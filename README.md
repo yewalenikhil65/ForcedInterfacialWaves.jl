@@ -11,13 +11,57 @@ The package keeps scalar functions corresponding directly to the MATLAB formulas
 
 ## Installation
 
+### Prerequisites
+
+- **Julia ≥ 1.9** — install from [julialang.org](https://julialang.org/downloads/) or via the terminal:
+  ```bash
+  curl -fsSL https://install.julialang.org | sh
+  ```
+
+### Option 1: Install directly from GitHub
+
+```julia
+using Pkg
+Pkg.add(url="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl.git")
+```
+
+This installs the package and all dependencies into your default Julia environment.
+
+### Option 2: Clone and activate locally
+
+```bash
+git clone https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl.git
+cd ForcedInterfacialWaves.jl
+```
+
+Then in Julia:
+
 ```julia
 using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
 ```
 
-Dependencies are QuadGK.jl, FresnelIntegrals.jl, Plots.jl, and Printf.
+### Running scripts
+
+Scripts should be run from the project root with the local environment active:
+
+```bash
+julia -t auto --project=. scripts/figure6_pure_gravity.jl
+julia -t auto --project=. scripts/figure10_capillary_gravity.jl
+```
+
+The `-t auto` flag uses all available CPU threads for parallel computation.
+
+### Dependencies
+
+| Package | Purpose |
+|:--------|:--------|
+| [QuadGK.jl](https://github.com/JuliaMath/QuadGK.jl) | Adaptive Gauss–Kronrod quadrature |
+| [FresnelIntegrals.jl](https://github.com/kiranshila/FresnelIntegrals.jl) | Fresnel cosine/sine integrals (closed-form) |
+| [Plots.jl](https://github.com/JuliaPlots/Plots.jl) | Figure generation |
+| [DelimitedFiles.jl](https://github.com/JuliaData/DelimitedFiles.jl) | CSV I/O for validation data |
+| Printf (stdlib) | Formatted output |
 
 ## MATLAB-equivalent defaults
 
