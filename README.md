@@ -190,4 +190,5 @@ If you use this package, please cite:
 
 - Vinod Kumar Kadari
 - Nikhil Yewale
-- Ratul Dasgupta
+- Prof. Y.S. Mayya
+- Prof. Ratul Dasgupta
