@@ -159,6 +159,72 @@ In eqn 3.11 , $\eta^{\text{local}}_{s}(x)$ ,  can be shown to be exactly equival
 
 $G(x) \equiv \dfrac{1}{k_{l}-k_{s}}\int_{0}^{\infty}\;dk\;\left(\dfrac{\cos(kx)}{k+k_{s}}-\dfrac{\cos(kx)}{k+k_{l}}\right)$
 
+## Manuscript §4 :
+### Zero capillarity limit ($\alpha=  0$) - section  §4.1 in the manuscript
+
+```math
+		\begin{align}
+				\eta(x,t) &=& \eta_{s}(x) + \eta_{tr}^{(1)}(x,t) + \eta_{tr}^{(2)}(x,t), 
+		\end{align}\tag{4.1}
+```
+
+```math
+      \begin{align}	
+        \dfrac{\eta_{s}(x)}{F_0} &\equiv \dfrac{1}{2\pi\left(1+\rho_r\right)}\int_{-\infty}^{\infty}dk\; \dfrac{\exp\left(ikx\right)}{|k| - \beta},\quad 0 < \beta \leq 1  \nonumber\\
+        \dfrac{\eta_{tr}^{(1)}(x,t)}{F_0} &\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) + t\sqrt{\beta|k|}\right)\right]}{k+ \sqrt{\beta|k|}},  \nonumber\\
+        \dfrac{\eta_{tr}^{(2)}(x,t)}{F_0} &\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) - t\sqrt{\beta|k|}\right)\right]}{k- \sqrt{\beta|k|}}. \tag{4.2a,b,c}
+      \end{align} 
+```
+It may be further shown using principal value techniques that (see proof [here](pure_gravity_steady_proof.md))
+```math
+			\begin{align}
+				\dfrac{\eta_{s}(x)}{F_0} &=& \dfrac{1}{\pi\left(1+\rho_r\right)}\left[-\pi\sin\left(\beta |x|\right)+\int_{0}^{\infty}dy\;\dfrac{y\exp\left(-|x|y\right)}{\beta^2 + y^2}\right],\quad 0 < \beta \leq 1,\; -\infty < x < \infty \nonumber \\
+			\end{align} \tag{4.3}
+```
+
+$\eta_{s}(x)$ in expression (4.3) is a symmetric function of $x$, implying a symmetric response upstream and downstream of the forcing at $x=0$. However, a contribution to the steady-state *also comes* from the time-dependent term in eqns. (4.2b),(4.2c). As shown in the  proof([here](pure_gravity_transient_proof.md)) these transient terms may be further simplified to obtain the following analytical representation valid for all $x,t$ i.e.
+
+```math
+\begin{aligned}
+\eta_{tr}(x,t) &\equiv \eta_{tr}^{(1)}(x,t) + \eta_{tr}^{(2)}(x,t) = \bigg\{\mathbb{T}_1(x) + \mathbb{T}_2(x,t) + \mathbb{T}_3(x,t) + \mathbb{T}_4(x,t)\bigg\}F_0, \quad\text{where}
+\end{aligned}
+```
+
+**(4.4a)**
+```math
+\mathbb{T}_1(x)\equiv  \mp\left(\dfrac{1}{1+\rho_r}\right)\sin(\beta x),
+```
+
+**(4.4b)**
+```math
+\mathbb{T}_2(x,t) \equiv - \dfrac{4\beta^{-1}}{\pi\left(1+\rho_r\right)}\int_{0}^{\infty}dv\; v^2\;\dfrac{\exp\left(\mp 2av^2 \pm 2bv\right)}{\beta + \left(2v-\beta^{1/2}\right)^2}\Biggl\{\beta^{1/2}\cos\left(\beta^{1/2}tv\right)\pm
+	\left(2v-\beta^{1/2}\right)\sin\left(\beta^{1/2}tv\right)\Biggr\},
+```
+
+**(4.4c)**
+```math
+\mathbb{T}_3(x,t)\equiv   \dfrac{\beta^{-1/2}}{\pi\left(1+\rho_r\right)}\left(1 + \dfrac{t}{2\left(t-x\right)}\right)\sqrt{\frac{\pi}{2|a|}}\left[\cos\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp \mathrm{C}\left(b\sqrt{\frac{2}{\pi |a|}}\right)\right\}+
+	\sin\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp \mathrm{S}\left(b\sqrt{\frac{2}{\pi |a|}}\right)\right\}\right],
+```
+
+**(4.4d)**
+```math
+\mathbb{T}_4(x,t)\equiv  - \dfrac{1}{\pi\left(1+\rho_r\right)}\left[\int_{0}^{\infty}\;dv\dfrac{\cos\left(av^2 + 2bv\right)}{v + \beta^{1/2}}\right],
+```
+
+where $a \equiv t-x, \; b \equiv \dfrac{t\sqrt{\beta}}{2}$, the upper signs in $\mathbb{T}_1(x),\mathbb{T}_2(x,t)$ are used for $x<t$, while lower signs are for $x > t$. The Fresnel integrals $\mathrm{C}(\cdot)$ and $\mathrm{S}(\cdot)$ in eqn. (4.4c) are defined as
+
+**(4.5)**
+```math
+\mathrm{C}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \cos\left(\frac{\pi t^2}{2}\right),\quad 
+	\mathrm{S}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \sin\left(\frac{\pi t^2}{2}\right).
+```
+
+In expressions (4.4), the *time-independent term*, $\mathbb{T}_1(x)$ (eqn. 4.4a), is asymmetric with the same amplitude as the first term on the right hand side of eqn. (4.3). As a result, these two terms reinforce each other for $x>0$ but cancel for $x<0$. Further, we note that as $\rho_r\rightarrow 1$ $\left(\beta = \dfrac{1-\rho_r}{1 + \rho_r}\rightarrow 0\right)$, the terms diverge. This is physically reasonable because in this limit ($\rho_r\rightarrow 1$), gravity vanishes and in the absence of capillary forces as well (i.e. $\alpha=0$ that we are currently assuming), there remains no restoring force to resist deformation due to the external pressure. The analytical strategy is clear now: provided one can show that $\mathbb{T}_2(x,t\rightarrow\infty)\rightarrow0$, $\mathbb{T}_3(x,t\rightarrow\infty)\rightarrow0$ and $\mathbb{T}_4(x,t\rightarrow\infty)\rightarrow0$, one obtains the expected steady-state lacking waves upstream (except for small localised deformation of the interface due to the localised integral in eqn. (4.3)) and sinusoidal waves downstream ($x>0$) with wavenumber $\beta$.
+
+### Finite-capillarity : ($\alpha > 0$) section §4.2 in the manuscript
+
+
 
 
 
@@ -175,6 +241,9 @@ This package evaluates these integrals numerically for two physical regimes:
 **Pure gravity (α = 0):** The solution is decomposed analytically into $T_0$ (steady), $T_1^\pm$–$T_4^\pm$ (transient), where $T_3$ uses the Fresnel cosine and sine integrals (evaluated in closed form via `FresnelIntegrals.jl`, no quadrature). An independent direct numerical Cauchy principal value (CPV) evaluation verifies the analytical decomposition.
 
 **Capillary–gravity (α > 0):** The combined integrand $\mathbb{I}(k; x, t)$ — which sums the steady part $\eta_s$ and the two transient integrands $\mathbb{I}_3$, $\mathbb{I}_4$ so that their singularities at the gravity root $k_s$ and capillary root $k_l$ cancel — is integrated over $[0,\infty)$ split around both poles. The classical steady solution via residues and a $G(x)$ integral is also computed for large-time comparison.
+
+
+
 
 ## Quick start
 ### Install julia from terminal 
