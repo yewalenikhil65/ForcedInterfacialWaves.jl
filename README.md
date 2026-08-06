@@ -166,3 +166,28 @@ ForcedInterfacialWaves.jl/
 └── test/
     └── runtests.jl
 ```
+
+## Citation
+
+If you use this package, please cite:
+
+> Kadari, V.K., Yewale, N., Farsoiya, P.K., Mayya, Y.S. & Dasgupta, R. (2026).
+> Interfacial waves from pressure forcing: revisiting classical theories from an IVP perspective.
+> *arXiv preprint* [arXiv:2605.12254](https://arxiv.org/abs/2605.12254).
+
+```bibtex
+@article{kadari2026interfacial,
+  title={Interfacial waves from pressure forcing: revisiting classical
+         theories from an {IVP} perspective},
+  author={Kadari, Vinod Kumar and Yewale, Nikhil and Farsoiya, Palas Kumar
+          and Mayya, Y. S. and Dasgupta, Ratul},
+  journal={arXiv preprint arXiv:2605.12254},
+  year={2026}
+}
+```
+
+## Contributors
+
+- Vinod Kumar Kadari
+- Nikhil Yewale
+- Ratul Dasgupta
