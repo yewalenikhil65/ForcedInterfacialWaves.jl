@@ -1,0 +1,16 @@
+# Julia
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+/docs/build/
+Manifest.toml
+
+# Generated output (figures, comparison data)
+/output/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+*.swp
