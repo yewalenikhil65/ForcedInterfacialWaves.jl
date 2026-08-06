@@ -7,7 +7,7 @@ makedocs(;
     remotes  = nothing,
     warnonly = [:missing_docs, :cross_references],
     format   = Documenter.HTML(;
-        prettyurls = get(ENV, "CI", nothing) == "true",
+        prettyurls = true,
         mathengine = Documenter.KaTeX(),
         assets = ["assets/custom.css"],
     ),
@@ -18,10 +18,4 @@ makedocs(;
         "Validation"               => "validation.md",
         "API Reference"            => "api.md",
     ],
-)
-
-deploydocs(;
-    repo = "github.com/yewalenikhil65/ForcedInterfacialWaves.jl.git",
-    devbranch = "main",
-    push_preview = true,
 )
