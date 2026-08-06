@@ -7,6 +7,8 @@ Manifest.toml
 
 # Generated output (figures, comparison data)
 /output/
+/julia_data.csv
+/matlab_data.csv
 
 # OS
 .DS_Store
