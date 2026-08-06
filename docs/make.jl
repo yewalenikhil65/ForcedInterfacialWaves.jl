@@ -9,6 +9,7 @@ makedocs(;
     format   = Documenter.HTML(;
         prettyurls = get(ENV, "CI", nothing) == "true",
         mathengine = Documenter.KaTeX(),
+        assets = ["assets/custom.css"],
     ),
     pages = [
         "Home"                     => "index.md",
@@ -17,4 +18,10 @@ makedocs(;
         "Validation"               => "validation.md",
         "API Reference"            => "api.md",
     ],
+)
+
+deploydocs(;
+    repo = "github.com/yewalenikhil65/ForcedInterfacialWaves.jl.git",
+    devbranch = "main",
+    push_preview = true,
 )
