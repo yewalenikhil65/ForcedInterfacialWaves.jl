@@ -1,5 +1,7 @@
 # ForcedInterfacialWaves.jl
 
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://yewalenikhil65.github.io/ForcedInterfacialWaves.jl/)
+
 Julia implementation and open validation of the pressure-forced interfacial-wave IVPs documented in `jfm_matlab_codes.tex`:
 
 - **Pure gravity, α = 0 (Figure 6)**
