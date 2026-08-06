@@ -1,4 +1,4 @@
-module WavesDelta
+module ForcedInterfacialWaves
 
 using QuadGK: quadgk, quadgk!, alloc_segbuf
 using FresnelIntegrals: fresnelc, fresnels

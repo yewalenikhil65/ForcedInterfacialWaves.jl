@@ -87,7 +87,7 @@ The production Julia profile algorithm uses vectorised in-place quadrature (`qua
 ## Reproducing
 
 ```julia
-using WavesDelta, Printf
+using ForcedInterfacialWaves, Printf
 
 # PG analytical vs CPV
 pg = compute_gravity_parameters()

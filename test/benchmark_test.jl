@@ -1,5 +1,5 @@
 """
-    Benchmark script: verifies Julia WavesDelta results against MATLAB reference values.
+    Benchmark script: verifies Julia ForcedInterfacialWaves results against MATLAB reference values.
 
     MATLAB reference values are computed from the cleaned implementation in jfm_matlab_codes.tex.
     The benchmark checks:
@@ -14,7 +14,7 @@ using Printf
 
 # Add the package path
 push!(LOAD_PATH, joinpath(@__DIR__, ".."))
-using WavesDelta
+using ForcedInterfacialWaves
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1: Capillary-Gravity Case (Figure 10) Benchmarks

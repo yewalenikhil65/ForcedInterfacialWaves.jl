@@ -3,7 +3,7 @@
 #  Usage: julia --project=. scripts/validate_output.jl
 
 push!(LOAD_PATH, joinpath(@__DIR__, ".."))
-using WavesDelta, Printf
+using ForcedInterfacialWaves, Printf
 
 ## Parameters
 p = compute_cg_parameters()

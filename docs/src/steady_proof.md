@@ -128,3 +128,5 @@ Upon plugging eqns. (S.8) and (S.10) (for $x>0$) and eqns. (S.9) and (S.11) (for
 ```
 
 It may be noted while the first two terms shows a far-field steady wavy pattern both upstream and downstream, the third term is a localised contribution which decays to zero rapidly as $|x| \to \infty$ and possesses a finite value at $x=0$: $\left(\frac{k_l+k_s}{2 \pi \alpha (k_l-k_s)}\right) \log \left(\frac{k_l}{k_s}\right)$. It may be remarked that eqn. (S.12) is a symmetrical solution implying the existence of both the gravity and capillary waves, symmetrically both in the upstream and downstream directions. Since it contradicts the observation that in steady state, gravity wave exists only in the downstream direction and capillary wave exists in the upstream direction, one suspects that this asymmetry will be introduced from the time-dependent part of the solution. Accordingly we perform analysis of the long time asymptotics of $\eta_{tr}(x,t)$.
+
+The local (exponential-decay) term in eqn. (S.12) can further be shown to be exactly equivalent to Lamb's classical local function $G(x)$; for the proof, see [Equivalence with Lamb's local function](lamb_gx_equivalence.md).

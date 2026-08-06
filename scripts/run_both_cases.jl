@@ -1,5 +1,5 @@
 """
-    Main driver script for WavesDelta.jl
+    Main driver script for ForcedInterfacialWaves.jl
     Computes profiles for both capillary-gravity (Figure 10) and pure-gravity (Figure 6) cases.
 
     Usage:
@@ -9,7 +9,7 @@
 using Printf
 
 push!(LOAD_PATH, joinpath(@__DIR__, ".."))
-using WavesDelta
+using ForcedInterfacialWaves
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Capillary-Gravity Case (Figure 10)
@@ -144,7 +144,7 @@ end
 
 function main()
     println("\n" * "╔" * "═"^68 * "╗")
-    println("║" * " "^10 * "WavesDelta.jl — Interfacial Waves IVP" * " "^20 * "║")
+    println("║" * " "^10 * "ForcedInterfacialWaves.jl — Interfacial Waves IVP" * " "^20 * "║")
     println("╚" * "═"^68 * "╝\n")
 
     t_start = time()

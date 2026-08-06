@@ -1,4 +1,4 @@
-# WavesDelta.jl
+# ForcedInterfacialWaves.jl
 
 Julia implementation and open validation of the pressure-forced interfacial-wave IVPs documented in `jfm_matlab_codes.tex`:
 
@@ -51,7 +51,7 @@ T4 = gravity_T4_left(-2.0, t, t + 2.0, pg)
 ## Capillary–gravity API
 
 ```julia
-using WavesDelta
+using ForcedInterfacialWaves
 
 p = compute_cg_parameters()
 t = 3.0 / p.t_c
@@ -143,10 +143,10 @@ The suite validates parameters, Fresnel normalization, individual terms, analyti
 ## Repository layout
 
 ```text
-WavesDelta.jl/
+ForcedInterfacialWaves.jl/
 ├── Project.toml
 ├── src/
-│   ├── WavesDelta.jl
+│   ├── ForcedInterfacialWaves.jl
 │   ├── parameters.jl
 │   ├── pure_gravity.jl
 │   └── capillary_gravity.jl

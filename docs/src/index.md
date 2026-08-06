@@ -1,4 +1,4 @@
-# WavesDelta.jl
+# ForcedInterfacialWaves.jl
 
 *Julia implementation of the initial value problem (IVP) for pressure-forced interfacial waves in a two-fluid system. Please see the manuscript file below for details*
 
@@ -7,11 +7,28 @@ Based on:
 > Kadari, V.K., Yewale, N., Farsoiya, P.K., Mayya, Y.S. & Dasgupta, R. (2026).
 > Interfacial waves from pressure forcing: revisiting classical theories from an IVP perspective.
 > *arXiv preprint* [arXiv:2605.12254](https://arxiv.org/abs/2605.12254).
+## Citation
+
+```bibtex
+@article{kadari2026interfacial,
+  title={Interfacial waves from pressure forcing: revisiting classical
+         theories from an {IVP} perspective},
+  author={Kadari, Vinod Kumar and Yewale, Nikhil and Farsoiya, Palas Kumar
+          and Mayya, Y. S. and Dasgupta, Ratul},
+  journal={arXiv preprint arXiv:2605.12254},
+  year={2026}
+}
+```
 
 ## Problem
 
 
-![Figure 10 comparison](assets/Fig3.png)
+```@raw html
+<figure style="text-align:center;">
+  <img src="assets/Fig3.png" alt="Figure 10 comparison" style="max-width:100%;">
+  <figcaption>Figure 3 (manuscript): localised pressure forcing at the interface.</figcaption>
+</figure>
+```
 
 As shown above (Fig. $3$ in the manuscript), a localised pressure $\tilde{p}_e = \tilde{F}_0\delta(\tilde{x})$ force is applied at the interface between two inviscid, incompressible, fluids of infinite depth, both streams moving at uniform speed $U$ rightwards. In the absence of this forcing, the interface is flat and remains at $\tilde{z}=0$. After non-dimensionalisation, the interfacial displacement resulting from the forcing i.e. $\eta(x,t)$ is obtained by evaluating the following time-dependent Fourier integrals (eqns. $3.7$ and $3.8$ in the manuscript)
 ```math
@@ -33,6 +50,119 @@ where $\lambda_{1,2}(k) \equiv k\mp\sqrt{\dfrac{\alpha|k|^3}{1+\rho_r}\;+\;\beta
 \rho_r = \frac{\rho_u}{\rho_l}, \quad
 \beta = \frac{1-\rho_r}{1+\rho_r}.  
 ```
+
+### Steady-state decomposition (manuscript §3.4)
+In this section, the manuscript shows that neglecting the time-dependent terms in eqns. (3.7) and (3.8) and $\textit{without}$ using any Rayleigh dissipation, the steady-state response turns out to be (we exclude all the Dirac delta function terms in eqn. $3.9$ in the manuscript) the following. For proof of this, see [Steady-state proof](steady_proof.md).
+```math
+\begin{aligned}
+\dfrac{\eta_{s}(x)}{F_0} =\dfrac{ \eta^{\text{far-field}}_{s}(x)}{F_0} + \dfrac{\eta^{\text{local}}_{s}(x)}{F_0},\tag{3.11}
+\end{aligned}
+```
+where , 
+```math
+\begin{aligned}
+\dfrac{\eta^{\text{far-field}}_{s}(x)}{F_0} \equiv \dfrac{1}{\alpha(k_l-k_s)}\bigg\{-\sin(k_s|x|)\quad + \quad \sin(k_l|x|)\bigg\} \\
+\dfrac{\eta^{\text{local}}_{s}(x)}{F_0} \equiv  \dfrac{\left(k_l+k_s\right)}{\pi\alpha}\int_{0}^{\infty}dy \dfrac{y\exp\left(-|x|y\right)}{\left(y^2 + k_l^2\right)\left(y^2+k_s^2\right)},\quad x\neq 0
+\end{aligned}
+```
+The integral expression for $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ above is solved numerically (in Julia and MATLAB) using the following codes:
+
+```@raw html
+<table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">using QuadGK, Plots
+using ForcedInterfacialWaves
+
+# Local manuscript-style alias for QuadGK.quadgk
+const ∫ = quadgk
+
+p = compute_cg_parameters()
+
+# Spatial grid (nondimensional)
+x = collect(-10:0.01:10)
+filter!(xi -> abs(xi) > 1e-12, x)
+
+# Far-field steady
+η_far = @. p.F0 / (p.alpha * (p.k_l - p.k_s)) *
+             (-sin(p.k_s * abs(x)) + sin(p.k_l * abs(x)))
+
+# Local steady
+η_local = similar(η_far)
+for i in eachindex(x)
+    integrand = y -> y * exp(-abs(x[i]) * y) /
+        ((y^2 + p.k_l^2) * (y^2 + p.k_s^2))
+    I, _ = ∫(integrand, 0.0, Inf;
+                  atol=p.atol, rtol=p.rtol)
+    η_local[i] = p.F0 * (p.k_l + p.k_s) /
+                   (π * p.alpha) * I
+end
+
+# Plot (×10³)
+plot(x, η_far .* 1e3,
+     label="η_s^{far-field}", lw=1.5)
+plot!(x, η_local .* 1e3,
+      label="η_s^{local}", lw=1.5)
+xlabel!("x"); ylabel!("η × 10³")
+savefig("eta_steady_components.png")
+</code></pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">% Parameters (CGS)
+U = 26.7046; g = 981; T = 72;
+rho_l = 1; rho_u = 0.001;
+l_c = U^2/g;
+alpha = T/(rho_l*U^2*l_c);
+rho_r = rho_u/rho_l;
+disc = (1+rho_r)^2 - 4*alpha*(1-rho_r);
+k_l = ((1+rho_r) + sqrt(disc))/(2*alpha);
+k_s = ((1+rho_r) - sqrt(disc))/(2*alpha);
+F0 = 0.01*T / (rho_l*U^2*l_c);
+
+% Spatial grid (nondimensional)
+x = -10:0.01:10;
+x(x == 0) = [];
+
+% Far-field steady
+eta_far = F0 / (alpha*(k_l - k_s)) * ...
+    (-sin(k_s*abs(x)) + sin(k_l*abs(x)));
+
+% Local steady
+eta_local = zeros(size(x));
+for i = 1:length(x)
+    integrand = @(y) y .* exp(-abs(x(i)).*y) ...
+        ./ ((y.^2+k_l^2) .* (y.^2+k_s^2));
+    I = integral(integrand, 0, Inf, ...
+        'AbsTol', 1e-10, 'RelTol', 1e-8);
+    eta_local(i) = F0*(k_l+k_s)/(pi*alpha)*I;
+end
+
+% Plot (×10³)
+figure; hold on;
+plot(x, eta_far*1e3, 'b-', 'LineWidth', 1.5, ...
+     'DisplayName', '\eta_s^{far-field}');
+plot(x, eta_local*1e3, 'r-', 'LineWidth', 1.5, ...
+     'DisplayName', '\eta_s^{local}');
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('Location','best'); grid on;
+</code></pre>
+</td>
+</tr></table>
+```
+The resulting figure from both Julia and MATLAB are superimposed  in the following figure, which is a reproduction of fig. $5a$ in the manuscript.
+
+![Figure 5a comparison](assets/Fig5a.png)
+*Figure 5a: Comparison of steady wave profiles computed in MATLAB vs Julia.*
+
+In eqn 3.11 , $\eta^{\text{local}}_{s}(x)$ ,  can be shown to be exactly equivalent to (for the proof, see [here](lamb_gx_equivalence.md)). 
+
+$G(x) \equiv \dfrac{1}{k_{l}-k_{s}}\int_{0}^{\infty}\;dk\;\left(\dfrac{\cos(kx)}{k+k_{s}}-\dfrac{\cos(kx)}{k+k_{l}}\right)$
+
+
+
+
+
 This package evaluates these integrals numerically for two physical regimes:
 
 | Case | Surface tension | Poles | Figure |
@@ -52,7 +182,7 @@ This package evaluates these integrals numerically for two physical regimes:
 curl -fsSL https://install.julialang.org | sh
 ```
 ```julia
-using WavesDelta
+using ForcedInterfacialWaves
 
 # ─── Pure gravity ───
 pg = compute_gravity_parameters()       # returns PureGravityParams struct
@@ -95,15 +225,3 @@ Pages = ["theory.md", "julia_matlab.md", "validation.md", "api.md"]
 Depth = 2
 ```
 
-## Citation
-
-```bibtex
-@article{kadari2026interfacial,
-  title={Interfacial waves from pressure forcing: revisiting classical
-         theories from an {IVP} perspective},
-  author={Kadari, Vinod Kumar and Yewale, Nikhil and Farsoiya, Palas Kumar
-          and Mayya, Y. S. and Dasgupta, Ratul},
-  journal={arXiv preprint arXiv:2605.12254},
-  year={2026}
-}
-```

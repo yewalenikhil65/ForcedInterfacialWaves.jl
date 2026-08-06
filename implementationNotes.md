@@ -1,4 +1,4 @@
-# Implementation Notes — WavesDelta.jl
+# Implementation Notes — ForcedInterfacialWaves.jl
 
 Complete context from the implementation session. Use as reference for the next session.
 
@@ -7,7 +7,7 @@ Complete context from the implementation session. Use as reference for the next 
 ## Repository location
 
 ```
-/home/nikhil/JFM_Vinod_supplementary/WavesDelta.jl/
+/home/nikhil/JFM_Vinod_supplementary/ForcedInterfacialWaves.jl/
 ```
 
 Reference LaTeX files:
@@ -98,7 +98,7 @@ Steady solution: $G(x) = \frac{1}{k_l-k_s}\int_0^\infty[\cos(kx)/(k+k_s) - \cos(
 ### Source structure
 
 ```
-src/WavesDelta.jl         — module, imports (quadgk, quadgk!, alloc_segbuf, fresnelc, fresnels)
+src/ForcedInterfacialWaves.jl         — module, imports (quadgk, quadgk!, alloc_segbuf, fresnelc, fresnels)
 src/parameters.jl         — CapillaryGravityParams, PureGravityParams structs + constructors
 src/pure_gravity.jl       — T0–T4, Fresnel, CPV, profile
 src/capillary_gravity.jl  — dispersion_chi, integrands, quadrature, profile algorithms
@@ -179,7 +179,7 @@ Uses coordinate transform $k = a + t/(1-t)$. Works because capillary dispersion 
 docs/
 ├── make.jl        — Documenter.HTML with KaTeX, pages list
 ├── serve.jl       — LiveServer at 0.0.0.0:8001
-├── Project.toml   — deps: Documenter, LiveServer, Plots, LaTeXStrings, WavesDelta
+├── Project.toml   — deps: Documenter, LiveServer, Plots, LaTeXStrings, ForcedInterfacialWaves
 └── src/
     ├── index.md          — Citation, problem, quick start
     ├── theory.md         — Full LaTeX math (supplementary notation)

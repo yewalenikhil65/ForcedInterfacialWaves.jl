@@ -7,7 +7,7 @@
 #  Usage: julia --project=. scripts/generate_comparison_plots.jl
 
 push!(LOAD_PATH, joinpath(@__DIR__, ".."))
-using WavesDelta
+using ForcedInterfacialWaves
 using Plots, LaTeXStrings, Printf, DelimitedFiles
 
 plot_font = "Computer Modern"

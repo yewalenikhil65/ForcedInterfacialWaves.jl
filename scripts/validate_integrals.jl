@@ -15,11 +15,11 @@
 """
 
 push!(LOAD_PATH, joinpath(@__DIR__, ".."))
-using WavesDelta
+using ForcedInterfacialWaves
 using Printf
 
 println("="^72)
-println("  WavesDelta.jl — INTEGRAL-LEVEL VALIDATION")
+println("  ForcedInterfacialWaves.jl — INTEGRAL-LEVEL VALIDATION")
 println("  Each integral validated independently for MATLAB equivalence")
 println("="^72)
 

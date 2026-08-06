@@ -1,5 +1,5 @@
-name = "WavesDelta"
-uuid = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+name = "ForcedInterfacialWaves"
+uuid = "e5219359-20f7-449b-9a6e-3764ada0d72e"
 version = "0.1.0"
 authors = ["Vinod Kumar Kadari", "Nikhil"]
 

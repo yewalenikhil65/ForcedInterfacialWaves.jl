@@ -1,9 +1,9 @@
 using Documenter
-using WavesDelta
+using ForcedInterfacialWaves
 
 makedocs(;
-    sitename = "WavesDelta.jl",
-    modules  = [WavesDelta],
+    sitename = "ForcedInterfacialWaves.jl",
+    modules  = [ForcedInterfacialWaves],
     remotes  = nothing,
     warnonly = [:missing_docs, :cross_references],
     format   = Documenter.HTML(;

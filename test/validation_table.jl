@@ -3,7 +3,7 @@
 #
 # Run: julia --project=. test/validation_table.jl
 
-using WavesDelta
+using ForcedInterfacialWaves
 using Printf
 
 function generate_gravity_table()
@@ -209,7 +209,7 @@ end
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
 println("\n" * "═" ^ 100)
-println("   WAVESDELTA.JL VALIDATION TABLE — FOR MATLAB-JULIA COMPARISON")
+println("   FORCEDINTERFACIALWAVES.JL VALIDATION TABLE — FOR MATLAB-JULIA COMPARISON")
 println("═" ^ 100 * "\n")
 
 generate_fresnel_table()

@@ -1,16 +1,16 @@
 """
-    runtests.jl — Validation test suite for WavesDelta.jl
+    runtests.jl — Validation test suite for ForcedInterfacialWaves.jl
 
     Validates Julia implementation against MATLAB reference formulas
     from jfm_matlab_codes.tex.
 """
 
 push!(LOAD_PATH, joinpath(@__DIR__, ".."))
-using WavesDelta
+using ForcedInterfacialWaves
 using Test
 using Printf
 
-@testset "WavesDelta.jl" begin
+@testset "ForcedInterfacialWaves.jl" begin
 
     # ═══════════════════════════════════════════════════════════════════════════
     @testset "Fresnel integrals" begin

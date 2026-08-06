@@ -171,7 +171,7 @@ The integral in $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ is solved numerically (
 <td style="vertical-align:top; width:50%">
 <strong>Julia</strong>
 <pre><code class="language-julia">using QuadGK, Plots
-using WavesDelta
+using ForcedInterfacialWaves
 
 # Local manuscript-style alias for QuadGK.quadgk
 const ∫ = quadgk

@@ -17,7 +17,7 @@ Complete drivers: `matlab/fig6_jfm_vinod.m` ↔ `scripts/fig6_jfm_vinod.jl`, `ma
 <table style="width:100%"><tr>
 <td style="vertical-align:top; width:50%">
 <strong>Julia</strong>
-<pre><code class="language-julia">using WavesDelta, Printf
+<pre><code class="language-julia">using ForcedInterfacialWaves, Printf
 
 pg = compute_gravity_parameters()
 t = 1.0/pg.t_c; x=-2.0; a=t-x
@@ -107,7 +107,7 @@ l_c = \frac{U^2}{g}, \quad \alpha = \frac{g\widetilde T}{\rho_l U^4}, \quad \chi
 <table style="width:100%"><tr>
 <td style="vertical-align:top; width:50%">
 <strong>Julia</strong>
-<pre><code class="language-julia">using WavesDelta, Printf
+<pre><code class="language-julia">using ForcedInterfacialWaves, Printf
 p = compute_cg_parameters()
 @printf("alpha   = %.15e\n", p.alpha)
 @printf("k_s     = %.15e\n", p.k_s)

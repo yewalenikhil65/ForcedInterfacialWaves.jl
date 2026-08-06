@@ -16,7 +16,7 @@ else
 end
 
 push!(LOAD_PATH, joinpath(@__DIR__, ".."))
-using WavesDelta
+using ForcedInterfacialWaves
 using Plots; gr()
 using Printf
 
