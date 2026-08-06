@@ -7,7 +7,7 @@ Julia implementation and open validation of the pressure-forced interfacial-wave
 - **Pure gravity, α = 0 (Figure 6)**
 - **Capillary–gravity, α > 0 (Figure 10)**
 
-The package keeps scalar functions corresponding directly to the MATLAB formulas, while production profile functions use Julia-specific optimizations without changing the default MATLAB numerical parameters.
+The package keeps scalar functions corresponding directly to the MATLAB formulas, while vectorised profile functions use Julia-specific optimizations without changing the default MATLAB numerical parameters.
 
 ## Installation
 
@@ -59,7 +59,7 @@ p = compute_cg_parameters()
 t = 3.0 / p.t_c
 x = make_cg_xgrid(p; Nx=2001)
 
-# Production profile algorithm
+# Vectorised profile computation
 η_ivp = compute_cg_ivp_profile(x, t, p)
 η_steady = compute_cg_steady_profile(x, p)
 
@@ -72,9 +72,9 @@ eta_at_x = ivp_surface_elevation(3.0, t, p)
 I1, I2, I3 = cg_partial_integrals(3.0, t, p)
 ```
 
-### Production profile algorithm
+### Vectorised profile algorithm
 
-The scalar MATLAB algorithm runs three adaptive quadratures independently at every spatial point. The optimized Julia profile instead:
+The scalar MATLAB algorithm runs three adaptive quadratures independently at every spatial point. The optimised Julia profile instead:
 
 1. factors the combined integrand as
    `I(k;x,t) = C(k,t)cos(kx) + S(k,t)sin(kx)`;
@@ -84,7 +84,7 @@ The scalar MATLAB algorithm runs three adaptive quadratures independently at eve
 5. divides the spatial grid into thread-local chunks;
 6. generates `sin(kx)` and `cos(kx)` on each uniform chunk with a recurrence, reset every 64 points to control roundoff.
 
-The default `method=:threaded_vector` is the production path. Two reference methods remain available:
+The default `method=:threaded_vector` is the recommended path. Two reference methods remain available:
 
 ```julia
 compute_cg_ivp_profile(x, t, p; method=:vector)
