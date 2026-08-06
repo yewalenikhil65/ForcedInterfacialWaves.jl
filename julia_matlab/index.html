@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Julia ↔ MATLAB · ForcedInterfacialWaves.jl</title><meta name="title" content="Julia ↔ MATLAB · ForcedInterfacialWaves.jl"/><meta property="og:title" content="Julia ↔ MATLAB · ForcedInterfacialWaves.jl"/><meta property="twitter:title" content="Julia ↔ MATLAB · ForcedInterfacialWaves.jl"/><meta name="description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="og:description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="twitter:description" content="Documentation for ForcedInterfacialWaves.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">ForcedInterfacialWaves.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../theory/">Theory</a></li><li class="is-active"><a class="tocitem" href>Julia ↔ MATLAB</a><ul class="internal"><li><a class="tocitem" href="#1.-Pure-Gravity:-T_0-through-T_4-at-x-2,-t_{\\dim}1-s"><span>1. Pure Gravity: <span>$T_0$</span> through <span>$T_4^-$</span> at <span>$x=-2$</span>, <span>$t_{\dim}=1$</span> s</span></a></li><li><a class="tocitem" href="#2.-PG-Profile:-Analytical-vs-CPV-(Figure-6)"><span>2. PG Profile: Analytical vs CPV (Figure 6)</span></a></li><li><a class="tocitem" href="#3.-Capillary–Gravity-Parameters"><span>3. Capillary–Gravity Parameters</span></a></li><li><a class="tocitem" href="#4.-Combined-Integrand-\\mathbb{I}-at-k2,-x3,-t110"><span>4. Combined Integrand <span>$\mathbb{I}$</span> at <span>$k=2$</span>, <span>$x=3$</span>, <span>$t=110$</span></span></a></li><li><a class="tocitem" href="#5.-Partial-Integrals-I_1,-I_2,-I_3-and-\\eta_{\\mathrm{IVP}}"><span>5. Partial Integrals <span>$I_1, I_2, I_3$</span> and <span>$\eta_{\mathrm{IVP}}$</span></span></a></li><li><a class="tocitem" href="#6.-Steady-Solution-G(x)"><span>6. Steady Solution <span>$G(x)$</span></span></a></li><li><a class="tocitem" href="#7.-CG-Profile:-IVP-vs-Steady-(Figure-10)"><span>7. CG Profile: IVP vs Steady (Figure 10)</span></a></li><li><a class="tocitem" href="#8.-Quadrature-Parameters-(identical-in-both)"><span>8. Quadrature Parameters (identical in both)</span></a></li></ul></li><li><a class="tocitem" href="../validation/">Validation</a></li><li><a class="tocitem" href="../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Julia ↔ MATLAB</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Julia ↔ MATLAB</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Julia-MATLAB"><a class="docs-heading-anchor" href="#Julia-MATLAB">Julia ↔ MATLAB</a><a id="Julia-MATLAB-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-MATLAB" title="Permalink"></a></h1><p>Side-by-side copy-pastable code with verified numerical output from both languages.</p><p><strong>Scripts used:</strong></p><ul><li>Julia: <code>julia --project=. scripts/validate_output.jl</code></li><li>MATLAB: <code>run(&#39;matlab/validate_output.m&#39;)</code></li><li>Plots: <code>julia --project=. scripts/generate_comparison_plots.jl</code></li></ul><p>Complete drivers: <code>matlab/fig6_jfm_vinod.m</code> ↔ <code>scripts/fig6_jfm_vinod.jl</code>, <code>matlab/Fig10_jfm_vinod.m</code> ↔ <code>scripts/Fig10_jfm_vinod.jl</code>.</p><hr/><h2 id="1.-Pure-Gravity:-T_0-through-T_4-at-x-2,-t_{\\dim}1-s"><a class="docs-heading-anchor" href="#1.-Pure-Gravity:-T_0-through-T_4-at-x-2,-t_{\\dim}1-s">1. Pure Gravity: <span>$T_0$</span> through <span>$T_4^-$</span> at <span>$x=-2$</span>, <span>$t_{\dim}=1$</span> s</a><a id="1.-Pure-Gravity:-T_0-through-T_4-at-x-2,-t_{\\dim}1-s-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Pure-Gravity:-T_0-through-T_4-at-x-2,-t_{\\dim}1-s" title="Permalink"></a></h2><table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">using ForcedInterfacialWaves, Printf
+
+pg = compute_gravity_parameters()
+t = 1.0/pg.t_c; x=-2.0; a=t-x
+@printf("T0  = %.15e\n", gravity_T0(x,pg))
+@printf("T1- = %.15e\n", gravity_T1_left(x,pg))
+@printf("T2- = %.15e\n", gravity_T2_left(x,t,a,pg))
+@printf("T3- = %.15e\n", gravity_T3_left(x,t,a,pg))
+@printf("T4- = %.15e\n", gravity_T4_left(x,t,a,pg))
+eta_a,_,_ = gravity_analytical_left(x,t,pg)
+eta_c = gravity_numerical_cpv(x,t,pg)
+@printf("eta_analytical = %.15e\n", eta_a)
+@printf("eta_CPV        = %.15e\n", eta_c)
+@printf("|diff| = %.4e\n", abs(eta_a-eta_c))
+</code></pre>
+<strong>Output:</strong>
+<pre>
+T0  = -8.639502272578199e-01
+T1- =  9.100430439351180e-01
+T2- =  5.830863275361431e-03
+T3- =  7.044858552279276e-04
+T4- = -7.003237060232554e-04
+eta_analytical = 7.212029103433114e-05
+eta_CPV        = 6.979529999850526e-05
+|diff|          = 2.3250e-06
+</pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">% (see matlab/validate_output.m)
+t_pg=1/t_c; x_pg=-2; a_pg=t_pg-x_pg;
+T0=(T0a+T0b)/(pi*(1+rho_r));
+T1=-sin(beta*x_pg)/(1+rho_r);
+T2=-4/(pi*(1+rho_r)*beta)*integral(...);
+b=0.5*t_pg*sqrt_beta; X=b*sqrt(2/(pi*a_pg));
+T3=1/(pi*(1+rho_r)*sqrt_beta)*(...)
+  *(cos(b^2/a_pg)*(0.5-fresnelc(X))
+  +sin(b^2/a_pg)*(0.5-fresnels(X)));
+T4=-1/(pi*(1+rho_r))*integral(...);
+eta_ana=F0*(T0+T1+T2+T3+T4);
+eta_cpv=F0*(I_below+I_above);
+</code></pre>
+<strong>Output:</strong>
+<pre>
+T0  = -8.639502272578199e-01
+T1- =  9.100430439351180e-01
+T2- =  5.830863275376527e-03
+T3- =  7.044858552279197e-04
+T4- = -7.003237060235279e-04
+eta_analytical = 7.212029103435171e-05
+eta_CPV        = 6.979529998880052e-05
+|diff|          = 2.3250e-06
+</pre>
+</td>
+</tr></table><table><tr><th style="text-align: left">Term</th><th style="text-align: right">Julia</th><th style="text-align: right">MATLAB</th><th style="text-align: left">Agreement</th></tr><tr><td style="text-align: left"><span>$T_0$</span></td><td style="text-align: right"><code>-8.63950227258e-01</code></td><td style="text-align: right"><code>-8.63950227258e-01</code></td><td style="text-align: left"><strong>15 digits</strong></td></tr><tr><td style="text-align: left"><span>$T_1^-$</span></td><td style="text-align: right"><code>9.10043043935e-01</code></td><td style="text-align: right"><code>9.10043043935e-01</code></td><td style="text-align: left"><strong>15 digits</strong> (closed-form)</td></tr><tr><td style="text-align: left"><span>$T_2^-$</span></td><td style="text-align: right"><code>5.83086327536e-03</code></td><td style="text-align: right"><code>5.83086327538e-03</code></td><td style="text-align: left"><strong>11 digits</strong></td></tr><tr><td style="text-align: left"><span>$T_3^-$</span></td><td style="text-align: right"><code>7.04485855228e-04</code></td><td style="text-align: right"><code>7.04485855228e-04</code></td><td style="text-align: left"><strong>14 digits</strong> (Fresnel, no quadrature)</td></tr><tr><td style="text-align: left"><span>$T_4^-$</span></td><td style="text-align: right"><code>-7.00323706023e-04</code></td><td style="text-align: right"><code>-7.00323706024e-04</code></td><td style="text-align: left"><strong>11 digits</strong></td></tr><tr><td style="text-align: left"><span>$\eta_{\mathrm{analytical}}$</span></td><td style="text-align: right"><code>7.21203e-05</code></td><td style="text-align: right"><code>7.21203e-05</code></td><td style="text-align: left"><strong>12 digits</strong></td></tr><tr><td style="text-align: left"><span>$\eta_{\mathrm{CPV}}$</span></td><td style="text-align: right"><code>6.97953e-05</code></td><td style="text-align: right"><code>6.97953e-05</code></td><td style="text-align: left"><strong>10 digits</strong></td></tr><tr><td style="text-align: left"><span>$</span></td><td style="text-align: right">\Delta</td><td style="text-align: right"><span>$</span></td><td style="text-align: left"><code>2.3250e-06</code></td></tr></table><p>✅ All analytical terms and the CPV integral agree between MATLAB and Julia. The internal cross-check (analytical vs CPV) also produces the same error bound in both languages.</p><p><strong>API:</strong> <a href="../api/#ForcedInterfacialWaves.gravity_T0"><code>gravity_T0</code></a>, <a href="../api/#ForcedInterfacialWaves.gravity_T1_left"><code>gravity_T1_left</code></a>–<a href="../api/#ForcedInterfacialWaves.gravity_T4_left"><code>gravity_T4_left</code></a>, <a href="../api/#ForcedInterfacialWaves.gravity_T1_right"><code>gravity_T1_right</code></a>–<a href="../api/#ForcedInterfacialWaves.gravity_T4_right"><code>gravity_T4_right</code></a> — individual analytical terms. <a href="../api/#ForcedInterfacialWaves.gravity_analytical_left"><code>gravity_analytical_left</code></a> / <a href="../api/#ForcedInterfacialWaves.gravity_analytical_right"><code>gravity_analytical_right</code></a> — complete piecewise solution. <a href="../api/#ForcedInterfacialWaves.gravity_numerical_cpv"><code>gravity_numerical_cpv</code></a> — direct CPV evaluation. <a href="../api/#ForcedInterfacialWaves.gravity_combined_integrand"><code>gravity_combined_integrand</code></a> — the <span>$G(k;x,t)$</span> integrand. <a href="../api/#ForcedInterfacialWaves.compute_gravity_profile"><code>compute_gravity_profile</code></a> — batch threaded profile. <a href="../api/#ForcedInterfacialWaves.fresnel_C"><code>fresnel_C</code></a> / <a href="../api/#ForcedInterfacialWaves.fresnel_S"><code>fresnel_S</code></a> — Fresnel integrals (wraps <code>FresnelIntegrals.jl</code>, O(1) cost).</p><hr/><h2 id="2.-PG-Profile:-Analytical-vs-CPV-(Figure-6)"><a class="docs-heading-anchor" href="#2.-PG-Profile:-Analytical-vs-CPV-(Figure-6)">2. PG Profile: Analytical vs CPV (Figure 6)</a><a id="2.-PG-Profile:-Analytical-vs-CPV-(Figure-6)-1"></a><a class="docs-heading-anchor-permalink" href="#2.-PG-Profile:-Analytical-vs-CPV-(Figure-6)" title="Permalink"></a></h2><p><img src="../assets/fig6_comparison.svg" alt="Figure 6 comparison"/></p><hr/><h2 id="3.-Capillary–Gravity-Parameters"><a class="docs-heading-anchor" href="#3.-Capillary–Gravity-Parameters">3. Capillary–Gravity Parameters</a><a id="3.-Capillary–Gravity-Parameters-1"></a><a class="docs-heading-anchor-permalink" href="#3.-Capillary–Gravity-Parameters" title="Permalink"></a></h2><p class="math-container">\[l_c = \frac{U^2}{g}, \quad \alpha = \frac{g\widetilde T}{\rho_l U^4}, \quad \chi(k) = \sqrt{\frac{\alpha k^3}{1+\rho_r} + \beta k}\]</p><table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">using ForcedInterfacialWaves, Printf
+p = compute_cg_parameters()
+@printf("alpha   = %.15e\n", p.alpha)
+@printf("k_s     = %.15e\n", p.k_s)
+@printf("k_l     = %.15e\n", p.k_l)
+@printf("F0      = %.15e\n", p.F0)
+@printf("chi(2)  = %.15e\n", dispersion_chi(2.0, p))
+</code></pre>
+<strong>Output:</strong>
+<pre>
+alpha   = 1.388855922278772e-01
+k_s     = 1.196700136678134e+00
+k_l     = 6.010670937188218e+00
+F0      = 1.388855922278772e-03
+chi(2)  = 1.762378721802994e+00
+</pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">U=26.7046; g=981; T=72; rho_l=1; rho_u=0.001;
+l_c=U^2/g; alpha=T/(rho_l*U^2*l_c);
+rho_r=rho_u/rho_l; beta=(1-rho_r)/(1+rho_r);
+gamma_rho=1/(1+rho_r);
+disc=(1+rho_r)^2-4*alpha*(1-rho_r);
+k_l=((1+rho_r)+sqrt(disc))/(2*alpha);
+k_s=((1+rho_r)-sqrt(disc))/(2*alpha);
+F0=0.01*T/(rho_l*U^2*l_c);
+chi=@(k) sqrt(beta.*k+gamma_rho.*alpha.*k.^3);
+</code></pre>
+<strong>Output:</strong>
+<pre>
+alpha   = 1.388855922278772e-01
+k_s     = 1.196700136678134e+00
+k_l     = 6.010670937188218e+00
+F0      = 1.388855922278772e-03
+chi(2)  = 1.762378721802994e+00
+</pre>
+</td>
+</tr></table><p><strong>API:</strong> <a href="../api/#ForcedInterfacialWaves.compute_cg_parameters"><code>compute_cg_parameters</code></a> → <a href="../api/#ForcedInterfacialWaves.CapillaryGravityParams"><code>CapillaryGravityParams</code></a> struct. <a href="../api/#ForcedInterfacialWaves.dispersion_chi"><code>dispersion_chi</code></a> evaluates <span>$\chi(k)$</span>.</p><p>✅ <strong>All 5 values agree to 15 significant digits.</strong></p><hr/><h2 id="4.-Combined-Integrand-\\mathbb{I}-at-k2,-x3,-t110"><a class="docs-heading-anchor" href="#4.-Combined-Integrand-\\mathbb{I}-at-k2,-x3,-t110">4. Combined Integrand <span>$\mathbb{I}$</span> at <span>$k=2$</span>, <span>$x=3$</span>, <span>$t=110$</span></a><a id="4.-Combined-Integrand-\\mathbb{I}-at-k2,-x3,-t110-1"></a><a class="docs-heading-anchor-permalink" href="#4.-Combined-Integrand-\\mathbb{I}-at-k2,-x3,-t110" title="Permalink"></a></h2><table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">val = cg_combined_integrand(2.0, 3.0, 110.0, p)
+@printf("I(2;3,110) = %.15e\n", val)
+</code></pre>
+<strong>Output:</strong>
+<pre>
+I(2; x=3, t=110) = -2.492590111020123e+00
+</pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">x=3; t=110;
+total_integrand = @(k) ...
+  2*cos(k*x)./(alpha*(k-k_l)*(k-k_s)) ...
+  -(1+rho_r)*(k+chi(k))/(1-rho_r+alpha*k^2)...
+    *cos(k*(t-x)-t*chi(k))/(alpha*(k-k_l)*(k-k_s))...
+  -(1+rho_r)*(k-chi(k))/(1-rho_r+alpha*k^2)...
+    *cos(k*(t-x)+t*chi(k))/(alpha*(k-k_l)*(k-k_s));
+fprintf('%.15e\n', total_integrand(2));
+</code></pre>
+<strong>Output:</strong>
+<pre>
+I(2; x=3, t=110) = -2.492590111020124e+00
+</pre>
+</td>
+</tr></table><p>✅ <strong>15 digits agree (last digit differs by 1 ULP).</strong></p><p><strong>API:</strong> <a href="../api/#ForcedInterfacialWaves.cg_combined_integrand"><code>cg_combined_integrand</code></a> — evaluates <span>$\mathbb{I}$</span> at a single <span>$(k,x,t)$</span>.  Individual terms: <a href="../api/#ForcedInterfacialWaves.cg_integrand_steady"><code>cg_integrand_steady</code></a>, <a href="../api/#ForcedInterfacialWaves.cg_integrand_I3"><code>cg_integrand_I3</code></a>, <a href="../api/#ForcedInterfacialWaves.cg_integrand_I4"><code>cg_integrand_I4</code></a>.</p><p><img src="../assets/cg_integrand.svg" alt="Combined integrand over k"/></p><hr/><h2 id="5.-Partial-Integrals-I_1,-I_2,-I_3-and-\\eta_{\\mathrm{IVP}}"><a class="docs-heading-anchor" href="#5.-Partial-Integrals-I_1,-I_2,-I_3-and-\\eta_{\\mathrm{IVP}}">5. Partial Integrals <span>$I_1, I_2, I_3$</span> and <span>$\eta_{\mathrm{IVP}}$</span></a><a id="5.-Partial-Integrals-I_1,-I_2,-I_3-and-\\eta_{\\mathrm{IVP}}-1"></a><a class="docs-heading-anchor-permalink" href="#5.-Partial-Integrals-I_1,-I_2,-I_3-and-\\eta_{\\mathrm{IVP}}" title="Permalink"></a></h2><p class="math-container">\[\eta = -\frac{F_0}{2\pi}\left[\underbrace{\int_0^{k_s-\varepsilon}}_{I_1} + \underbrace{\int_{k_s+\varepsilon}^{k_l-\varepsilon}}_{I_2} + \underbrace{\int_{k_l+\varepsilon}^\infty}_{I_3}\right]\mathbb{I}\,dk\]</p><table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">I1, I2, I3 = cg_partial_integrals(3.0, 110.0, p)
+eta = ivp_surface_elevation(3.0, 110.0, p)
+</code></pre>
+<strong>Output:</strong>
+<pre>
+I1      = -1.046983063067731e+01
+I2      = -3.370909573931704e+00
+I3      =  5.152909149338241e+00
+eta_IVP =  1.920386718354886e-03
+</pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">I1=integral(total_integrand,0,k_s-1e-6,...
+    'AbsTol',1e-10,'RelTol',1e-8);
+I2=integral(total_integrand,k_s+1e-6,k_l-1e-6,...
+    'AbsTol',1e-10,'RelTol',1e-8);
+I3=integral(total_integrand,k_l+1e-6,Inf,...
+    'AbsTol',1e-10,'RelTol',1e-8);
+eta=-F0/(2*pi)*(I1+I2+I3);
+</code></pre>
+<strong>Output:</strong>
+<pre>
+I1      = -1.046983063067731e+01
+I2      = -3.370909573932243e+00
+I3      =  5.152903874765406e+00  ⚠️
+eta_IVP =  1.920387884263914e-03
+</pre>
+</td>
+</tr></table><table><tr><th style="text-align: left">Integral</th><th style="text-align: right">Julia</th><th style="text-align: right">MATLAB</th><th style="text-align: left">Agreement</th></tr><tr><td style="text-align: left"><span>$I_1$</span></td><td style="text-align: right"><code>-1.04698e+01</code></td><td style="text-align: right"><code>-1.04698e+01</code></td><td style="text-align: left"><strong>12+ digits</strong></td></tr><tr><td style="text-align: left"><span>$I_2$</span></td><td style="text-align: right"><code>-3.37091e+00</code></td><td style="text-align: right"><code>-3.37091e+00</code></td><td style="text-align: left"><strong>12 digits</strong></td></tr><tr><td style="text-align: left"><span>$I_3$</span></td><td style="text-align: right"><code>5.15291e+00</code></td><td style="text-align: right"><code>5.15290e+00</code></td><td style="text-align: left">~5 digits ⚠️</td></tr><tr><td style="text-align: left"><span>$\eta$</span></td><td style="text-align: right"><code>1.92039e-03</code></td><td style="text-align: right"><code>1.92039e-03</code></td><td style="text-align: left"><strong>5 digits</strong></td></tr></table><div class="admonition is-info" id="Note-bb2e95e07fb4a523"><header class="admonition-header">Note<a class="admonition-anchor" href="#Note-bb2e95e07fb4a523" title="Permalink"></a></header><div class="admonition-body"><p>MATLAB&#39;s <code>integral</code> emits a warning on the <span>$[k_l+\varepsilon,\infty)$</span> interval, reaching its maximum subdivision limit. Julia&#39;s QuadGK with <code>order=15</code> resolves the oscillatory tail more completely. The finite-domain integrals <span>$I_1$</span>, <span>$I_2$</span> match to machine precision.</p></div></div><p><strong>API:</strong> <a href="../api/#ForcedInterfacialWaves.cg_partial_integrals"><code>cg_partial_integrals</code></a> — returns <span>$(I_1, I_2, I_3)$</span> tuple. <a href="../api/#ForcedInterfacialWaves.ivp_surface_elevation"><code>ivp_surface_elevation</code></a> — scalar <span>$\eta(x,t)$</span>. <a href="../api/#ForcedInterfacialWaves.compute_cg_ivp_profile"><code>compute_cg_ivp_profile</code></a> — threaded vector profile over a grid.</p><hr/><h2 id="6.-Steady-Solution-G(x)"><a class="docs-heading-anchor" href="#6.-Steady-Solution-G(x)">6. Steady Solution <span>$G(x)$</span></a><a id="6.-Steady-Solution-G(x)-1"></a><a class="docs-heading-anchor-permalink" href="#6.-Steady-Solution-G(x)" title="Permalink"></a></h2><table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">Gx = cg_Gx_integral(3.0, p)
+eta_s = steady_surface_elevation(3.0, p)
+</code></pre>
+<strong>Output:</strong>
+<pre>
+G(3)        = 1.171510465926700e-02
+eta_steady  = 1.838802567706596e-03
+</pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">G_x = 1/(k_l-k_s)*integral(@(k)...
+    cos(k*x)./(k+k_s)-cos(k*x)./(k+k_l),...
+    0, Inf, 'AbsTol',1e-10,'RelTol',1e-8);
+eta_steady = -2*F0/(alpha*(k_l-k_s))*sin(k_s*x)...
+    + F0/(pi*alpha)*G_x;
+</code></pre>
+<strong>Output:</strong>
+<pre>
+G(3)        = 1.171509902934500e-02
+eta_steady  = 1.838802549785997e-03
+</pre>
+</td>
+</tr></table><p>✅ <span>$G(x)$</span> agrees to 5 digits (MATLAB hits interval limit on <span>$[0,\infty)$</span>); <span>$\eta_{\mathrm{steady}}$</span> agrees to 6 digits.</p><p><strong>API:</strong> <a href="../api/#ForcedInterfacialWaves.cg_Gx_integral"><code>cg_Gx_integral</code></a> — evaluates <span>$G(x)$</span>. <a href="../api/#ForcedInterfacialWaves.steady_surface_elevation"><code>steady_surface_elevation</code></a> — piecewise steady formula. <a href="../api/#ForcedInterfacialWaves.compute_cg_steady_profile"><code>compute_cg_steady_profile</code></a> — threaded vector profile.</p><hr/><h2 id="7.-CG-Profile:-IVP-vs-Steady-(Figure-10)"><a class="docs-heading-anchor" href="#7.-CG-Profile:-IVP-vs-Steady-(Figure-10)">7. CG Profile: IVP vs Steady (Figure 10)</a><a id="7.-CG-Profile:-IVP-vs-Steady-(Figure-10)-1"></a><a class="docs-heading-anchor-permalink" href="#7.-CG-Profile:-IVP-vs-Steady-(Figure-10)" title="Permalink"></a></h2><p><img src="../assets/fig10_comparison.svg" alt="Figure 10 comparison"/></p><hr/><hr/><h2 id="8.-Quadrature-Parameters-(identical-in-both)"><a class="docs-heading-anchor" href="#8.-Quadrature-Parameters-(identical-in-both)">8. Quadrature Parameters (identical in both)</a><a id="8.-Quadrature-Parameters-(identical-in-both)-1"></a><a class="docs-heading-anchor-permalink" href="#8.-Quadrature-Parameters-(identical-in-both)" title="Permalink"></a></h2><table><tr><th style="text-align: left">Parameter</th><th style="text-align: left">Julia</th><th style="text-align: left">MATLAB</th><th style="text-align: right">Value</th></tr><tr><td style="text-align: left"><span>$\varepsilon$</span></td><td style="text-align: left"><code>p.epsilon_pv</code></td><td style="text-align: left"><code>epsilon_pv</code></td><td style="text-align: right"><span>$10^{-6}$</span></td></tr><tr><td style="text-align: left">AbsTol</td><td style="text-align: left"><code>p.atol</code></td><td style="text-align: left"><code>AbsTol</code></td><td style="text-align: right"><span>$10^{-10}$</span></td></tr><tr><td style="text-align: left">RelTol</td><td style="text-align: left"><code>p.rtol</code></td><td style="text-align: left"><code>RelTol</code></td><td style="text-align: right"><span>$10^{-8}$</span></td></tr><tr><td style="text-align: left"><span>$K_{\max}$</span> (CG)</td><td style="text-align: left"><code>p.k_max</code></td><td style="text-align: left"><code>k_max</code></td><td style="text-align: right"><span>$\infty$</span></td></tr><tr><td style="text-align: left"><span>$K_{\max}$</span> (PG analytical)</td><td style="text-align: left"><code>pg.k_max_analytical</code></td><td style="text-align: left"><code>KMAX_analytical</code></td><td style="text-align: right">100</td></tr><tr><td style="text-align: left"><span>$K_{\max}$</span> (PG CPV)</td><td style="text-align: left"><code>pg.k_max_cpv</code></td><td style="text-align: left"><code>KMAX_cpv</code></td><td style="text-align: right">100</td></tr><tr><td style="text-align: left">Front band</td><td style="text-align: left"><code>pg.front_band</code></td><td style="text-align: left"><code>front_band</code></td><td style="text-align: right">1.0</td></tr></table></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../theory/">« Theory</a><a class="docs-footer-nextpage" href="../validation/">Validation »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 6 August 2026 13:10">Thursday 6 August 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Theory · ForcedInterfacialWaves.jl</title><meta name="title" content="Theory · ForcedInterfacialWaves.jl"/><meta property="og:title" content="Theory · ForcedInterfacialWaves.jl"/><meta property="twitter:title" content="Theory · ForcedInterfacialWaves.jl"/><meta name="description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="og:description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="twitter:description" content="Documentation for ForcedInterfacialWaves.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">ForcedInterfacialWaves.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li class="is-active"><a class="tocitem" href>Theory</a><ul class="internal"><li><a class="tocitem" href="#Pure-Gravity-IVP-(\\alpha-0)"><span>Pure-Gravity IVP (<span>$\alpha = 0$</span>)</span></a></li><li><a class="tocitem" href="#Capillary–Gravity-IVP-(\\alpha-0)"><span>Capillary–Gravity IVP (<span>$\alpha &gt; 0$</span>)</span></a></li></ul></li><li><a class="tocitem" href="../julia_matlab/">Julia ↔ MATLAB</a></li><li><a class="tocitem" href="../validation/">Validation</a></li><li><a class="tocitem" href="../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Theory</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Theory</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Theory"><a class="docs-heading-anchor" href="#Theory">Theory</a><a id="Theory-1"></a><a class="docs-heading-anchor-permalink" href="#Theory" title="Permalink"></a></h1><p>Following the notation of the supplementary material (<em>Interfacial waves from pressure forcing</em>, Kadari et al.).</p><h2 id="Pure-Gravity-IVP-(\\alpha-0)"><a class="docs-heading-anchor" href="#Pure-Gravity-IVP-(\\alpha-0)">Pure-Gravity IVP (<span>$\alpha = 0$</span>)</a><a id="Pure-Gravity-IVP-(\\alpha-0)-1"></a><a class="docs-heading-anchor-permalink" href="#Pure-Gravity-IVP-(\\alpha-0)" title="Permalink"></a></h2><p>Setting <span>$\alpha = 0$</span> in the general formulation. The dispersion simplifies to <span>$\chi(k) = \sqrt{\beta k}$</span> and the single pole is at <span>$k = \beta$</span>.</p><h3 id="Analytical-decomposition"><a class="docs-heading-anchor" href="#Analytical-decomposition">Analytical decomposition</a><a id="Analytical-decomposition-1"></a><a class="docs-heading-anchor-permalink" href="#Analytical-decomposition" title="Permalink"></a></h3><p>The solution is decomposed piecewise around the disturbance front <span>$x = t$</span>:</p><p class="math-container">\[\eta^-(x,t) = F_0[T_0(x) + T_1^- + T_2^- + T_3^- + T_4^-], \quad x &lt; t - \delta_x\]</p><p class="math-container">\[\eta^+(x,t) = F_0[T_0(x) + T_1^+ + T_2^+ + T_3^+ + T_4^+], \quad x &gt; t + \delta_x\]</p><p>where <span>$T_3^\pm$</span> involve the Fresnel cosine and sine integrals <span>$C(X)$</span>, <span>$S(X)$</span> (evaluated in closed form, no quadrature), and <span>$\delta_x = 1$</span>.</p><h3 id="Direct-numerical-CPV"><a class="docs-heading-anchor" href="#Direct-numerical-CPV">Direct numerical CPV</a><a id="Direct-numerical-CPV-1"></a><a class="docs-heading-anchor-permalink" href="#Direct-numerical-CPV" title="Permalink"></a></h3><p class="math-container">\[\eta_{\mathrm{CPV}}(x,t) = F_0\left[
+  \int_0^{\beta-\varepsilon} G(k;x,t)\,dk +
+  \int_{\beta+\varepsilon}^{K_{\max}} G(k;x,t)\,dk
+\right]\]</p><p>with</p><p class="math-container">\[G(k;x,t) = \frac{\cos(kx)}{\pi(1+\rho_r)(k-\beta)}
+  - \frac{k\cos[k(t-x)-t\sqrt{\beta k}]}{2\pi(1-\rho_r)(k-\sqrt{\beta k})}
+  - \frac{k\cos[k(t-x)+t\sqrt{\beta k}]}{2\pi(1-\rho_r)(k+\sqrt{\beta k})}\]</p><p>The analytical and CPV evaluations agree to <span>$O(10^{-6})$</span> in the left region and <span>$O(10^{-5})$</span> in the right region, providing independent verification of the derivation.</p><h2 id="Capillary–Gravity-IVP-(\\alpha-0)"><a class="docs-heading-anchor" href="#Capillary–Gravity-IVP-(\\alpha-0)">Capillary–Gravity IVP (<span>$\alpha &gt; 0$</span>)</a><a id="Capillary–Gravity-IVP-(\\alpha-0)-1"></a><a class="docs-heading-anchor-permalink" href="#Capillary–Gravity-IVP-(\\alpha-0)" title="Permalink"></a></h2><h3 id="Problem-setup-(§1.1-of-supplementary)"><a class="docs-heading-anchor" href="#Problem-setup-(§1.1-of-supplementary)">Problem setup (§1.1 of supplementary)</a><a id="Problem-setup-(§1.1-of-supplementary)-1"></a><a class="docs-heading-anchor-permalink" href="#Problem-setup-(§1.1-of-supplementary)" title="Permalink"></a></h3><p>A localized pressure <span>$p_e(x,z=0^+) = F_0\,\delta(x)$</span> acts at the interface of two inviscid, incompressible, irrotational fluids of infinite depth. The nondimensionalisation uses</p><p class="math-container">\[l_c = \frac{U^2}{g}, \quad t_c = \frac{U}{g}, \quad p_c = \rho_l U^2\]</p><p>with nondimensional groups (eq. 2.3, 2.25 of supplementary):</p><p class="math-container">\[\alpha = \frac{g\widetilde T}{\rho_l U^4}, \quad
+\rho_r = \frac{\rho_u}{\rho_l}, \quad
+\beta = \frac{1-\rho_r}{1+\rho_r}, \quad
+\Delta = \sqrt{1-\frac{4\alpha\beta}{1+\rho_r}}\]</p><h3 id="Dispersion-function-(eq.-2.13-of-supplementary)"><a class="docs-heading-anchor" href="#Dispersion-function-(eq.-2.13-of-supplementary)">Dispersion function (eq. 2.13 of supplementary)</a><a id="Dispersion-function-(eq.-2.13-of-supplementary)-1"></a><a class="docs-heading-anchor-permalink" href="#Dispersion-function-(eq.-2.13-of-supplementary)" title="Permalink"></a></h3><p class="math-container">\[\chi(k) = \sqrt{\frac{\alpha|k|^3}{1+\rho_r} + \beta|k|}\]</p><h3 id="Formal-solution-(eq.-2.17-of-supplementary)"><a class="docs-heading-anchor" href="#Formal-solution-(eq.-2.17-of-supplementary)">Formal solution (eq. 2.17 of supplementary)</a><a id="Formal-solution-(eq.-2.17-of-supplementary)-1"></a><a class="docs-heading-anchor-permalink" href="#Formal-solution-(eq.-2.17-of-supplementary)" title="Permalink"></a></h3><p class="math-container">\[\eta(x,t) = \eta_s(x) + \eta_{\mathrm{tr}}(x,t)\]</p><h3 id="Time-independent-part-(eq.-2.22,-2.26-of-supplementary)"><a class="docs-heading-anchor" href="#Time-independent-part-(eq.-2.22,-2.26-of-supplementary)">Time-independent part (eq. 2.22, 2.26 of supplementary)</a><a id="Time-independent-part-(eq.-2.22,-2.26-of-supplementary)-1"></a><a class="docs-heading-anchor-permalink" href="#Time-independent-part-(eq.-2.22,-2.26-of-supplementary)" title="Permalink"></a></h3><p class="math-container">\[\frac{\eta_s(x)}{F_0} = -\frac{1}{2\pi}\left[\mathbb{I}_1(x) + \mathbb{I}_2(x)\right]\]</p><p>where</p><p class="math-container">\[\mathbb{I}_1(x) = \int_0^\infty dk\;\frac{e^{ikx}}{\alpha(k-k_l)(k-k_s)}, \quad
+\mathbb{I}_2(x) = \int_0^\infty dk\;\frac{e^{-ikx}}{\alpha(k-k_l)(k-k_s)}\]</p><p>Equivalently (the numerical implementation uses this real form):</p><p class="math-container">\[\frac{\eta_s(x)}{F_0} = -\frac{1}{\pi}\int_0^\infty dk\;\frac{\cos(kx)}{\alpha(k-k_l)(k-k_s)}\]</p><h3 id="Time-dependent-part-(eq.-2.39–2.41-of-supplementary)"><a class="docs-heading-anchor" href="#Time-dependent-part-(eq.-2.39–2.41-of-supplementary)">Time-dependent part (eq. 2.39–2.41 of supplementary)</a><a id="Time-dependent-part-(eq.-2.39–2.41-of-supplementary)-1"></a><a class="docs-heading-anchor-permalink" href="#Time-dependent-part-(eq.-2.39–2.41-of-supplementary)" title="Permalink"></a></h3><p class="math-container">\[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0} = -\frac{1}{2\pi}\left[\mathbb{I}_3(x,t) + \mathbb{I}_4(x,t)\right]\]</p><p class="math-container">\[\mathbb{I}_3(x,t) = -\frac{(1+\rho_r)}{\alpha}\int_0^\infty dk\;
+\frac{(k+\chi(k))\cos[t(k-\chi(k))-kx]}{(\alpha k^2+1-\rho_r)(k-k_l)(k-k_s)}\]</p><p class="math-container">\[\mathbb{I}_4(x,t) = \int_0^\infty dk\;\frac{k}{\alpha k^2+1-\rho_r}\cdot
+\frac{\cos[k(t-x)+t\chi(k)]}{k+\chi(k)}\]</p><h3 id="Poles-(eq.-2.23–2.24-of-supplementary)"><a class="docs-heading-anchor" href="#Poles-(eq.-2.23–2.24-of-supplementary)">Poles (eq. 2.23–2.24 of supplementary)</a><a id="Poles-(eq.-2.23–2.24-of-supplementary)-1"></a><a class="docs-heading-anchor-permalink" href="#Poles-(eq.-2.23–2.24-of-supplementary)" title="Permalink"></a></h3><p>The roots of <span>$\alpha k^2 - (1+\rho_r)k + (1-\rho_r) = 0$</span> are</p><p class="math-container">\[k_l = \frac{(1+\rho_r)}{2\alpha}\left[1 + \Delta\right], \quad
+k_s = \frac{(1+\rho_r)}{2\alpha}\left[1 - \Delta\right]\]</p><p>Both are positive and real for <span>$\alpha \le \alpha_{\max} = \frac{(1+\rho_r)^2}{4(1-\rho_r)}$</span>.</p><h3 id="Numerical-evaluation-(combined-integrand)"><a class="docs-heading-anchor" href="#Numerical-evaluation-(combined-integrand)">Numerical evaluation (combined integrand)</a><a id="Numerical-evaluation-(combined-integrand)-1"></a><a class="docs-heading-anchor-permalink" href="#Numerical-evaluation-(combined-integrand)" title="Permalink"></a></h3><p>The implementation combines all three contributions before integration so that the poles cancel (see <code>jfm_matlab_codes.tex</code>, eq. cg_total_integrand):</p><p class="math-container">\[\mathbb{I}(k;x,t) = \frac{2\cos(kx)}{\alpha(k-k_l)(k-k_s)}
+  - \frac{(1+\rho_r)(k+\chi)}{1+\alpha k^2-\rho_r}\,
+    \frac{\cos[k(t-x)-t\chi]}{\alpha(k-k_l)(k-k_s)}
+  - \frac{(1+\rho_r)(k-\chi)}{1+\alpha k^2-\rho_r}\,
+    \frac{\cos[k(t-x)+t\chi]}{\alpha(k-k_l)(k-k_s)}\]</p><p class="math-container">\[\eta(x,t) = -\frac{F_0}{2\pi}\left[
+  \int_0^{k_s-\varepsilon}\!\mathbb{I}\,dk +
+  \int_{k_s+\varepsilon}^{k_l-\varepsilon}\!\mathbb{I}\,dk +
+  \int_{k_l+\varepsilon}^{\infty}\!\mathbb{I}\,dk
+\right], \quad \varepsilon = 10^{-6}\]</p><h3 id="Steady-solution-(evaluated-analytically-via-residues)"><a class="docs-heading-anchor" href="#Steady-solution-(evaluated-analytically-via-residues)">Steady solution (evaluated analytically via residues)</a><a id="Steady-solution-(evaluated-analytically-via-residues)-1"></a><a class="docs-heading-anchor-permalink" href="#Steady-solution-(evaluated-analytically-via-residues)" title="Permalink"></a></h3><p class="math-container">\[G(x) = \frac{1}{k_l-k_s}\int_0^\infty\left[\frac{\cos(kx)}{k+k_s} - \frac{\cos(kx)}{k+k_l}\right]dk\]</p><p class="math-container">\[\frac{\eta_{\text{steady}}(x)}{F_0} = \begin{cases}
+  -\dfrac{2}{\alpha(k_l-k_s)}\sin(k_s x) + \dfrac{G(x)}{\pi\alpha}, &amp; x &gt; 0 \\[6pt]
+  -\dfrac{2}{\alpha(k_l-k_s)}\sin(k_l x) + \dfrac{G(x)}{\pi\alpha}, &amp; x &lt; 0
+\end{cases}\]</p><h3 id="Steady-state-decomposition-(manuscript-§3.4)"><a class="docs-heading-anchor" href="#Steady-state-decomposition-(manuscript-§3.4)">Steady-state decomposition (manuscript §3.4)</a><a id="Steady-state-decomposition-(manuscript-§3.4)-1"></a><a class="docs-heading-anchor-permalink" href="#Steady-state-decomposition-(manuscript-§3.4)" title="Permalink"></a></h3><p>In this section, the manuscript shows that neglecting the time-dependent terms in eqns. (3.7) and (3.8) and <span>$\textit{without}$</span> using any Rayleigh dissipation, the steady-state response turns out to be (we exclude all the Dirac delta function terms in eqn. <span>$3.9$</span> in the manuscript) the following. For proof, see <a href="../steady_proof/">Steady-state proof</a>.</p><p class="math-container">\[\begin{aligned}
+\dfrac{\eta_{s}(x)}{F_0} =\dfrac{ \eta^{\text{far-field}}_{s}(x)}{F_0} + \dfrac{\eta^{\text{local}}_{s}(x)}{F_0},\tag{3.11}
+\end{aligned}\]</p><p>where , </p><p class="math-container">\[\begin{aligned}
+\dfrac{\eta^{\text{far-field}}_{s}(x)}{F_0} \equiv \dfrac{1}{\alpha(k_l-k_s)}\bigg\{-\sin(k_s|x|)\quad + \quad \sin(k_l|x|)\bigg\} \\
+\dfrac{\eta^{\text{local}}_{s}(x)}{F_0} \equiv  \dfrac{\left(k_l+k_s\right)}{\pi\alpha}\int_{0}^{\infty}dy \dfrac{y\exp\left(-|x|y\right)}{\left(y^2 + k_l^2\right)\left(y^2+k_s^2\right)},\quad x\neq 0
+\end{aligned}\]</p><p>The integral in <span>$\frac{\eta^{\text{local}}_{s}(x)}{F_0}$</span> is solved numerically (in Julia and MATLAB) as follows:</p><table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">using QuadGK, Plots
+using ForcedInterfacialWaves
+
+# Local manuscript-style alias for QuadGK.quadgk
+const ∫ = quadgk
+
+p = compute_cg_parameters()
+
+# Spatial grid (nondimensional)
+x = collect(-10:0.01:10)
+filter!(xi -> abs(xi) > 1e-12, x)
+
+# Far-field steady
+η_far = @. p.F0 / (p.alpha * (p.k_l - p.k_s)) *
+             (-sin(p.k_s * abs(x)) + sin(p.k_l * abs(x)))
+
+# Local steady
+η_local = similar(η_far)
+for i in eachindex(x)
+    integrand = y -> y * exp(-abs(x[i]) * y) /
+        ((y^2 + p.k_l^2) * (y^2 + p.k_s^2))
+    I, _ = ∫(integrand, 0.0, Inf;
+                  atol=p.atol, rtol=p.rtol)
+    η_local[i] = p.F0 * (p.k_l + p.k_s) /
+                   (π * p.alpha) * I
+end
+
+# Plot (×10³)
+plot(x, η_far .* 1e3,
+     label="η_s^{far-field}", lw=1.5)
+plot!(x, η_local .* 1e3,
+      label="η_s^{local}", lw=1.5)
+xlabel!("x"); ylabel!("η × 10³")
+savefig("eta_steady_components.png")
+</code></pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">% Parameters (CGS)
+U = 26.7046; g = 981; T = 72;
+rho_l = 1; rho_u = 0.001;
+l_c = U^2/g;
+alpha = T/(rho_l*U^2*l_c);
+rho_r = rho_u/rho_l;
+disc = (1+rho_r)^2 - 4*alpha*(1-rho_r);
+k_l = ((1+rho_r) + sqrt(disc))/(2*alpha);
+k_s = ((1+rho_r) - sqrt(disc))/(2*alpha);
+F0 = 0.01*T / (rho_l*U^2*l_c);
+
+% Spatial grid (nondimensional)
+x = -10:0.01:10;
+x(x == 0) = [];
+
+% Far-field steady
+eta_far = F0 / (alpha*(k_l - k_s)) * ...
+    (-sin(k_s*abs(x)) + sin(k_l*abs(x)));
+
+% Local steady
+eta_local = zeros(size(x));
+for i = 1:length(x)
+    integrand = @(y) y .* exp(-abs(x(i)).*y) ...
+        ./ ((y.^2+k_l^2) .* (y.^2+k_s^2));
+    I = integral(integrand, 0, Inf, ...
+        'AbsTol', 1e-10, 'RelTol', 1e-8);
+    eta_local(i) = F0*(k_l+k_s)/(pi*alpha)*I;
+end
+
+% Plot (×10³)
+figure; hold on;
+plot(x, eta_far*1e3, 'b-', 'LineWidth', 1.5, ...
+     'DisplayName', '\eta_s^{far-field}');
+plot(x, eta_local*1e3, 'r-', 'LineWidth', 1.5, ...
+     'DisplayName', '\eta_s^{local}');
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('Location','best'); grid on;
+</code></pre>
+</td>
+</tr></table></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../julia_matlab/">Julia ↔ MATLAB »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 6 August 2026 13:10">Thursday 6 August 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

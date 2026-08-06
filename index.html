@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · ForcedInterfacialWaves.jl</title><meta name="title" content="Home · ForcedInterfacialWaves.jl"/><meta property="og:title" content="Home · ForcedInterfacialWaves.jl"/><meta property="twitter:title" content="Home · ForcedInterfacialWaves.jl"/><meta name="description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="og:description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="twitter:description" content="Documentation for ForcedInterfacialWaves.jl."/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href>ForcedInterfacialWaves.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>Home</a><ul class="internal"><li><a class="tocitem" href="#Citation"><span>Citation</span></a></li><li><a class="tocitem" href="#Problem"><span>Problem</span></a></li><li><a class="tocitem" href="#Manuscript-§4-:"><span>Manuscript §4 :</span></a></li><li><a class="tocitem" href="#What-the-code-computes"><span>What the code computes</span></a></li><li><a class="tocitem" href="#Quick-start"><span>Quick start</span></a></li><li><a class="tocitem" href="#Generating-the-paper-figures"><span>Generating the paper figures</span></a></li><li><a class="tocitem" href="#Contents"><span>Contents</span></a></li></ul></li><li><a class="tocitem" href="theory/">Theory</a></li><li><a class="tocitem" href="julia_matlab/">Julia ↔ MATLAB</a></li><li><a class="tocitem" href="validation/">Validation</a></li><li><a class="tocitem" href="api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Home</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="ForcedInterfacialWaves.jl"><a class="docs-heading-anchor" href="#ForcedInterfacialWaves.jl">ForcedInterfacialWaves.jl</a><a id="ForcedInterfacialWaves.jl-1"></a><a class="docs-heading-anchor-permalink" href="#ForcedInterfacialWaves.jl" title="Permalink"></a></h1><p><em>Julia implementation of the initial value problem (IVP) for pressure-forced interfacial waves in a two-fluid system. Please see the manuscript file below for details</em></p><p>Based on:</p><blockquote><p>Kadari, V.K., Yewale, N., Farsoiya, P.K., Mayya, Y.S. &amp; Dasgupta, R. (2026). Interfacial waves from pressure forcing: revisiting classical theories from an IVP perspective. <em>arXiv preprint</em> <a href="https://arxiv.org/abs/2605.12254">arXiv:2605.12254</a>.</p></blockquote><h2 id="Citation"><a class="docs-heading-anchor" href="#Citation">Citation</a><a id="Citation-1"></a><a class="docs-heading-anchor-permalink" href="#Citation" title="Permalink"></a></h2><pre><code class="language-bibtex hljs">@article{kadari2026interfacial,
+  title={Interfacial waves from pressure forcing: revisiting classical
+         theories from an {IVP} perspective},
+  author={Kadari, Vinod Kumar and Yewale, Nikhil and Farsoiya, Palas Kumar
+          and Mayya, Y. S. and Dasgupta, Ratul},
+  journal={arXiv preprint arXiv:2605.12254},
+  year={2026}
+}</code></pre><h2 id="Problem"><a class="docs-heading-anchor" href="#Problem">Problem</a><a id="Problem-1"></a><a class="docs-heading-anchor-permalink" href="#Problem" title="Permalink"></a></h2><figure style="text-align:center;">
+  <img src="assets/Fig3.png" alt="Figure 10 comparison" style="max-width:100%;">
+  <figcaption>Figure 3 (manuscript): localised pressure forcing at the interface.</figcaption>
+</figure><p>As shown above (Fig. <span>$3$</span> in the manuscript), a localised pressure <span>$\tilde{p}_e = \tilde{F}_0\delta(\tilde{x})$</span> force is applied at the interface between two inviscid, incompressible, fluids of infinite depth, both streams moving at uniform speed <span>$U$</span> rightwards. In the absence of this forcing, the interface is flat and remains at <span>$\tilde{z}=0$</span>. After non-dimensionalisation, the interfacial displacement resulting from the forcing i.e. <span>$\eta(x,t)$</span> is obtained by evaluating the following time-dependent Fourier integrals (eqns. <span>$3.7$</span> and <span>$3.8$</span> in the manuscript)</p><p class="math-container">\[\begin{aligned}
+\dfrac{\sqrt{2\pi}\;\bar{\eta}(k,t)}{F_0} &amp;= \left(\dfrac{1}{-\alpha|k|^2 + \left(1+\rho_r\right)|k| - \left(1-\rho_r\right)}\right) \\
+&amp;\quad - \dfrac{1}{\alpha |k|^2 + \left(1 - \rho_r\right)} \left(\dfrac{k}{2}\right) \Bigg( \dfrac{\exp\left[-it\lambda_2(k)\right]}{\lambda_2(k)} + \dfrac{\exp\left[-it\lambda_1(k)\right]}{\lambda_1(k)} \Bigg) \tag{3.7}
+\end{aligned}\]</p><p>The inverse Fourier integral, leads to the (non-dimensional) interface displacement as a function of time:</p><p class="math-container">\[\begin{aligned}
+	\eta(x,t) = \dfrac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}dk\;\exp\left(ikx\right)\bar{\eta}(k,t), 
+  \end{aligned}  \tag{3.8}\]</p><p>where <span>$\lambda_{1,2}(k) \equiv k\mp\sqrt{\dfrac{\alpha|k|^3}{1+\rho_r}\;+\;\beta|k|}$</span> and </p><p class="math-container">\[\alpha = \frac{gT}{\rho_l U^4}, \quad
+\rho_r = \frac{\rho_u}{\rho_l}, \quad
+\beta = \frac{1-\rho_r}{1+\rho_r}.  \]</p><h3 id="Steady-state-decomposition-(manuscript-§3.4)"><a class="docs-heading-anchor" href="#Steady-state-decomposition-(manuscript-§3.4)">Steady-state decomposition (manuscript §3.4)</a><a id="Steady-state-decomposition-(manuscript-§3.4)-1"></a><a class="docs-heading-anchor-permalink" href="#Steady-state-decomposition-(manuscript-§3.4)" title="Permalink"></a></h3><p>In this section, the manuscript shows that neglecting the time-dependent terms in eqns. (3.7) and (3.8) and <span>$\textit{without}$</span> using any Rayleigh dissipation, the steady-state response turns out to be (we exclude all the Dirac delta function terms in eqn. <span>$3.9$</span> in the manuscript) the following. For proof of this, see <a href="steady_proof/">Steady-state proof</a>.</p><p class="math-container">\[\begin{aligned}
+\dfrac{\eta_{s}(x)}{F_0} =\dfrac{ \eta^{\text{far-field}}_{s}(x)}{F_0} + \dfrac{\eta^{\text{local}}_{s}(x)}{F_0},\tag{3.11}
+\end{aligned}\]</p><p>where , </p><p class="math-container">\[\begin{aligned}
+\dfrac{\eta^{\text{far-field}}_{s}(x)}{F_0} \equiv \dfrac{1}{\alpha(k_l-k_s)}\bigg\{-\sin(k_s|x|)\quad + \quad \sin(k_l|x|)\bigg\} \\
+\dfrac{\eta^{\text{local}}_{s}(x)}{F_0} \equiv  \dfrac{\left(k_l+k_s\right)}{\pi\alpha}\int_{0}^{\infty}dy \dfrac{y\exp\left(-|x|y\right)}{\left(y^2 + k_l^2\right)\left(y^2+k_s^2\right)},\quad x\neq 0
+\end{aligned}\]</p><p>The integral expression for <span>$\frac{\eta^{\text{local}}_{s}(x)}{F_0}$</span> above is solved numerically (in Julia and MATLAB) using the following codes:</p><table style="width:100%"><tr>
+<td style="vertical-align:top; width:50%">
+<strong>Julia</strong>
+<pre><code class="language-julia">using QuadGK, Plots
+using ForcedInterfacialWaves
+
+# Local manuscript-style alias for QuadGK.quadgk
+const ∫ = quadgk
+
+p = compute_cg_parameters()
+
+# Spatial grid (nondimensional)
+x = collect(-10:0.01:10)
+filter!(xi -> abs(xi) > 1e-12, x)
+
+# Far-field steady
+η_far = @. p.F0 / (p.alpha * (p.k_l - p.k_s)) *
+             (-sin(p.k_s * abs(x)) + sin(p.k_l * abs(x)))
+
+# Local steady
+η_local = similar(η_far)
+for i in eachindex(x)
+    integrand = y -> y * exp(-abs(x[i]) * y) /
+        ((y^2 + p.k_l^2) * (y^2 + p.k_s^2))
+    I, _ = ∫(integrand, 0.0, Inf;
+                  atol=p.atol, rtol=p.rtol)
+    η_local[i] = p.F0 * (p.k_l + p.k_s) /
+                   (π * p.alpha) * I
+end
+
+# Plot (×10³)
+plot(x, η_far .* 1e3,
+     label="η_s^{far-field}", lw=1.5)
+plot!(x, η_local .* 1e3,
+      label="η_s^{local}", lw=1.5)
+xlabel!("x"); ylabel!("η × 10³")
+savefig("eta_steady_components.png")
+</code></pre>
+</td>
+<td style="vertical-align:top; width:50%">
+<strong>MATLAB</strong>
+<pre><code class="language-matlab">% Parameters (CGS)
+U = 26.7046; g = 981; T = 72;
+rho_l = 1; rho_u = 0.001;
+l_c = U^2/g;
+alpha = T/(rho_l*U^2*l_c);
+rho_r = rho_u/rho_l;
+disc = (1+rho_r)^2 - 4*alpha*(1-rho_r);
+k_l = ((1+rho_r) + sqrt(disc))/(2*alpha);
+k_s = ((1+rho_r) - sqrt(disc))/(2*alpha);
+F0 = 0.01*T / (rho_l*U^2*l_c);
+
+% Spatial grid (nondimensional)
+x = -10:0.01:10;
+x(x == 0) = [];
+
+% Far-field steady
+eta_far = F0 / (alpha*(k_l - k_s)) * ...
+    (-sin(k_s*abs(x)) + sin(k_l*abs(x)));
+
+% Local steady
+eta_local = zeros(size(x));
+for i = 1:length(x)
+    integrand = @(y) y .* exp(-abs(x(i)).*y) ...
+        ./ ((y.^2+k_l^2) .* (y.^2+k_s^2));
+    I = integral(integrand, 0, Inf, ...
+        'AbsTol', 1e-10, 'RelTol', 1e-8);
+    eta_local(i) = F0*(k_l+k_s)/(pi*alpha)*I;
+end
+
+% Plot (×10³)
+figure; hold on;
+plot(x, eta_far*1e3, 'b-', 'LineWidth', 1.5, ...
+     'DisplayName', '\eta_s^{far-field}');
+plot(x, eta_local*1e3, 'r-', 'LineWidth', 1.5, ...
+     'DisplayName', '\eta_s^{local}');
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('Location','best'); grid on;
+</code></pre>
+</td>
+</tr></table><p>The resulting figure from both Julia and MATLAB are superimposed  in the following figure, which is a reproduction of fig. <span>$5a$</span> in the manuscript.</p><p><img src="assets/Fig5a.png" alt="Figure 5a comparison"/> <em>Figure 5a: Comparison of steady wave profiles computed in MATLAB vs Julia.</em></p><p>In eqn 3.11 , <span>$\eta^{\text{local}}_{s}(x)$</span> ,  can be shown to be exactly equivalent to (for the proof, see <a href="lamb_gx_equivalence/">here</a>). </p><p class="math-container">\[G(x) \equiv \dfrac{1}{k_{l}-k_{s}}\int_{0}^{\infty}\;dk\;\left(\dfrac{\cos(kx)}{k+k_{s}}-\dfrac{\cos(kx)}{k+k_{l}}\right)\]</p><h2 id="Manuscript-§4-:"><a class="docs-heading-anchor" href="#Manuscript-§4-:">Manuscript §4 :</a><a id="Manuscript-§4-:-1"></a><a class="docs-heading-anchor-permalink" href="#Manuscript-§4-:" title="Permalink"></a></h2><h3 id="Zero-capillarity-limit-(\\alpha-0)-section-§4.1-in-the-manuscript"><a class="docs-heading-anchor" href="#Zero-capillarity-limit-(\\alpha-0)-section-§4.1-in-the-manuscript">Zero capillarity limit (<span>$\alpha=  0$</span>) - section  §4.1 in the manuscript</a><a id="Zero-capillarity-limit-(\\alpha-0)-section-§4.1-in-the-manuscript-1"></a><a class="docs-heading-anchor-permalink" href="#Zero-capillarity-limit-(\\alpha-0)-section-§4.1-in-the-manuscript" title="Permalink"></a></h3><p class="math-container">\[		\begin{align}
+				\eta(x,t) &amp;=&amp; \eta_{s}(x) + \eta_{tr}^{(1)}(x,t) + \eta_{tr}^{(2)}(x,t), 
+		\end{align}\tag{4.1}\]</p><p class="math-container">\[      \begin{align}	
+        \dfrac{\eta_{s}(x)}{F_0} &amp;\equiv \dfrac{1}{2\pi\left(1+\rho_r\right)}\int_{-\infty}^{\infty}dk\; \dfrac{\exp\left(ikx\right)}{|k| - \beta},\quad 0 &lt; \beta \leq 1  \nonumber\\
+        \dfrac{\eta_{tr}^{(1)}(x,t)}{F_0} &amp;\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) + t\sqrt{\beta|k|}\right)\right]}{k+ \sqrt{\beta|k|}},  \nonumber\\
+        \dfrac{\eta_{tr}^{(2)}(x,t)}{F_0} &amp;\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) - t\sqrt{\beta|k|}\right)\right]}{k- \sqrt{\beta|k|}}. \tag{4.2a,b,c}
+      \end{align} \]</p><p>It may be further shown using principal value techniques that (see proof <a href="pure_gravity_steady_proof/">here</a>)</p><p class="math-container">\[			\begin{align}
+				\dfrac{\eta_{s}(x)}{F_0} &amp;=&amp; \dfrac{1}{\pi\left(1+\rho_r\right)}\left[-\pi\sin\left(\beta |x|\right)+\int_{0}^{\infty}dy\;\dfrac{y\exp\left(-|x|y\right)}{\beta^2 + y^2}\right],\quad 0 &lt; \beta \leq 1,\; -\infty &lt; x &lt; \infty \nonumber \\
+			\end{align} \tag{4.3}\]</p><p class="math-container">\[\eta_{s}(x)\]</p><p>in expression (4.3) is a symmetric function of <span>$x$</span>, implying a symmetric response upstream and downstream of the forcing at <span>$x=0$</span>. However, a contribution to the steady-state <em>also comes</em> from the time-dependent term in eqns. (4.2b),(4.2c). As shown in the  proof(<a href="pure_gravity_transient_proof/">here</a>) these transient terms may be further simplified to obtain the following analytical representation valid for all <span>$x,t$</span> i.e.</p><p class="math-container">\[\begin{aligned}
+\eta_{tr}(x,t) &amp;\equiv \eta_{tr}^{(1)}(x,t) + \eta_{tr}^{(2)}(x,t) = \bigg\{\mathbb{T}_1(x) + \mathbb{T}_2(x,t) + \mathbb{T}_3(x,t) + \mathbb{T}_4(x,t)\bigg\}F_0, \quad\text{where}
+\end{aligned}\]</p><p><strong>(4.4a)</strong></p><p class="math-container">\[\mathbb{T}_1(x)\equiv  \mp\left(\dfrac{1}{1+\rho_r}\right)\sin(\beta x),\]</p><p><strong>(4.4b)</strong></p><p class="math-container">\[\mathbb{T}_2(x,t) \equiv - \dfrac{4\beta^{-1}}{\pi\left(1+\rho_r\right)}\int_{0}^{\infty}dv\; v^2\;\dfrac{\exp\left(\mp 2av^2 \pm 2bv\right)}{\beta + \left(2v-\beta^{1/2}\right)^2}\Biggl\{\beta^{1/2}\cos\left(\beta^{1/2}tv\right)\pm
+	\left(2v-\beta^{1/2}\right)\sin\left(\beta^{1/2}tv\right)\Biggr\},\]</p><p><strong>(4.4c)</strong></p><p class="math-container">\[\mathbb{T}_3(x,t)\equiv   \dfrac{\beta^{-1/2}}{\pi\left(1+\rho_r\right)}\left(1 + \dfrac{t}{2\left(t-x\right)}\right)\sqrt{\frac{\pi}{2|a|}}\left[\cos\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp \mathrm{C}\left(b\sqrt{\frac{2}{\pi |a|}}\right)\right\}+
+	\sin\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp \mathrm{S}\left(b\sqrt{\frac{2}{\pi |a|}}\right)\right\}\right],\]</p><p><strong>(4.4d)</strong></p><p class="math-container">\[\mathbb{T}_4(x,t)\equiv  - \dfrac{1}{\pi\left(1+\rho_r\right)}\left[\int_{0}^{\infty}\;dv\dfrac{\cos\left(av^2 + 2bv\right)}{v + \beta^{1/2}}\right],\]</p><p>where <span>$a \equiv t-x, \; b \equiv \dfrac{t\sqrt{\beta}}{2}$</span>, the upper signs in <span>$\mathbb{T}_1(x),\mathbb{T}_2(x,t)$</span> are used for <span>$x&lt;t$</span>, while lower signs are for <span>$x &gt; t$</span>. The Fresnel integrals <span>$\mathrm{C}(\cdot)$</span> and <span>$\mathrm{S}(\cdot)$</span> in eqn. (4.4c) are defined as</p><p><strong>(4.5)</strong></p><p class="math-container">\[\mathrm{C}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \cos\left(\frac{\pi t^2}{2}\right),\quad 
+	\mathrm{S}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \sin\left(\frac{\pi t^2}{2}\right).\]</p><p>In expressions (4.4), the <em>time-independent term</em>, <span>$\mathbb{T}_1(x)$</span> (eqn. 4.4a), is asymmetric with the same amplitude as the first term on the right hand side of eqn. (4.3). As a result, these two terms reinforce each other for <span>$x&gt;0$</span> but cancel for <span>$x&lt;0$</span>. Further, we note that as <span>$\rho_r\rightarrow 1$</span> <span>$\left(\beta = \dfrac{1-\rho_r}{1 + \rho_r}\rightarrow 0\right)$</span>, the terms diverge. This is physically reasonable because in this limit (<span>$\rho_r\rightarrow 1$</span>), gravity vanishes and in the absence of capillary forces as well (i.e. <span>$\alpha=0$</span> that we are currently assuming), there remains no restoring force to resist deformation due to the external pressure. The analytical strategy is clear now: provided one can show that <span>$\mathbb{T}_2(x,t\rightarrow\infty)\rightarrow0$</span>, <span>$\mathbb{T}_3(x,t\rightarrow\infty)\rightarrow0$</span> and <span>$\mathbb{T}_4(x,t\rightarrow\infty)\rightarrow0$</span>, one obtains the expected steady-state lacking waves upstream (except for small localised deformation of the interface due to the localised integral in eqn. (4.3)) and sinusoidal waves downstream (<span>$x&gt;0$</span>) with wavenumber <span>$\beta$</span>.</p><h3 id="Finite-capillarity-:-(\\alpha-0)-section-§4.2-in-the-manuscript"><a class="docs-heading-anchor" href="#Finite-capillarity-:-(\\alpha-0)-section-§4.2-in-the-manuscript">Finite-capillarity : (<span>$\alpha &gt; 0$</span>) section §4.2 in the manuscript</a><a id="Finite-capillarity-:-(\\alpha-0)-section-§4.2-in-the-manuscript-1"></a><a class="docs-heading-anchor-permalink" href="#Finite-capillarity-:-(\\alpha-0)-section-§4.2-in-the-manuscript" title="Permalink"></a></h3><p>This package evaluates these integrals numerically for two physical regimes:</p><table><tr><th style="text-align: left">Case</th><th style="text-align: center">Surface tension</th><th style="text-align: left">Poles</th><th style="text-align: center">Figure</th></tr><tr><td style="text-align: left">Pure gravity (<span>$\alpha = 0$</span>)</td><td style="text-align: center">absent</td><td style="text-align: left">CPV at <span>$k = \beta$</span></td><td style="text-align: center">6</td></tr><tr><td style="text-align: left">Capillary–gravity (<span>$\alpha &gt; 0$</span>)</td><td style="text-align: center">active</td><td style="text-align: left">Removable at <span>$k_s$</span>, <span>$k_l$</span> (combined integrand cancels)</td><td style="text-align: center">10</td></tr></table><h2 id="What-the-code-computes"><a class="docs-heading-anchor" href="#What-the-code-computes">What the code computes</a><a id="What-the-code-computes-1"></a><a class="docs-heading-anchor-permalink" href="#What-the-code-computes" title="Permalink"></a></h2><p><strong>Pure gravity (α = 0):</strong> The solution is decomposed analytically into <span>$T_0$</span> (steady), <span>$T_1^\pm$</span>–<span>$T_4^\pm$</span> (transient), where <span>$T_3$</span> uses the Fresnel cosine and sine integrals (evaluated in closed form via <code>FresnelIntegrals.jl</code>, no quadrature). An independent direct numerical Cauchy principal value (CPV) evaluation verifies the analytical decomposition.</p><p><strong>Capillary–gravity (α &gt; 0):</strong> The combined integrand <span>$\mathbb{I}(k; x, t)$</span> — which sums the steady part <span>$\eta_s$</span> and the two transient integrands <span>$\mathbb{I}_3$</span>, <span>$\mathbb{I}_4$</span> so that their singularities at the gravity root <span>$k_s$</span> and capillary root <span>$k_l$</span> cancel — is integrated over <span>$[0,\infty)$</span> split around both poles. The classical steady solution via residues and a <span>$G(x)$</span> integral is also computed for large-time comparison.</p><h2 id="Quick-start"><a class="docs-heading-anchor" href="#Quick-start">Quick start</a><a id="Quick-start-1"></a><a class="docs-heading-anchor-permalink" href="#Quick-start" title="Permalink"></a></h2><h3 id="Install-julia-from-terminal"><a class="docs-heading-anchor" href="#Install-julia-from-terminal">Install julia from terminal</a><a id="Install-julia-from-terminal-1"></a><a class="docs-heading-anchor-permalink" href="#Install-julia-from-terminal" title="Permalink"></a></h3><pre><code class="language-julia hljs">curl -fsSL https://install.julialang.org | sh</code></pre><pre><code class="language-julia hljs">using ForcedInterfacialWaves
+
+# ─── Pure gravity ───
+pg = compute_gravity_parameters()       # returns PureGravityParams struct
+t_pg = 1.0 / pg.t_c
+
+# Analytical decomposition (left of wavefront):
+η_total, η_steady, η_transient = gravity_analytical_left(-2.0, t_pg, pg)
+
+# Independent numerical CPV verification:
+η_cpv = gravity_numerical_cpv(-2.0, t_pg, pg)
+
+# Individual T-terms for validation:
+T0 = gravity_T0(-2.0, pg)
+T3 = gravity_T3_left(-2.0, t_pg, t_pg + 2.0, pg)  # uses fresnelc/fresnels
+
+# ─── Capillary–gravity parameters (all CGS, matching the paper) ───
+p = compute_cg_parameters()   # returns CapillaryGravityParams struct
+
+# Evaluate the IVP surface displacement at a single (x, t) point:
+η = ivp_surface_elevation(3.0, 110.0, p)
+
+# Compute a full spatial profile using threaded vector-valued quadrature:
+x_grid = make_cg_xgrid(p; Nx=2001)
+t = 3.0 / p.t_c                        # t_dim = 3 s → nondimensional
+η_ivp    = compute_cg_ivp_profile(x_grid, t, p)
+η_steady = compute_cg_steady_profile(x_grid, p)</code></pre><h2 id="Generating-the-paper-figures"><a class="docs-heading-anchor" href="#Generating-the-paper-figures">Generating the paper figures</a><a id="Generating-the-paper-figures-1"></a><a class="docs-heading-anchor-permalink" href="#Generating-the-paper-figures" title="Permalink"></a></h2><pre><code class="language-bash hljs">julia -t auto --project=. scripts/figure6_pure_gravity.jl
+julia -t auto --project=. scripts/figure10_capillary_gravity.jl</code></pre><h2 id="Contents"><a class="docs-heading-anchor" href="#Contents">Contents</a><a id="Contents-1"></a><a class="docs-heading-anchor-permalink" href="#Contents" title="Permalink"></a></h2><ul><li><a href="theory/#Theory">Theory</a></li><li class="no-marker"><ul><li><a href="theory/#Pure-Gravity-IVP-(\\alpha-0)">Pure-Gravity IVP (<span>$\alpha = 0$</span>)</a></li><li><a href="theory/#Capillary–Gravity-IVP-(\\alpha-0)">Capillary–Gravity IVP (<span>$\alpha &gt; 0$</span>)</a></li></ul></li><li><a href="julia_matlab/#Julia-MATLAB">Julia ↔ MATLAB</a></li><li class="no-marker"><ul><li><a href="julia_matlab/#1.-Pure-Gravity:-T_0-through-T_4-at-x-2,-t_{\\dim}1-s">1. Pure Gravity: <span>$T_0$</span> through <span>$T_4^-$</span> at <span>$x=-2$</span>, <span>$t_{\dim}=1$</span> s</a></li><li><a href="julia_matlab/#2.-PG-Profile:-Analytical-vs-CPV-(Figure-6)">2. PG Profile: Analytical vs CPV (Figure 6)</a></li><li><a href="julia_matlab/#3.-Capillary–Gravity-Parameters">3. Capillary–Gravity Parameters</a></li><li><a href="julia_matlab/#4.-Combined-Integrand-\\mathbb{I}-at-k2,-x3,-t110">4. Combined Integrand <span>$\mathbb{I}$</span> at <span>$k=2$</span>, <span>$x=3$</span>, <span>$t=110$</span></a></li><li><a href="julia_matlab/#5.-Partial-Integrals-I_1,-I_2,-I_3-and-\\eta_{\\mathrm{IVP}}">5. Partial Integrals <span>$I_1, I_2, I_3$</span> and <span>$\eta_{\mathrm{IVP}}$</span></a></li><li><a href="julia_matlab/#6.-Steady-Solution-G(x)">6. Steady Solution <span>$G(x)$</span></a></li><li><a href="julia_matlab/#7.-CG-Profile:-IVP-vs-Steady-(Figure-10)">7. CG Profile: IVP vs Steady (Figure 10)</a></li><li><a href="julia_matlab/#8.-Quadrature-Parameters-(identical-in-both)">8. Quadrature Parameters (identical in both)</a></li></ul></li><li><a href="validation/#Validation">Validation</a></li><li class="no-marker"><ul><li><a href="validation/#Parameters-(15-digit-agreement)">Parameters (15-digit agreement)</a></li><li><a href="validation/#Pure-Gravity-Individual-T-Terms-(x-2,-t_{\\dim}-1-s)">Pure-Gravity Individual <span>$T$</span>-Terms (<span>$x = -2$</span>, <span>$t_{\dim} = 1$</span> s)</a></li><li><a href="validation/#Analytical-vs-Numerical-CPV-(t_{\\dim}-1-s)">Analytical vs Numerical CPV (<span>$t_{\dim} = 1$</span> s)</a></li><li><a href="validation/#Capillary–Gravity-IVP-vs-Steady-(t_{\\dim}-3-s)">Capillary–Gravity IVP vs Steady (<span>$t_{\dim} = 3$</span> s)</a></li><li><a href="validation/#Optimized-Profile-Equivalence">Optimized Profile Equivalence</a></li><li><a href="validation/#Reproducing">Reproducing</a></li></ul></li><li><a href="api/#API-Reference">API Reference</a></li><li class="no-marker"><ul><li><a href="api/#Parameters">Parameters</a></li><li><a href="api/#Pure-Gravity-(Figure-6)">Pure Gravity (Figure 6)</a></li><li><a href="api/#Capillary–Gravity-(Figure-10)">Capillary–Gravity (Figure 10)</a></li></ul></li></ul></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="theory/">Theory »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 6 August 2026 13:10">Thursday 6 August 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

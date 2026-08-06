@@ -1,0 +1,9 @@
+/* Make the content area use full width instead of leaving half empty */
+#documenter .docs-main > article {
+    max-width: none;
+}
+
+/* Also widen the overall content container */
+.content {
+    max-width: none;
+}
