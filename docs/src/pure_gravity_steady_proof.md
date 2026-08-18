@@ -1,25 +1,22 @@
-# Proof: Steady-state solution for pure gravity ($\alpha = 0$)
+# Proof: Time-independent solution for pure gravity ($\alpha = 0$)
 
 ## Evaluation of time-independent term $\eta_{s}(x)$
 
-Let us first focus on the time-independent part $\eta_s(x)$. This can be rewritten as:
+Let us focus on the time-independent part $\eta_s(x)$ (see eqn. 4.2a in manuscript). This can be rewritten as:
 
-**(P.1)**
 ```math
-\frac{\eta_{s}(x)}{F_0} =  \frac{1}{2\pi (1+\rho_r)}\left\{\mathbb{I}_5(x)+\mathbb{I}_6(x)\right\},
+\frac{\eta_{s}(x)}{F_0} =  \frac{1}{2\pi (1+\rho_r)}\left\{\mathbb{I}_5(x)+\mathbb{I}_6(x)\right\},\tag{P.1}
 ```
 
 where, we define,
 
-**(P.2)**
 ```math
-\mathbb{I}_5(x) = \int_{0}^{\infty}dk\;\dfrac{\exp\left(ikx\right)}{k - \beta}, \qquad -\infty < x < \infty,
+\mathbb{I}_5(x) = \int_{0}^{\infty}dk\;\dfrac{\exp\left(ikx\right)}{k - \beta}, \qquad -\infty < x < \infty,\tag{P.2}
 ```
 
-**(P.3)**
 ```math
 \mathbb{I}_6(x) = \int_{0}^{\infty}dk\;\dfrac{\exp\left(-ikx\right)}{k - \beta},
-	\qquad -\infty < x < \infty.
+	\qquad -\infty < x < \infty.\tag{P.3}
 ```
 
 ![Contours for evaluating the pure-gravity steady integrals](assets/supp2.png)
@@ -32,7 +29,6 @@ They may be evaluated by contour integration using the PV method, with the conto
 
 The PV of an integral $I=\int_{0}^{\infty} f(x)\,dx$, where $f(x)$ possesses a simple first-order pole at $x=x_0$ ($x_0 \in \mathbb{R}^{+}$), is defined as
 
-**(P.4)**
 ```math
 I=\operatorname{PV}\int_{0}^{\infty} f(x)\,dx
 =\displaystyle \lim_{\epsilon \to 0}
@@ -40,38 +36,50 @@ I=\operatorname{PV}\int_{0}^{\infty} f(x)\,dx
 \int_{0}^{x_0-\epsilon} f(x)\,dx
 +
 \int_{x_0+\epsilon}^{\infty} f(x)\,dx
-\right],
+\right],\tag{P.4}
 ```
 if such a limit exists.
 
 Consider the integral $\mathbb{I}_5^c(x)$ along the closed contour shown in Figure 2(a) for $x>0$,
 
-**(P.5)**
 ```math
-\mathbb{I}_5^c(x) = \oint dz \,  \frac{\exp\left(izx\right)}{(z - \beta)}, \qquad x>0.
+\mathbb{I}_5^c(x) = \oint dz \,  \frac{\exp\left(izx\right)}{(z - \beta)}, \qquad x>0.\tag{P.5}
 ```
 
-$\mathbb{I}_5^c(x)$ will be zero as the closed contour does not enclose any singularity. Further, upon breaking this integral along the individual segments of the contour, one may write as
+Integral $\mathbb{I}_5^c(x)$ will be zero as the closed contour does not enclose any singularity. Further, upon breaking this integral along the individual segments of the contour, one may write as
 
-**(P.6)**
 ```math
-\mathbb{I}_5^c(x) = 0 =	\int_{\Gamma_1} dz\, \frac{\exp(izx)}{z-\beta}
-	+\int_{\Gamma_2} dz\, \frac{\exp(izx)}{z-\beta}
-	+\int_{\Gamma_3} dz\, \frac{\exp(izx)}{z-\beta}
-	+\int_{\Gamma_4} dz\, \frac{\exp(izx)}{z-\beta}
-	+\int_{\Gamma_5} dz\, \frac{\exp(izx)}{z-\beta}.
+\begin{aligned}
+\mathbb{I}_5^c(x)=0
+={}&
+\int_{\Gamma_1}
+\frac{e^{izx}}{z-\beta}\,dz
++
+\int_{\Gamma_2}
+\frac{e^{izx}}{z-\beta}\,dz
+\\
+&+
+\int_{\Gamma_3}
+\frac{e^{izx}}{z-\beta}\,dz
++
+\int_{\Gamma_4}
+\frac{e^{izx}}{z-\beta}\,dz
+\\
+&+
+\int_{\Gamma_5}
+\frac{e^{izx}}{z-\beta}\,dz .
+\end{aligned}
+\tag{P.6}
 ```
 
 The integral on the large quarter circle $\Gamma_4$ tends to zero as $R \to \infty$ for $x>0$, as argued below,
 
-**(P.7)**
 ```math
-\lim_{R \rightarrow \infty}\left[\int_{\Gamma_4} dz\, \frac{\exp(izx)}{z-\beta}\right]=\lim_{R \rightarrow \infty} \left[\int_{0}^{\frac{\pi}{2}} d\theta \, iR \exp(i \theta) \frac{\exp\left(ixR \cos(\theta)\right)\exp\left(-xR \sin(\theta)\right)}{(R \exp(i \theta) - \beta)} \right],
+\lim_{R \rightarrow \infty}\left[\int_{\Gamma_4} dz\, \frac{\exp(izx)}{z-\beta}\right]=\lim_{R \rightarrow \infty} \left[\int_{0}^{\frac{\pi}{2}} d\theta \, iR \exp(i \theta) \frac{\exp\left(ixR \cos(\theta)\right)\exp\left(-xR \sin(\theta)\right)}{(R \exp(i \theta) - \beta)} \right],\tag{P.7}
 ```
 
 the value of the integrand above is governed by the factor $\exp(-xR\sin\theta)$ which tends to zero as $R \to \infty$ for $x>0$ by Jordan's lemma, since $\sin(\theta)$ is always positive in the first quadrant. In view of this, eqn. (P.6) reduces to,
 
-**(P.8)**
 ```math
 \begin{aligned}
 	&\lim_{\substack{\epsilon \to 0 \\ R \to \infty}} \left[\int_{0}^{\beta-\epsilon}dk\, 
@@ -86,46 +94,58 @@ the value of the integrand above is governed by the factor $\exp(-xR\sin\theta)$
 	&+
 	\int_{\infty}^{0} dy\,\exp \left(i\frac{\pi}{2}\right)
 	\frac{ \exp \left(i \left[\exp \left(i\frac{\pi}{2}\right)y\right] x\right)}{\left\{\exp \left(i\frac{\pi}{2}\right)y-\beta\right\}}\, =0.
-\end{aligned}
+\end{aligned}\tag{P.8}
 ```
 
 Upon completing the limiting process and identifying the first two terms with the PV of $\mathbb{I}_5(x)$ and evaluating the remaining terms, one obtains,
 
-**(P.9)**
 ```math
 \operatorname{PV}\! \left[\mathbb{I}_5(x)\right] =  i \pi \exp \left(i\beta x\right)
-	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(-yx\right)}{(iy-\beta)} \, , \qquad x>0.
+	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(-yx\right)}{(iy-\beta)} \, , \qquad x>0.\tag{P.9}
 ```
 
-Similarly, for $x<0$ one performs similar steps of contour integration using the contour in Figure P1(b) and obtains,
+Similarly, for $x<0$ one performs similar steps of contour integration using the contour in Figure 2(b) and obtains,
 
-**(P.10)**
 ```math
 \operatorname{PV}\! \left[\mathbb{I}_5(x)\right] =  -i \pi \exp \left(i\beta x\right)
-	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(yx\right)}{(iy+\beta)} \, , \qquad x<0.
+	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(yx\right)}{(iy+\beta)} \, , \qquad x<0.\tag{P.10}
 ```
 
 The integral $\mathbb{I}_6(x)$ in eqn. (P.3) is the converse of $\mathbb{I}_5(x)$ with $x$ replaced with $-x$, accordingly one may write
 
-**(P.11)**
 ```math
 \operatorname{PV}\! \left[\mathbb{I}_6(x)\right] =  -i \pi \exp \left(-i\beta x\right)
-	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(-yx\right)}{(iy+\beta)} \, , \qquad x>0,
+	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(-yx\right)}{(iy+\beta)} \, , \qquad x>0,\tag{P.11}
 ```
 
 and
 
-**(P.12)**
 ```math
 \operatorname{PV}\! \left[\mathbb{I}_6(x)\right] =  i \pi \exp \left(-i\beta x\right)
-	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(yx\right)}{(iy-\beta)} \, , \qquad x<0.
+	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(yx\right)}{(iy-\beta)} \, , \qquad x<0.\tag{P.12}
 ```
 
 Upon plugging eqns. (P.9)–(P.12) into eqn. (P.1) and separating the real and imaginary parts (the latter vanishes), one obtains symmetric expressions for $x>0$ and $x<0$. Since this is expected — the integral expression for $\eta_s(x)$ contains a symmetrical term namely $\cos(kx)$ — taking this symmetry into account one may write down the final expression as,
 
-**(P.13)**
 ```math
-\frac{\eta_{s}(x)}{F_0} = \dfrac{1}{\pi\left(1+\rho_r\right)}\left[-\pi\sin\left(\beta |x|\right)+\int_{0}^{\infty}dy\;\dfrac{y\exp\left(-|x|y\right)}{\beta^2 + y^2}\right],\quad 0 < \beta < 1,\; -\infty < x < \infty.
+\begin{aligned}
+\frac{\eta_s(x)}{F_0}
+={}&
+\frac{1}{\pi(1+\rho_r)}
+\left[
+-\pi\sin\!\left(\beta|x|\right)
++
+\int_0^\infty
+\frac{y\,e^{-|x|y}}
+{\beta^2+y^2}\,dy
+\right],
+\\[0.4em]
+&\qquad
+0<\beta<1,
+\qquad
+-\infty<x<\infty .
+\end{aligned}
+\tag{P.13}
 ```
 
 It may be noted while the first term shows a far-field steady wavy pattern both upstream and downstream, the second term is a localised contribution which decays to zero rapidly as $|x|^{-2}$ as $|x| \to \infty$; its value at $|x|=0$ possesses a logarithmic divergence with respect to $x$.
