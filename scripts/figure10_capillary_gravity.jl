@@ -1,108 +1,134 @@
 """
     figure10_capillary_gravity.jl
 
-    Julia equivalent of the MATLAB Fig10 plotting script.
     Capillary-gravity (α > 0) IVP solution vs steady state.
+    Reproduces Figure 10 of the manuscript at multiple time snapshots.
 
     Usage:
-        julia -t auto --project=. scripts/figure10_capillary_gravity.jl
+        julia -t auto --project=scripts scripts/figure10_capillary_gravity.jl
 """
 
-# Thread check
+# ─── Thread check ──────────────────────────────────────────────────────────────
 if Threads.nthreads() == 1
-    @warn "Running single-threaded. For ~5× speedup, restart with: julia -t auto --project=. scripts/figure10_capillary_gravity.jl"
+    @warn "Running single-threaded. For ~5× speedup: julia -t auto --project=scripts scripts/figure10_capillary_gravity.jl"
 else
     @info "Using $(Threads.nthreads()) threads"
 end
 
-push!(LOAD_PATH, joinpath(@__DIR__, ".."))
 using ForcedInterfacialWaves
 using Plots; gr()
-using Printf
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Parameters
 # ═══════════════════════════════════════════════════════════════════════════════
 
 const OUTPUT_DIR = joinpath(@__DIR__, "..", "output", "figure10")
+const COMPARISON_FILE = joinpath(
+    @__DIR__, "..", "docs", "src", "assets", "matlab_cg_ivp_t300.csv"
+)
 mkpath(OUTPUT_DIR)
 
 const TIME_INDICES = [1, 3, 7, 15, 25, 60, 145, 300]
 const NX_PLOT      = 2001
 
+"""Read a headerless two-column `(x, η)` CSV without adding a package dependency."""
+function read_comparison_csv(path)
+    rows = [split(strip(line), ',') for line in eachline(path) if !isempty(strip(line))]
+    all(length(row) >= 2 for row in rows) || error("Expected at least two columns in $path")
+    x = [parse(Float64, row[1]) for row in rows]
+    η = [parse(Float64, row[2]) for row in rows]
+    return x, η
+end
+
+comparison = if isfile(COMPARISON_FILE)
+    println("CSV comparison: ", COMPARISON_FILE)
+    read_comparison_csv(COMPARISON_FILE)
+else
+    @warn "CSV comparison not found; figures will contain theory only" path=COMPARISON_FILE
+    nothing
+end
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Setup
 # ═══════════════════════════════════════════════════════════════════════════════
 
-p = compute_cg_parameters()  # MATLAB-exact: k_max=Inf, atol=1e-10, rtol=1e-8
+p = compute_cg_parameters()
 
-@printf("Capillary-gravity parameters:\n")
-@printf("  α     = %.6e\n", p.alpha)
-@printf("  ρ_r   = %.6e\n", p.rho_r)
-@printf("  k_s   = %.12f\n", p.k_s)
-@printf("  k_l   = %.12f\n", p.k_l)
-@printf("  F₀    = %.6e\n", p.F0)
-
-k_l_dim = p.k_l / p.l_c
-k_s_dim = p.k_s / p.l_c
-@printf("  λ_capillary = %.4f cm\n", 2π / k_l_dim)
-@printf("  λ_gravity   = %.4f cm\n", 2π / k_s_dim)
+println("Capillary-gravity parameters:")
+println("  α   = ", p.α)
+println("  ρᵣ  = ", p.ρᵣ)
+println("  kₛ  = ", p.kₛ)
+println("  kₗ  = ", p.kₗ)
+println("  F₀  = ", p.F₀)
+println("  λ_capillary = ", 2π / (p.kₗ / p.l_c), " cm")
+println("  λ_gravity   = ", 2π / (p.kₛ / p.l_c), " cm")
 
 x_grid = make_cg_xgrid(p; Nx=NX_PLOT)
 
+# Explicit asymmetric classical steady state for long-time comparison.
+# sol.η_steady itself is the symmetric ηₛ from equation (4.5b).
+classical_steady = solve(ForcedGCProblem(p, x_grid);
+                         method=steady(rayleigh_dissipation=true)).η
+
 # ═══════════════════════════════════════════════════════════════════════════════
-# Loop over times — threaded in-place vector quadrature over spatial chunks
+# Loop over times
 # ═══════════════════════════════════════════════════════════════════════════════
 
 for ti in TIME_INDICES
     t_dim = ti / 100.0
     t = t_dim / p.t_c
 
-    @printf("\n  time_index = %d, t_dim = %.2f s, t = %.4f ... ", ti, t_dim, t)
+    print("\n  time_index = $ti, t_dim = $(t_dim) s, t = $t ... ")
     flush(stdout)
 
     t0 = time()
-    η_ivp, η_steady = compute_cg_profile(
-        x_grid, t, p; compute_steady=(ti == 300))
+    sol = solve(ForcedGCProblem(p, x_grid, t))
     elapsed = time() - t0
-    @printf("done in %.1f s\n", elapsed)
+    println("done in $(round(elapsed; digits=2)) s")
 
-    # Scale for plotting
-    scale = 1.0e3
+    η_ivp    = sol.η
+    η_s      = sol.η_steady
+    η_tr     = sol.η_transient
+    scale    = 1.0e3
 
     # ─── Plot ───
     plt = plot(;
         size       = (500, 340),
         xlims      = (-5.0, 10.0),
         ylims      = (-6.0, 13.0),
-        yticks     = [-4, 0, 4, 8],
+        yticks     = [-4, 0, 4, 8, 12],
         xlabel     = "\$x\$",
         ylabel     = "\$10^3 \\eta\$",
         legend     = :topright,
         framestyle = :box,
         grid       = false,
         tickdir    = :out,
-        fontfamily = "Computer Modern",
     )
 
+    plot!(plt, x_grid, scale .* η_ivp;
+          lw=1.8, ls=:dash, lc=:blue, label="\$\\eta\$ (IVP)")
+    plot!(plt, x_grid, scale .* η_s;
+          lw=1.8, ls=:solid, lc=:black, label="\$\\eta_s\$ (eq. 4.5b)")
+    plot!(plt, x_grid, scale .* η_tr;
+          lw=1.4, ls=:dot, lc=:green, label="\$\\eta_{\\rm tr}\$")
+
     if ti == 300
-        # Steady (black solid)
-        plot!(plt, x_grid, scale .* η_steady;
-              lw=1.8, ls=:solid, lc=:black, label="Steady")
-        # IVP theory (blue dashed)
-        plot!(plt, x_grid, scale .* η_ivp;
-              lw=1.8, ls=:dash, lc=:blue, label="Theory")
-    else
-        # IVP theory (blue dash-dot)
-        plot!(plt, x_grid, scale .* η_ivp;
-              lw=1.8, ls=:dashdot, lc=:blue, label="Theory")
+        # Also show the asymmetric long-time radiation solution and archived
+        # MATLAB reference; these are not sol.η_steady.
+        plot!(plt, x_grid, scale .* classical_steady;
+              lw=1.8, ls=:dashdot, lc=:gray, label="classical radiation")
+        if comparison !== nothing
+            x_csv, η_csv = comparison
+            plot!(plt, x_csv, scale .* η_csv;
+                  lw=1.6, ls=:dot, lc=:red, label="CSV reference")
+        end
     end
 
-    # Save
-    fname = @sprintf("figure10_t%04d", ti)
+    # ─── Save ───
+    fname = "figure10_t" * lpad(ti, 4, '0')
     savefig(plt, joinpath(OUTPUT_DIR, fname * ".png"))
     savefig(plt, joinpath(OUTPUT_DIR, fname * ".pdf"))
-    @printf("    saved: %s\n", fname)
+    println("    saved: ", fname)
 end
 
 println("\nDone. Figures in: ", OUTPUT_DIR)

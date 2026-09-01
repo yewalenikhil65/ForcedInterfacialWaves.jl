@@ -128,23 +128,7 @@ and
 Upon plugging eqns. (P.9)–(P.12) into eqn. (P.1) and separating the real and imaginary parts (the latter vanishes), one obtains symmetric expressions for $x>0$ and $x<0$. Since this is expected — the integral expression for $\eta_s(x)$ contains a symmetrical term namely $\cos(kx)$ — taking this symmetry into account one may write down the final expression as,
 
 ```math
-\begin{aligned}
-\frac{\eta_s(x)}{F_0}
-={}&
-\frac{1}{\pi(1+\rho_r)}
-\left[
--\pi\sin\!\left(\beta|x|\right)
-+
-\int_0^\infty
-\frac{y\,e^{-|x|y}}
-{\beta^2+y^2}\,dy
-\right],
-\\[0.4em]
-&\qquad
-0<\beta<1,
-\qquad
--\infty<x<\infty .
-\end{aligned}
+\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right)+\int_0^\infty \frac{y\,e^{-|x|y}}{\beta^2+y^2}\,dy\right], \qquad 0<\beta<1, \qquad -\infty<x<\infty .
 \tag{P.13}
 ```
 

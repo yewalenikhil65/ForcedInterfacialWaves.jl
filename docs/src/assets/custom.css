@@ -1,9 +1,51 @@
-/* Make the content area use full width instead of leaving half empty */
-#documenter .docs-main > article {
+/* Use the space remaining beside the sidebar on desktop. Documenter caps
+   .docs-main at 50rem by default, which causes premature wrapping and a
+   large unused area on the right at normal zoom. */
+@media screen and (min-width: 1056px) {
+    #documenter > .docs-main {
+        max-width: none;
+    }
+
+    #documenter > .docs-main > article {
+        max-width: none;
+    }
+}
+
+/* Keep generated content and wide code/table blocks from adding another cap. */
+#documenter .content {
     max-width: none;
 }
 
-/* Also widen the overall content container */
-.content {
+/* Keep paired Julia/MATLAB examples together on wide screens. The wrapper is
+   added by custom.js because executable Julia examples can have generated
+   output between the Julia and MATLAB <pre> elements. */
+.code-comparison {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    margin: 1rem 0 1.5rem;
+}
+
+.code-comparison .code-column {
+    min-width: 0;
+}
+
+.code-comparison pre {
     max-width: none;
+    margin: 0 0 0.75rem;
+    overflow-x: auto;
+}
+
+.code-comparison img,
+.code-comparison svg {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.75rem;
+}
+
+@media screen and (max-width: 800px) {
+    .code-comparison {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }

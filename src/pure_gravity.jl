@@ -39,272 +39,166 @@ Wraps `FresnelIntegrals.fresnels` — O(1) cost, no quadrature.
 @inline fresnel_S(x::Real) = fresnels(x)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# T₀ : time-independent (steady) contribution
+# Unified T₀–T₄ functions (accept any x, t)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 """
-    gravity_T0(x, p)
+    T₀(x, p)
 
-Time-independent (steady) contribution:
+Time-independent (steady) contribution. Symmetric in x:
 
 ```math
 T_0(x) = \\frac{1}{\\pi(1+\\rho_r)}\\left[-\\pi\\sin(\\beta|x|)
-+ \\int_0^\\infty e^{-y|x|}\\frac{y}{\\beta^2+y^2}\\,dy\\right]
++ \\int_0^\\infty \\frac{y\\,e^{-|x|y}}{\\beta^2+y^2}\\,dy\\right]
 ```
 """
-function gravity_T0(x::Real, p::PureGravityParams)
+function T₀(x::Real, p::PureGravityParams)
     xa = abs(x)
     β² = p.beta^2
-
     term_a = -π * sin(p.beta * xa)
-
-    # This integrand decays exponentially — default order=7 is fine
     integrand = y -> exp(-y * xa) * y / (β² + y^2)
     term_b, _ = quadgk(integrand, 0.0, Inf;
                        atol=p.atol_transformed, rtol=p.rtol_transformed)
-
     return (term_a + term_b) / (π * (1.0 + p.rho_r))
 end
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# Left region  x < t − δ_x  (behind front),  a = t − x > 0
-# ═══════════════════════════════════════════════════════════════════════════════
-
 """
-    gravity_T1_left(x, p)
+    T₁(x, t, p)
 
-First transient contribution (left region, closed-form):
+Closed-form transient term. Sign determined by position relative to wavefront:
 
 ```math
-T_1^-(x) = -\\frac{\\sin(\\beta x)}{1+\\rho_r}
+T_1(x,t) = \\mp\\frac{\\sin(\\beta x)}{1+\\rho_r}
 ```
+Upper sign (−) for x < t, lower sign (+) for x > t.
 """
-@inline function gravity_T1_left(x::Real, p::PureGravityParams)
-    return -sin(p.beta * x) / (1.0 + p.rho_r)
+@inline function T₁(x::Real, t::Real, p::PureGravityParams)
+    s = x < t ? -1.0 : 1.0
+    return s * sin(p.beta * x) / (1.0 + p.rho_r)
 end
 
 """
-    gravity_T2_left(x, t, a, p)
+    T₂(x, t, p)
 
-Exponentially-damped oscillatory integral (left region, ``a = t-x > 0``):
+Exponentially-damped oscillatory integral. Valid for any x ≠ t:
 
 ```math
-T_2^- = -\\frac{4}{\\pi(1+\\rho_r)\\beta}\\int_0^{K_{\\max}} v^2\\,
-e^{-2v^2 a + vt\\sqrt\\beta}\\,
-\\frac{\\sqrt\\beta\\cos(vt\\sqrt\\beta) + (2v-\\sqrt\\beta)\\sin(vt\\sqrt\\beta)}
-{\\beta + (2v-\\sqrt\\beta)^2}\\,dv
+T_2 = -\\frac{4}{\\pi(1+\\rho_r)\\beta}\\int_0^{K_{\\max}} v^2\\,
+\\frac{\\exp(\\mp 2v^2 a \\pm vt\\sqrt\\beta)}{\\beta + (2v-\\sqrt\\beta)^2}
+\\left[\\sqrt\\beta\\cos(vt\\sqrt\\beta) \\pm (2v-\\sqrt\\beta)\\sin(vt\\sqrt\\beta)\\right]dv
 ```
 """
-function gravity_T2_left(x::Real, t::Real, a::Real, p::PureGravityParams)
+function T₂(x::Real, t::Real, p::PureGravityParams)
+    a   = t - x
     sβ  = p.sqrt_beta
     β   = p.beta
     tsβ = t * sβ
+    s   = a > 0 ? 1.0 : -1.0   # +1 for left (x<t), -1 for right (x>t)
 
     integrand = v -> begin
         arg = v * tsβ
-        num = sβ * cos(arg) + (2.0v - sβ) * sin(arg)
+        num = sβ * cos(arg) + s * (2.0v - sβ) * sin(arg)
         den = β + (2.0v - sβ)^2
-        return v^2 * exp(-2.0 * v^2 * a + v * tsβ) * num / den
-    end
-
-    # Exponential decay — converges quickly; order=7 sufficient
-    I, _ = quadgk(integrand, 0.0, p.k_max_analytical;
-                  atol=p.atol_transformed, rtol=p.rtol_transformed)
-
-    return -4.0 / (π * (1.0 + p.rho_r) * β) * I
-end
-
-"""
-    gravity_T3_left(x, t, a, p)
-
-Fresnel-integral contribution (left region). No quadrature — uses [`fresnel_C`](@ref), [`fresnel_S`](@ref):
-
-```math
-T_3^- = \\frac{1}{\\pi(1+\\rho_r)\\sqrt\\beta}
-\\left(1+\\frac{t}{2a}\\right)\\sqrt{\\frac{\\pi}{2a}}\\,
-\\left[\\cos\\!\\left(\\frac{b^2}{a}\\right)\\!\\left(\\tfrac12 - C(X)\\right)
-+ \\sin\\!\\left(\\frac{b^2}{a}\\right)\\!\\left(\\tfrac12 - S(X)\\right)\\right]
-```
-
-where ``b = t\\sqrt\\beta/2``, ``X = b\\sqrt{2/(\\pi a)}``.
-"""
-function gravity_T3_left(x::Real, t::Real, a::Real, p::PureGravityParams)
-    sβ = p.sqrt_beta
-    b  = 0.5 * t * sβ
-    X  = b * sqrt(2.0 / (π * a))
-
-    coeff = 1.0 / (π * (1.0 + p.rho_r) * sβ)
-    pref  = (1.0 + t / (2.0 * a)) * sqrt(π / (2.0 * a))
-    b2a   = b^2 / a
-
-    return coeff * pref * (cos(b2a) * (0.5 - fresnel_C(X)) +
-                           sin(b2a) * (0.5 - fresnel_S(X)))
-end
-
-"""
-    gravity_T4_left(x, t, a, p)
-
-Oscillatory integral (left region):
-
-```math
-T_4^- = -\\frac{1}{\\pi(1+\\rho_r)}\\int_0^{K_{\\max}}
-\\frac{\\cos(v^2 a + vt\\sqrt\\beta)}{v + \\sqrt\\beta}\\,dv
-```
-"""
-function gravity_T4_left(x::Real, t::Real, a::Real, p::PureGravityParams)
-    sβ  = p.sqrt_beta
-    tsβ = t * sβ
-
-    # Oscillatory integrand — use higher order for better polynomial interpolation
-    integrand = v -> cos(v^2 * a + v * tsβ) / (v + sβ)
-    I, _ = quadgk(integrand, 0.0, p.k_max_analytical;
-                  atol=p.atol_transformed, rtol=p.rtol_transformed, order=15)
-
-    return -1.0 / (π * (1.0 + p.rho_r)) * I
-end
-
-"""
-    gravity_analytical_left(x, t, p) → (η_total, η_steady, η_transient)
-
-Complete analytical solution for ``x < t - \\delta_x`` (behind the wavefront):
-
-```math
-\\eta^-(x,t) = F_0\\left[T_0(x) + T_1^- + T_2^- + T_3^- + T_4^-\\right]
-```
-
-Returns a tuple `(η_total, η_steady, η_transient)` where `η_steady = F₀ T₀` and
-`η_transient = F₀(T₁⁻ + T₂⁻ + T₃⁻ + T₄⁻)`.
-"""
-function gravity_analytical_left(x::Real, t::Real, p::PureGravityParams)
-    a = t - x
-    T0 = gravity_T0(x, p)
-    T1 = gravity_T1_left(x, p)
-    T2 = gravity_T2_left(x, t, a, p)
-    T3 = gravity_T3_left(x, t, a, p)
-    T4 = gravity_T4_left(x, t, a, p)
-
-    η_s  = p.F0 * T0
-    η_tr = p.F0 * (T1 + T2 + T3 + T4)
-    return (η_s + η_tr, η_s, η_tr)
-end
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# Right region  x > t + δ_x  (ahead of front),  a = t − x < 0
-# ═══════════════════════════════════════════════════════════════════════════════
-
-"""
-    gravity_T1_right(x, p)
-
-First transient contribution (right region, closed-form):
-
-```math
-T_1^+(x) = +\\frac{\\sin(\\beta x)}{1+\\rho_r}
-```
-"""
-@inline function gravity_T1_right(x::Real, p::PureGravityParams)
-    return sin(p.beta * x) / (1.0 + p.rho_r)
-end
-
-"""
-    gravity_T2_right(x, t, a, p)
-
-Exponentially-damped oscillatory integral (right region, ``a = t-x < 0``):
-
-```math
-T_2^+ = -\\frac{4}{\\pi(1+\\rho_r)\\beta}\\int_0^{K_{\\max}} v^2\\,
-e^{2v^2 a - vt\\sqrt\\beta}\\,
-\\frac{\\sqrt\\beta\\cos(vt\\sqrt\\beta) - (2v-\\sqrt\\beta)\\sin(vt\\sqrt\\beta)}
-{\\beta + (2v-\\sqrt\\beta)^2}\\,dv
-```
-
-Note: ``a < 0`` so ``\\exp(2v^2 a)`` decays.
-"""
-function gravity_T2_right(x::Real, t::Real, a::Real, p::PureGravityParams)
-    sβ  = p.sqrt_beta
-    β   = p.beta
-    tsβ = t * sβ
-
-    integrand = v -> begin
-        arg = v * tsβ
-        num = sβ * cos(arg) - (2.0v - sβ) * sin(arg)
-        den = β + (2.0v - sβ)^2
-        return v^2 * exp(2.0 * v^2 * a - v * tsβ) * num / den
+        return v^2 * exp(-s * 2.0 * v^2 * a + s * v * tsβ) * num / den
     end
 
     I, _ = quadgk(integrand, 0.0, p.k_max_analytical;
                   atol=p.atol_transformed, rtol=p.rtol_transformed)
-
     return -4.0 / (π * (1.0 + p.rho_r) * β) * I
 end
 
 """
-    gravity_T3_right(x, t, a, p)
+    T₃(x, t, p)
 
-Fresnel-integral contribution (right region, ``a < 0``). Uses ``|a|`` and flipped signs:
+Fresnel-integral contribution. No quadrature — uses [`fresnel_C`](@ref), [`fresnel_S`](@ref):
 
 ```math
-T_3^+ = \\frac{1}{\\pi(1+\\rho_r)\\sqrt\\beta}
-\\left(1+\\frac{t}{2a}\\right)\\sqrt{\\frac{\\pi}{2|a|}}\\,
-\\left[\\cos\\!\\left(\\frac{b^2}{|a|}\\right)\\!\\left(\\tfrac12 + C(X)\\right)
-+ \\sin\\!\\left(\\frac{b^2}{|a|}\\right)\\!\\left(\\tfrac12 + S(X)\\right)\\right]
+T_3 = \\frac{\\beta^{-1/2}}{\\pi(1+\\rho_r)}\\left(1+\\frac{t}{2a}\\right)\\sqrt{\\frac{\\pi}{2|a|}}
+\\left[\\cos\\!\\left(\\frac{b^2}{|a|}\\right)\\left(\\frac{1}{2}\\mp C(X)\\right)
++ \\sin\\!\\left(\\frac{b^2}{|a|}\\right)\\left(\\frac{1}{2}\\mp S(X)\\right)\\right]
 ```
-
-where ``b = t\\sqrt\\beta/2``, ``X = b\\sqrt{2/(\\pi|a|)}``.
+where ``a = t-x``, ``b = t\\sqrt\\beta/2``, ``X = b\\sqrt{2/(\\pi|a|)}``.
 """
-function gravity_T3_right(x::Real, t::Real, a::Real, p::PureGravityParams)
-    sβ   = p.sqrt_beta
+function T₃(x::Real, t::Real, p::PureGravityParams)
+    a    = t - x
     absa = abs(a)
+    sβ   = p.sqrt_beta
     b    = 0.5 * t * sβ
     X    = b * sqrt(2.0 / (π * absa))
+    s    = a > 0 ? 1.0 : -1.0   # +1 for left, -1 for right
 
     coeff = 1.0 / (π * (1.0 + p.rho_r) * sβ)
     pref  = (1.0 + t / (2.0 * a)) * sqrt(π / (2.0 * absa))
     b2a   = b^2 / absa
 
-    return coeff * pref * (cos(b2a) * (0.5 + fresnel_C(X)) +
-                           sin(b2a) * (0.5 + fresnel_S(X)))
+    return coeff * pref * (cos(b2a) * (0.5 - s * fresnel_C(X)) +
+                           sin(b2a) * (0.5 - s * fresnel_S(X)))
 end
 
 """
-    gravity_T4_right(x, t, a, p)
+    T₄(x, t, p)
 
-Oscillatory integral (right region). Same formula as ``T_4^-``; sign enters through ``a < 0``:
+Oscillatory integral. Same formula for both regions — sign enters through ``a = t-x``:
 
 ```math
-T_4^+ = -\\frac{1}{\\pi(1+\\rho_r)}\\int_0^{K_{\\max}}
-\\frac{\\cos(v^2 a + vt\\sqrt\\beta)}{v + \\sqrt\\beta}\\,dv
+T_4 = -\\frac{1}{\\pi(1+\\rho_r)}\\int_0^{K_{\\max}}
+\\frac{\\cos(av^2 + vt\\sqrt\\beta)}{v + \\sqrt\\beta}\\,dv
 ```
 """
-function gravity_T4_right(x::Real, t::Real, a::Real, p::PureGravityParams)
+function T₄(x::Real, t::Real, p::PureGravityParams)
+    a   = t - x
     sβ  = p.sqrt_beta
     tsβ = t * sβ
 
     integrand = v -> cos(v^2 * a + v * tsβ) / (v + sβ)
     I, _ = quadgk(integrand, 0.0, p.k_max_analytical;
                   atol=p.atol_transformed, rtol=p.rtol_transformed, order=15)
-
     return -1.0 / (π * (1.0 + p.rho_r)) * I
+end
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Backward-compatible wrappers (deprecated)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+"""
+    gravity_T0(x, p)
+
+Deprecated: use [`T₀`](@ref) instead.
+"""
+gravity_T0(x::Real, p::PureGravityParams) = T₀(x, p)
+
+gravity_T1_left(x::Real, p::PureGravityParams) = -sin(p.beta * x) / (1.0 + p.rho_r)
+gravity_T1_right(x::Real, p::PureGravityParams) = sin(p.beta * x) / (1.0 + p.rho_r)
+
+# For T2–T4, the old API passed `a` explicitly — just forward to unified version
+gravity_T2_left(x::Real, t::Real, a::Real, p::PureGravityParams) = T₂(x, t, p)
+gravity_T3_left(x::Real, t::Real, a::Real, p::PureGravityParams) = T₃(x, t, p)
+gravity_T4_left(x::Real, t::Real, a::Real, p::PureGravityParams) = T₄(x, t, p)
+gravity_T2_right(x::Real, t::Real, a::Real, p::PureGravityParams) = T₂(x, t, p)
+gravity_T3_right(x::Real, t::Real, a::Real, p::PureGravityParams) = T₃(x, t, p)
+gravity_T4_right(x::Real, t::Real, a::Real, p::PureGravityParams) = T₄(x, t, p)
+
+"""
+    gravity_analytical_left(x, t, p) → (η_total, η_steady, η_transient)
+
+Deprecated: use `solve(ForcedGravityProblem(p, x, t))` instead.
+"""
+function gravity_analytical_left(x::Real, t::Real, p::PureGravityParams)
+    t0 = T₀(x, p)
+    η_s  = p.F0 * t0
+    η_tr = p.F0 * (T₁(x, t, p) + T₂(x, t, p) + T₃(x, t, p) + T₄(x, t, p))
+    return (η_s + η_tr, η_s, η_tr)
 end
 
 """
     gravity_analytical_right(x, t, p) → (η_total, η_steady, η_transient)
 
-Complete analytical solution for ``x > t + \\delta_x`` (ahead of wavefront):
-
-```math
-\\eta^+(x,t) = F_0\\left[T_0(x) + T_1^+ + T_2^+ + T_3^+ + T_4^+\\right]
-```
+Deprecated: use `solve(ForcedGravityProblem(p, x, t))` instead.
 """
 function gravity_analytical_right(x::Real, t::Real, p::PureGravityParams)
-    a = t - x
-    T0 = gravity_T0(x, p)
-    T1 = gravity_T1_right(x, p)
-    T2 = gravity_T2_right(x, t, a, p)
-    T3 = gravity_T3_right(x, t, a, p)
-    T4 = gravity_T4_right(x, t, a, p)
-
-    η_s  = p.F0 * T0
-    η_tr = p.F0 * (T1 + T2 + T3 + T4)
+    t0 = T₀(x, p)
+    η_s  = p.F0 * t0
+    η_tr = p.F0 * (T₁(x, t, p) + T₂(x, t, p) + T₃(x, t, p) + T₄(x, t, p))
     return (η_s + η_tr, η_s, η_tr)
 end
 

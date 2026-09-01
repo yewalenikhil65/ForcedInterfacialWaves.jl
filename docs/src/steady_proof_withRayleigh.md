@@ -1,4 +1,4 @@
-# Proof: Steady-state solution for finite capillarity ($\alpha > 0$, without Rayleigh dissipation)
+# Proof: Steady-state solution for finite capillarity ($\alpha > 0$, with Rayleigh dissipation)
 
 ## Evaluation of time-independent term $\eta_{s}(x)$
 The time-independent part of eqn. $3.8$ in the manuscript is given by:
@@ -8,7 +8,7 @@ The time-independent part of eqn. $3.8$ in the manuscript is given by:
 	\tag{3.4.1}
 ```
 
-We get rid of the $|k|$ terms by folding the above integral onto the positive $k$-axis. This results in the following simplification of equation (3.4.1) 
+We get rid of the $|k|$ terms by folding the above integral onto the positive $k$-axis. This results in the following simplification of equation (3.4.1)
 
 ```math
 \frac{\eta_s(x)}{F_0} = -\frac{1}{\pi}\int_0^\infty dk\, \frac{\cos(kx)}{\alpha k^2-(1+\rho_r)k+(1-\rho_r)}.
@@ -245,4 +245,3 @@ Upon plugging eqns. (3.4.14) and (3.4.16) (for $x>0$) and eqns. (3.4.15) and (3.
 ```
 
 It may be noted while the first two terms shows a far-field steady wavy pattern both upstream and downstream, the third term is a localised contribution which decays to zero rapidly as $|x| \to \infty$ and possesses a finite value at $x=0$: $\left(\frac{k_l+k_s}{2 \pi \alpha (k_l-k_s)}\right) \log \left(\frac{k_l}{k_s}\right)$. It may be remarked that eqn. (3.4.18) is a symmetrical solution implying the existence of both the gravity and capillary waves, symmetrically both in the upstream and downstream directions. Since it contradicts the observation that in steady state, gravity wave exists only in the downstream direction and capillary wave exists in the upstream direction, one suspects that this asymmetry will be introduced from the time-dependent part of the solution. Accordingly we perform analysis of the long time asymptotics of $\eta_{tr}(x,t)$.
-

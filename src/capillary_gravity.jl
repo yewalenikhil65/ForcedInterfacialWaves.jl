@@ -26,6 +26,7 @@ Two-fluid capillary–gravity dispersion function:
 end
 
 const dispersion_omega = dispersion_chi
+const χ = dispersion_chi
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Individual integrands  (for validation: each can be evaluated at any k)
@@ -198,9 +199,13 @@ function cg_Gx_integral(x::Real, p::CapillaryGravityParams)
 end
 
 """
-    steady_surface_elevation(x, p)
+    steady_surface_elevation(x, p; rayleigh_dissipation=true)
 
-Classical steady capillary–gravity solution (obtained via residue calculus):
+Classical steady capillary–gravity solution obtained via residue calculus. The
+default `rayleigh_dissipation=true` returns the asymmetric radiation profile
+used for long-time comparisons. Set `rayleigh_dissipation=false` for the
+symmetric nominal steady term in equation (4.5b), which is the component used
+by the CG IVP `WaveSolution`.
 
 ```math
 \\frac{\\eta_{\\text{steady}}(x)}{F_0} = \\begin{cases}
@@ -211,16 +216,23 @@ Classical steady capillary–gravity solution (obtained via residue calculus):
 
 where ``G(x)`` is computed by [`cg_Gx_integral`](@ref).
 """
-function steady_surface_elevation(x::Real, p::CapillaryGravityParams)
+function steady_surface_elevation(x::Real, p::CapillaryGravityParams;
+                                  rayleigh_dissipation::Bool=true)
     G_x = cg_Gx_integral(x, p)
+    η_local = p.F0 * G_x / (π * p.alpha)
+    denominator = p.alpha * (p.k_l - p.k_s)
 
-    if x > 0.0
-        return p.F0 * (-2.0 / (p.alpha * (p.k_l - p.k_s)) * sin(p.k_s * x) +
-                        G_x / (π * p.alpha))
+    farfield = if rayleigh_dissipation
+        if x > 0.0
+            -2.0 * p.F0 * sin(p.k_s * x) / denominator
+        else
+            -2.0 * p.F0 * sin(p.k_l * x) / denominator
+        end
     else
-        return p.F0 * (-2.0 / (p.alpha * (p.k_l - p.k_s)) * sin(p.k_l * x) +
-                        G_x / (π * p.alpha))
+        p.F0 / denominator *
+        (-sin(p.k_s * abs(x)) + sin(p.k_l * abs(x)))
     end
+    return η_local + farfield
 end
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -497,12 +509,18 @@ function cg_integrate_steady_chunk(x_chunk::AbstractVector{<:Real},
 end
 
 """
-    compute_cg_steady_profile(x_grid, p; atol=p.atol, rtol=p.rtol)
+    compute_cg_steady_profile(x_grid, p; rayleigh_dissipation=true,
+                               atol=p.atol, rtol=p.rtol)
 
-Compute the steady profile with thread-local in-place vector quadratures.
+Compute the capillary–gravity steady profile. With the default
+`rayleigh_dissipation=true`, return the asymmetric classical radiation profile
+used for long-time comparisons. With `false`, return the symmetric nominal
+Fourier/PV steady term from equation (4.5b), which is the steady component of
+the CG IVP decomposition.
 """
 function compute_cg_steady_profile(x_grid::AbstractVector{<:Real},
                                    p::CapillaryGravityParams;
+                                   rayleigh_dissipation::Bool=true,
                                    atol::Real=p.atol, rtol::Real=p.rtol)
     N = length(x_grid)
     N > 0 || throw(ArgumentError("x_grid must not be empty"))
@@ -523,41 +541,269 @@ function compute_cg_steady_profile(x_grid::AbstractVector{<:Real},
 
     eta_steady = similar(G)
     common = p.F0 / (π * p.alpha)
-    wave = -2.0 * p.F0 / (p.alpha * (p.k_l - p.k_s))
+    denominator = p.alpha * (p.k_l - p.k_s)
     @inbounds @simd for ix in eachindex(x_grid, eta_steady)
         x = x_grid[ix]
-        eta_steady[ix] = wave * sin((x > 0 ? p.k_s : p.k_l) * x) + common * G[ix]
+        farfield = if rayleigh_dissipation
+            wave = x > 0.0 ?
+                -2.0 * p.F0 * sin(p.k_s * x) / denominator :
+                -2.0 * p.F0 * sin(p.k_l * x) / denominator
+            wave
+        else
+            p.F0 / denominator *
+            (-sin(p.k_s * abs(x)) + sin(p.k_l * abs(x)))
+        end
+        eta_steady[ix] = farfield + common * G[ix]
     end
     return eta_steady
 end
 
 """
-    compute_cg_profile(x_grid, t, p; method=:threaded_vector, compute_steady=true,
+    compute_cg_profile(x_grid, t, p; method=:threaded_vector,
+                       compute_steady=true, rayleigh_dissipation=false,
                        atol=p.atol, rtol=p.rtol)
 
-Compatibility wrapper returning `(eta_ivp, eta_steady)`. Set
-`compute_steady=false` at times where Figure 10 does not plot the steady curve;
-the second return value is then `nothing`.
+Compatibility wrapper returning `(eta_ivp, eta_steady)`. By default the second
+return value is the symmetric nominal steady term from equation (4.5b), so the
+identity `eta_ivp == eta_steady + eta_transient` matches the documented CG IVP
+decomposition. Set `rayleigh_dissipation=true` to request the asymmetric
+classical steady profile instead. Set `compute_steady=false` to skip that
+calculation and return `nothing` as the second value.
 """
 function compute_cg_profile(x_grid::AbstractVector{<:Real}, t::Real,
                             p::CapillaryGravityParams;
                             method::Symbol=:threaded_vector, compute_steady::Bool=true,
+                            rayleigh_dissipation::Bool=false,
                             atol::Real=p.atol, rtol::Real=p.rtol)
     eta_ivp = compute_cg_ivp_profile(x_grid, t, p;
                                      method=method, atol=atol, rtol=rtol)
     eta_steady = compute_steady ?
-                 compute_cg_steady_profile(x_grid, p; atol=atol, rtol=rtol) :
+                 compute_cg_steady_profile(x_grid, p;
+                                           rayleigh_dissipation=rayleigh_dissipation,
+                                           atol=atol, rtol=rtol) :
                  nothing
     return eta_ivp, eta_steady
 end
 
-"""
-    make_cg_xgrid(p; Nx=2001)
+function _cg_I3_scalar(x::Real, t::Real, p::CapillaryGravityParams,
+                       epsilon_pv::Real, atol::Real, rtol::Real,
+                       k_max::Real)
+    f = k -> cg_integrand_I3(k, x, t, p)
+    I₁, _ = quadgk(f, 0.0, p.k_s - epsilon_pv;
+                   atol=atol, rtol=rtol)
+    I₂, _ = quadgk(f, p.k_s + epsilon_pv, p.k_l - epsilon_pv;
+                   atol=atol, rtol=rtol)
+    I₃, _ = quadgk(f, p.k_l + epsilon_pv, k_max;
+                   atol=atol, rtol=rtol, order=15)
+    return I₁ + I₂ + I₃
+end
 
-Nondimensional spatial grid, excluding x ≈ 0.
 """
-function make_cg_xgrid(p::CapillaryGravityParams; Nx::Int=2001)
-    xg = collect(range(-p.L / (2.0 * p.l_c), p.L / (2.0 * p.l_c); length=Nx))
+    cg_I3(x, t, p; epsilon_pv=p.epsilon_pv, atol=p.atol,
+          rtol=p.rtol, k_max=p.k_max) → value
+
+Evaluate the standalone ``\\mathbb{I}_3(x,t)`` integral from equation (4.5d).
+Because the separate ``\\mathbb{I}_3`` integrand has poles at ``k_s`` and ``k_l``,
+this function uses the package's pole-exclusion/CPV convention over three
+intervals. The result is a diagnostic component; the production IVP integrates
+the combined steady + ``\\mathbb{I}_3`` + ``\\mathbb{I}_4`` integrand.
+"""
+function cg_I3(x::Real, t::Real, p::CapillaryGravityParams;
+               epsilon_pv::Real=p.epsilon_pv,
+               atol::Real=p.atol, rtol::Real=p.rtol,
+               k_max::Real=p.k_max)
+    return _cg_I3_scalar(x, t, p, epsilon_pv, atol, rtol, k_max)
+end
+
+@inline function _cg_I4_integrand(k::Real, x::Real, t::Real,
+                                  p::CapillaryGravityParams)
+    χ = dispersion_chi(k, p)
+    return iszero(k) ? 0.0 :
+        k * cos(t * (k + χ) - k * x) /
+        ((k + χ) * (1.0 + p.alpha * k^2 - p.rho_r))
+end
+
+function _cg_I4_scalar(x::Real, t::Real, p::CapillaryGravityParams,
+                       _epsilon_pv::Real, atol::Real, rtol::Real,
+                       k_max::Real)
+    f = k -> _cg_I4_integrand(k, x, t, p)
+    value, _ = quadgk(f, 0.0, k_max;
+                      atol=atol, rtol=rtol, order=15)
+    return value
+end
+
+"""
+    cg_I4(x, t, p; atol=p.atol, rtol=p.rtol, k_max=p.k_max) → value
+
+Evaluate the standalone ``\\mathbb{I}_4(x,t)`` integral from equation (4.5d).
+The apparent poles are removed algebraically before quadrature, so this
+integral is evaluated directly over ``[0, k_max]`` without pole splitting.
+"""
+function cg_I4(x::Real, t::Real, p::CapillaryGravityParams;
+               atol::Real=p.atol, rtol::Real=p.rtol,
+               k_max::Real=p.k_max)
+    return _cg_I4_scalar(x, t, p, p.epsilon_pv, atol, rtol, k_max)
+end
+
+"""Vector-valued ``\\mathbb{I}_3`` profile quadrature for one spatial chunk."""
+function _cg_I3_chunk(x_chunk::AbstractVector{<:Real}, t::Real,
+                      p::CapillaryGravityParams, atol::Real, rtol::Real,
+                      epsilon_pv::Real, k_max::Real)
+    values = zeros(Float64, length(x_chunk))
+    integrand! = (values, k) -> begin
+        χ = dispersion_chi(k, p)
+        factor = -(1.0 + p.rho_r) * (k + χ) /
+                 (p.alpha * (k - p.k_l) * (k - p.k_s) *
+                  (1.0 + p.alpha * k^2 - p.rho_r))
+        sin_phase, cos_phase = sincos(t * (k - χ))
+        @inbounds @simd for ix in eachindex(x_chunk, values)
+            sin_kx, cos_kx = sincos(k * x_chunk[ix])
+            values[ix] = factor *
+                         (cos_phase * cos_kx + sin_phase * sin_kx)
+        end
+        values
+    end
+
+    I₁ = zeros(Float64, length(x_chunk))
+    I₂ = similar(I₁)
+    I₃ = similar(I₁)
+    quadgk!(integrand!, I₁, 0.0, p.k_s - epsilon_pv;
+            atol=atol, rtol=rtol, norm=values -> maximum(abs, values))
+    quadgk!(integrand!, I₂, p.k_s + epsilon_pv, p.k_l - epsilon_pv;
+            atol=atol, rtol=rtol, norm=values -> maximum(abs, values))
+    quadgk!(integrand!, I₃, p.k_l + epsilon_pv, k_max;
+            atol=atol, rtol=rtol, order=15,
+            norm=values -> maximum(abs, values))
+
+    @inbounds @simd for ix in eachindex(values, I₁, I₂, I₃)
+        values[ix] = I₁[ix] + I₂[ix] + I₃[ix]
+    end
+    return values
+end
+
+"""Vector-valued regularized ``\\mathbb{I}_4`` profile quadrature for one chunk."""
+function _cg_I4_chunk(x_chunk::AbstractVector{<:Real}, t::Real,
+                      p::CapillaryGravityParams, atol::Real, rtol::Real,
+                      _epsilon_pv::Real, k_max::Real)
+    values = zeros(Float64, length(x_chunk))
+    integrand! = (values, k) -> begin
+        χ = dispersion_chi(k, p)
+        if iszero(k)
+            fill!(values, 0.0)
+            return values
+        end
+        amplitude = k / ((k + χ) * (1.0 + p.alpha * k^2 - p.rho_r))
+        sin_phase, cos_phase = sincos(t * (k + χ))
+        @inbounds @simd for ix in eachindex(x_chunk, values)
+            sin_kx, cos_kx = sincos(k * x_chunk[ix])
+            values[ix] = amplitude *
+                         (cos_phase * cos_kx + sin_phase * sin_kx)
+        end
+        values
+    end
+
+    quadgk!(integrand!, values, 0.0, k_max;
+            atol=atol, rtol=rtol, order=15,
+            norm=values -> maximum(abs, values))
+    return values
+end
+
+function _cg_component_profile(x_grid::AbstractVector{<:Real}, t::Real,
+                               p::CapillaryGravityParams, chunk_fun,
+                               scalar_fun; method::Symbol,
+                               epsilon_pv::Real, atol::Real, rtol::Real,
+                               k_max::Real)
+    N = length(x_grid)
+    N > 0 || throw(ArgumentError("x_grid must not be empty"))
+
+    if method === :threaded_vector
+        values = Vector{Float64}(undef, N)
+        chunk_count = min(Threads.nthreads(), N)
+        chunk_length = cld(N, chunk_count)
+        Threads.@threads :static for chunk_index in 1:chunk_count
+            first_index = (chunk_index - 1) * chunk_length + 1
+            last_index = min(chunk_index * chunk_length, N)
+            if first_index <= last_index
+                indices = first_index:last_index
+                chunk_values = chunk_fun(@view(x_grid[indices]), t, p,
+                                         atol, rtol, epsilon_pv, k_max)
+                copyto!(@view(values[indices]), chunk_values)
+            end
+        end
+        return values
+    elseif method === :vector
+        return chunk_fun(x_grid, t, p, atol, rtol, epsilon_pv, k_max)
+    elseif method === :threaded_scalar
+        values = Vector{Float64}(undef, N)
+        Threads.@threads :static for ix in eachindex(x_grid)
+            values[ix] = scalar_fun(x_grid[ix], t, p, epsilon_pv,
+                                    atol, rtol, k_max)
+        end
+        return values
+    end
+    throw(ArgumentError("method must be :threaded_vector, :vector, or :threaded_scalar"))
+end
+
+"""
+    compute_cg_I3_profile(x_grid, t, p; method=:threaded_vector, ...)
+
+Compute the standalone ``\\mathbb{I}_3`` profile using the pole-split CPV
+convention. The threaded-vector method is the production default.
+"""
+function compute_cg_I3_profile(x_grid::AbstractVector{<:Real}, t::Real,
+                               p::CapillaryGravityParams;
+                               method::Symbol=:threaded_vector,
+                               epsilon_pv::Real=p.epsilon_pv,
+                               atol::Real=p.atol, rtol::Real=p.rtol,
+                               k_max::Real=p.k_max)
+    return _cg_component_profile(x_grid, t, p, _cg_I3_chunk,
+                                 _cg_I3_scalar; method=method,
+                                 epsilon_pv=epsilon_pv, atol=atol, rtol=rtol,
+                                 k_max=k_max)
+end
+
+"""
+    compute_cg_I4_profile(x_grid, t, p; method=:threaded_vector, ...)
+
+Compute the standalone regularized ``\\mathbb{I}_4`` profile directly over
+``[0, k_max]``. The threaded-vector method shares each quadrature node's
+``\\chi`` and time phase across the spatial chunk.
+"""
+function compute_cg_I4_profile(x_grid::AbstractVector{<:Real}, t::Real,
+                               p::CapillaryGravityParams;
+                               method::Symbol=:threaded_vector,
+                               atol::Real=p.atol, rtol::Real=p.rtol,
+                               k_max::Real=p.k_max)
+    return _cg_component_profile(x_grid, t, p, _cg_I4_chunk,
+                                 _cg_I4_scalar; method=method,
+                                 epsilon_pv=p.epsilon_pv, atol=atol, rtol=rtol,
+                                 k_max=k_max)
+end
+
+# Unicode aliases matching the mathematical notation in the documentation.
+const 𝕀₃ = cg_I3
+const 𝕀₄ = cg_I4
+
+"""
+    make_cg_xgrid(p; Nx=2001, xlim=nothing)
+
+Nondimensional spatial grid, excluding x ≈ 0. By default the grid spans
+`[-p.L/(2p.l_c), p.L/(2p.l_c)]`. Set `xlim=(xmin, xmax)` to use a restricted
+nondimensional domain instead.
+"""
+function make_cg_xgrid(p::CapillaryGravityParams;
+                       Nx::Int=2001, xlim=nothing)
+    xmin, xmax = if xlim === nothing
+        (-p.L / (2.0 * p.l_c), p.L / (2.0 * p.l_c))
+    elseif xlim isa Tuple && length(xlim) == 2 &&
+           all(value -> value isa Real, xlim)
+        (Float64(xlim[1]), Float64(xlim[2]))
+    else
+        throw(ArgumentError("xlim must be a two-element tuple of real values"))
+    end
+    xmin < xmax || throw(ArgumentError("xlim must satisfy xmin < xmax"))
+
+    xg = collect(range(xmin, xmax; length=Nx))
     filter!(x -> abs(x) > 1.0e-12, xg)
     return xg
 end

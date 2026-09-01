@@ -10,11 +10,28 @@
 """
 
 """
-    CapillaryGravityParams
+    AbstractWaveParams
+
+Abstract supertype for all wave-problem parameter sets.
+
+Subtypes: [`CapillaryGravityParams`](@ref), [`PureGravityParams`](@ref).
+"""
+abstract type AbstractWaveParams end
+
+"""
+    CapillaryGravityParams <: AbstractWaveParams
 
 All nondimensional parameters needed for the capillary-gravity (α > 0) IVP.
+
+Fields are accessible via both ASCII and unicode names:
+    p.alpha ≡ p.α,  p.beta ≡ p.β,  p.k_l ≡ p.kₗ,  p.F0 ≡ p.F₀, etc.
+
+Typing hints (Julia REPL / VS Code):
+    α → \\alpha<TAB>,  β → \\beta<TAB>,  ρ → \\rho<TAB>,
+    γ → \\gamma<TAB>,  ε → \\varepsilon<TAB>,
+    ₀ → \\_0<TAB>,  ₛ → \\_s<TAB>,  ₗ → \\_l<TAB>
 """
-struct CapillaryGravityParams
+mutable struct CapillaryGravityParams <: AbstractWaveParams
     # Dimensional
     U::Float64
     g::Float64
@@ -50,11 +67,14 @@ struct CapillaryGravityParams
 end
 
 """
-    PureGravityParams
+    PureGravityParams <: AbstractWaveParams
 
 All nondimensional parameters needed for the pure-gravity (α = 0) IVP.
+
+Fields are accessible via both ASCII and unicode names:
+    p.beta ≡ p.β,  p.sqrt_beta ≡ p.sqrtβ,  p.F0 ≡ p.F₀, etc.
 """
-struct PureGravityParams
+mutable struct PureGravityParams <: AbstractWaveParams
     # Dimensional
     U::Float64
     g::Float64
@@ -194,4 +214,59 @@ function compute_gravity_parameters(;
         k_max_analytical, k_max_cpv,
         front_band
     )
+end
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Unicode property aliases
+#
+# Both ASCII and unicode access is supported for get AND set:
+#   p.α = 0.2   ≡   p.alpha = 0.2
+#   p.β         ≡   p.beta
+#   (; α, β, kₗ, kₛ) = p   # destructuring works too
+#
+# Typing hints (Julia REPL / VS Code):
+#   α   →  \alpha<TAB>        β   →  \beta<TAB>
+#   ρ   →  \rho<TAB>          γ   →  \gamma<TAB>
+#   ε   →  \varepsilon<TAB>   √   →  \sqrt<TAB>
+#   ₀   →  \_0<TAB>           ₛ   →  \_s<TAB>
+#   ₗ   →  \_l<TAB>           ᵣ   →  \_r<TAB>
+# ═══════════════════════════════════════════════════════════════════════════════
+
+const _CG_UNICODE = Dict{Symbol,Symbol}(
+    :α     => :alpha,
+    :β     => :beta,
+    :ρᵣ    => :rho_r,
+    :γ_ρ   => :gamma_rho,
+    :kₗ    => :k_l,
+    :kₛ    => :k_s,
+    :F₀    => :F0,
+    :ε     => :epsilon_pv,
+)
+
+const _PG_UNICODE = Dict{Symbol,Symbol}(
+    :β     => :beta,
+    :sqrtβ => :sqrt_beta,
+    :ρᵣ    => :rho_r,
+    :F₀    => :F0,
+    :ε     => :epsilon_cpv,
+)
+
+function Base.getproperty(p::CapillaryGravityParams, s::Symbol)
+    ascii = get(_CG_UNICODE, s, s)
+    return getfield(p, ascii)
+end
+
+function Base.setproperty!(p::CapillaryGravityParams, s::Symbol, v)
+    ascii = get(_CG_UNICODE, s, s)
+    return setfield!(p, ascii, v)
+end
+
+function Base.getproperty(p::PureGravityParams, s::Symbol)
+    ascii = get(_PG_UNICODE, s, s)
+    return getfield(p, ascii)
+end
+
+function Base.setproperty!(p::PureGravityParams, s::Symbol, v)
+    ascii = get(_PG_UNICODE, s, s)
+    return setfield!(p, ascii, v)
 end

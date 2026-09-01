@@ -77,20 +77,7 @@ substituting $a=t-x$ and $b=\frac{t \sqrt{\beta}}{2}$ into the above equation gi
 Hence,
 
 ```math
-\begin{aligned}
-\mathbb{I}_8(x,t)
-={}&
-- 2 \sqrt{\beta} \left(1+\frac{t}{2(t-x)}\right)
-\int_{0}^{\infty}dv\;
-\cos\left\{a v^2 + 2bv\right\}
-\\
-&+2\beta \int_{0}^{\infty}dv\;
-\dfrac{
-\cos\left\{\left(v^2 (t-x) + vt\sqrt{\beta}\right)\right\}
-}{
-v+ \sqrt{\beta}
-}.
-\end{aligned}
+\mathbb{I}_8(x,t) = - 2 \sqrt{\beta} \left(1+\frac{t}{2(t-x)}\right)\int_{0}^{\infty}dv\;\cos\left\{a v^2 + 2bv\right\} +2\beta \int_{0}^{\infty}dv\;\dfrac{\cos\left\{\left(v^2 (t-x) + vt\sqrt{\beta}\right)\right\}}{v+ \sqrt{\beta}}.
 \tag{T.13}
 ```
 

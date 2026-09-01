@@ -1,0 +1,11 @@
+[deps]
+ForcedInterfacialWaves = "e5219359-20f7-449b-9a6e-3764ada0d72e"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+
+[sources]
+ForcedInterfacialWaves = {path = ".."}
+
+[compat]
+ForcedInterfacialWaves = "0.1"
+Plots = "=1.40.20"
+julia = "1.9"
