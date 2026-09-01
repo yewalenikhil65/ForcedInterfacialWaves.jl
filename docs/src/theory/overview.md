@@ -39,13 +39,26 @@ where $\eta_s$ is a nominally time-independent (steady) contribution and $\eta_{
 
 ## Pages in this section
 
-- **[Steady-State](steady_state.md)** — Manuscript §3.4: the general Fourier integral solution (eqns. 3.7–3.8), the steady far-field and local decomposition (eqn. 3.11), and its numerical evaluation with Julia/MATLAB code.
+- **[Steady-State](steady_state.md)** — Manuscript §3.4: the general Fourier integral solution (eqns. 3.7–3.8), the steady far-field and local decomposition (eqn. 3.11), the Rayleigh dissipation form (eqn. 3.12), and numerical evaluation with Julia/MATLAB code.
 
-- **[Pure Gravity](pure_gravity.md)** — Manuscript §4.1: setting $\alpha = 0$, the analytical $T_0$–$T_4^\pm$ decomposition, Fresnel-integral representations, and independent CPV verification. Includes full Julia/MATLAB implementations.
+- **[Pure Gravity](pure_gravity.md)** — Manuscript §4.1: setting $\alpha = 0$, the analytical $T_0$–$T_4^\pm$ decomposition, Fresnel-integral representations, independent CPV verification, and the spatial IVP profile at $t = 183.68$ (manuscript Fig. 6). Includes Julia/MATLAB implementations.
 
-- **[Capillary–Gravity](capillary_gravity.md)** — Manuscript §4.2: the finite-capillarity case with the combined integrand technique, steady-state asymmetric cancellation proof, and threaded numerical evaluation. Includes full Julia/MATLAB implementations.
+- **[Capillary–Gravity](capillary_gravity.md)** — Manuscript §4.2: the finite-capillarity case with the combined integrand technique, steady-state asymmetric cancellation proof, the $\mathbb{I}_4$ transient decay (Fig. 7), the full IVP profile (Fig. 8), and comparison with nonlinear simulations (Fig. 10). Includes Julia/MATLAB implementations.
 
 Each sub-page is self-contained: it introduces the relevant equations, presents the derivation, and provides working code.
+
+### Manuscript figure index
+
+| Figure | Content | Theory page | Notebook cell |
+|:------:|:--------|:------------|:-------------|
+| 5a | Steady CG: far-field + local (no Rayleigh) | [Steady-State](steady_state.md) | 9 |
+| 5b | Steady CG: far-field + local (Rayleigh dissipation) | [Steady-State](steady_state.md) | 10 |
+| 6 | Pure-gravity IVP at $t = 183.68$ | [Pure Gravity](pure_gravity.md) | 13 |
+| 7 | $\mathbb{I}_4(x,t)$ transient decay at $t = 0.34$ | [Capillary–Gravity](capillary_gravity.md) | 17 |
+| 8 | CG full IVP at $t = 367.35$ | [Capillary–Gravity](capillary_gravity.md) | 19 |
+| 10 | CG IVP vs nonlinear simulation at $t_{\dim} = 25$ s | [Capillary–Gravity](capillary_gravity.md) | 22 |
+
+The companion [`forced_interfacial_waves_usage.ipynb`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/forced_interfacial_waves_usage.ipynb) notebook provides a runnable Julia walkthrough covering all the same cases with identical time instances.
 
 ## Computing parameters
 

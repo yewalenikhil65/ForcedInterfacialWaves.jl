@@ -56,59 +56,55 @@ See the [Theory](theory/overview.md) section for the full mathematical derivatio
 
 The primary interface is [`solve`](@ref) applied to a [`ForcedGravityProblem`](@ref) (pure
 gravity) or [`ForcedGCProblem`](@ref) (capillary–gravity). Both accept a scalar `x` or a
-vector spatial grid, and always return a [`WaveSolution`](@ref) with fields `η`, `η_steady`,
-`η_transient`, `x`, `t`.
+vector spatial grid, and return a [`WaveSolution`](@ref) with fields `η`, `η_steady`,
+`η_s_local`, `η_s_farfield`, `η_transient`, `x`, `t`.
 
 ```@example quickstart
 using ForcedInterfacialWaves
 
-# ─── Pure gravity ───
-pg = compute_gravity_parameters()      # PureGravityParams, MATLAB-matching defaults
-t_pg = 1.0 / pg.t_c                    # nondimensional time for t_dim = 1 s
-
-sol = solve(ForcedGravityProblem(pg, -2.0, t_pg))
-sol.η, sol.η_steady, sol.η_transient
-
-steady_sol = solve(ForcedGravityProblem(pg, -2.0); method=steady(rayleigh_dissipation=false))
-steady_sol.η
+# ─── Parameters ───
+pg = compute_gravity_parameters()      # PureGravityParams (α = 0)
+p  = compute_cg_parameters()           # CapillaryGravityParams (α > 0)
 ```
 
-A full spatial profile uses the same call with a vector `x`:
+### Steady state
 
 ```@example quickstart
-x_grid = make_gravity_xgrid(pg; Nx=501)
-profile = solve(ForcedGravityProblem(pg, x_grid, t_pg))
-extrema(filter(!isnan, profile.η))
+x = make_cg_xgrid(p; Nx=2001, xlim=(-15.0, 15.0))
+
+# Without Rayleigh dissipation (symmetric, eqn. 3.11)
+sol_s = solve(ForcedGCProblem(p, x); method=steady(rayleigh_dissipation=false))
+sol_s.η_s_local, sol_s.η_s_farfield   # decomposed components
+
+# With Rayleigh dissipation (asymmetric, eqn. 3.12)
+sol_r = solve(ForcedGCProblem(p, x); method=steady(rayleigh_dissipation=true))
+extrema(sol_r.η)
 ```
 
-The capillary–gravity problem follows the identical pattern:
+### Pure-gravity IVP
 
 ```@example quickstart
-p = compute_cg_parameters()            # CapillaryGravityParams
-t_cg = 3.0 / p.t_c
+t_pg = 183.68                          # nondimensional time (Fig. 6)
+x_pg = make_gravity_xgrid(pg; Nx=2001)
 
-sol_cg = solve(ForcedGCProblem(p, 3.0, t_cg))
+prof_pg = solve(ForcedGravityProblem(pg, x_pg, t_pg))
+prof_pg.η, prof_pg.η_steady, prof_pg.η_transient  # full, steady, transient
+
+# Individual T₀–T₄ terms at a point
+T₀(-2.0, pg), T₁(-2.0, t_pg, pg), T₂(-2.0, t_pg, pg), T₃(-2.0, t_pg, pg), T₄(-2.0, t_pg, pg)
+```
+
+### Capillary–gravity IVP
+
+```@example quickstart
+t_cg = 367.35                          # nondimensional time (Fig. 8)
+
+sol_cg = solve(ForcedGCProblem(p, x, t_cg); method=IVP())
 sol_cg.η, sol_cg.η_steady, sol_cg.η_transient
 
-# `IVP()` or `IVP(asym_cancel=false)` gives equations (4.5a–d).
-# Select the asymmetric long-time reference explicitly when needed.
-sol_cg_asym = solve(ForcedGCProblem(p, 3.0, t_cg);
-                    method=IVP(asym_cancel=true))
-sol_cg_asym.η_steady, sol_cg_asym.η_transient
-
-# For a spatial profile, the same dispatch applies.
-x_grid_cg = make_cg_xgrid(p; Nx=501)
-profile_cg_asym = solve(ForcedGCProblem(p, x_grid_cg, t_cg);
-                        method=IVP(asym_cancel=true))
-```
-
-### Inspecting the low-level pure-gravity terms
-
-The `T₀`–`T₄` functions behind `ForcedGravityProblem` are public and independently callable —
-useful for validating individual contributions:
-
-```@example quickstart
-T₀(-2.0, pg), T₁(-2.0, t_pg, pg), T₂(-2.0, t_pg, pg), T₃(-2.0, t_pg, pg), T₄(-2.0, t_pg, pg)
+# Asymmetric long-time reference decomposition
+sol_asym = solve(ForcedGCProblem(p, x, t_cg); method=IVP(asym_cancel=true))
+sol_asym.η_steady, sol_asym.η_transient
 ```
 
 ### Parameters: Unicode/ASCII aliases and mutability caveat

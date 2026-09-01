@@ -206,4 +206,176 @@ eta_classical = 1.838802567706595e-03
 The full spatial profile — IVP solution, its steady part, and the transient remainder — reproduces Figure 10 of the manuscript:
 
 ![Figure 10 comparison](../assets/fig10_comparison.svg)
-*Figure 10: Capillary–gravity IVP solution $\eta$, steady part $\eta_s$, and transient part $\eta_{\mathrm{tr}}$, computed in both Julia and MATLAB.*
+*Fig. 10: Julia and MATLAB overlay.*
+
+## $\mathbb{I}_4$ transient decay (Fig. 7)
+
+Figure 7 of the manuscript shows the transient component $-\mathbb{I}_4(x,t)/(2\pi)$ at an early time $t = 0.34$, confirming the decay of $\mathbb{I}_4$ as $t\to\infty$.
+
+```@example capillary_gravity
+using Plots, LaTeXStrings
+
+plot_font = "Computer Modern"
+default(fontfamily=plot_font, linewidth=3, framestyle=:box, label=nothing,
+        grid=false, fg_legend=false, background_color_legend=false)
+
+x_grid = make_cg_xgrid(p; Nx=2001, xlim=(-15.0, 15.0))
+t_I4 = 0.34
+I4 = compute_cg_I4_profile(x_grid, t_I4, p; method=:threaded_vector)
+
+plot(x_grid, -(1/(2π)) .* I4; color="purple",
+     guidefontsize=16, tickfontsize=14,
+     xlabel=L"x", ylabel=L"\frac{-\mathbb{I}_{4}(x,t)}{2\pi}",
+     xlims=(-10,10), ylims=(-10,14), size=(800,400))
+```
+
+*Fig. 7: $-\mathbb{I}_4/(2\pi)$ at $t = 0.34$.*
+
+```matlab
+%% I4 component at t = 0.34 (Fig 7)
+t = 0.34;
+x_grid = linspace(-15, 15, 2001);
+x_grid(abs(x_grid) < 1e-12) = [];
+
+I4 = zeros(size(x_grid));
+for i = 1:length(x_grid)
+    xi = x_grid(i);
+    integrand_I4 = @(k) -(1+rho_r)/alpha * ...
+        (k - chi(k)) .* cos(t*(k + chi(k)) - k*xi) ./ ...
+        ((1 + alpha*k.^2 - rho_r) .* (k - k_l) .* (k - k_s));
+    I4(i) = integral(integrand_I4, 0, k_s - epsilon_pv, ...
+        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(integrand_I4, k_s + epsilon_pv, k_l - epsilon_pv, ...
+        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(integrand_I4, k_l + epsilon_pv, Inf, ...
+        'AbsTol', AbsTol, 'RelTol', RelTol);
+end
+
+figure;
+plot(x_grid, -(1/(2*pi))*I4, 'Color', [0.5 0 0.5], 'LineWidth', 3);
+xlabel('x'); ylabel('-I_4/(2\pi)');
+xlim([-10 10]); ylim([-10 14]);
+```
+
+## Full IVP profile (Fig. 8)
+
+The capillary–gravity IVP at $t = 367.35$ shows the transient contribution $\eta_{\mathrm{tr}}$ approaching its long-time limit.
+
+```@example capillary_gravity
+t_fig8 = 367.35
+sol_8 = solve(ForcedGCProblem(p, x_grid, t_fig8); method=IVP())
+
+plot(x_grid, sol_8.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L"x", ylabel=L"\eta \times 10^{3}",
+     xlims=(-10,10), ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8],
+     legend=:outerright, size=(800,400))
+plot!(x_grid, sol_8.η_transient .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
+```
+
+*Fig. 8: Capillary–gravity IVP at $t = 367.35$.*
+
+```matlab
+%% Full CG IVP profile at t = 367.35 (Fig 8)
+t = 367.35;
+
+eta_8     = zeros(size(x_grid));
+eta_s_8   = zeros(size(x_grid));
+
+for i = 1:length(x_grid)
+    xi = x_grid(i);
+
+    combined = @(k) ...
+        2*cos(k*xi)./(alpha*(k - k_l).*(k - k_s)) ...
+        - (1+rho_r)*(k + chi(k)).*cos(k*(t-xi) - t*chi(k)) ./ ...
+          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s)) ...
+        - (1+rho_r)*(k - chi(k)).*cos(k*(t-xi) + t*chi(k)) ./ ...
+          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s));
+
+    I_total = integral(combined, 0, k_s-epsilon_pv, ...
+        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(combined, k_s+epsilon_pv, k_l-epsilon_pv, ...
+        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(combined, k_l+epsilon_pv, Inf, ...
+        'AbsTol', AbsTol, 'RelTol', RelTol);
+
+    eta_8(i) = -F0/(2*pi) * I_total;
+
+    steady_int = @(k) cos(k*xi)./(alpha*(k-k_l).*(k-k_s));
+    eta_s_8(i) = -F0/pi * ( ...
+        integral(steady_int, 0, k_s-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(steady_int, k_s+epsilon_pv, k_l-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(steady_int, k_l+epsilon_pv, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol));
+end
+
+eta_tr_8 = eta_8 - eta_s_8;
+
+figure; hold on;
+plot(x_grid, eta_8*1e3, 'b--', 'LineWidth', 3);
+plot(x_grid, eta_tr_8*1e3, 'm:', 'LineWidth', 3);
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('\eta','\eta_{tr}'); xlim([-10 10]);
+```
+
+## Comparison with nonlinear simulations (Fig. 10)
+
+The IVP solution is compared against a nonlinear simulation (Basilisk, Navier–Stokes/VOF) at $t_{\dim} = 25$ s. Simulation data are stored in `notebooks/if_25.csv`; valid time indices are $t_{\dim} \in \{1, 3, 7, 15, 25, 60, 145, 300\}$ s.
+
+```@example capillary_gravity
+using DelimitedFiles
+
+t_dim = 25
+t_sim = t_dim / (100 * p.t_c)
+
+sol_sim = solve(ForcedGCProblem(p, x_grid, t_sim); method=IVP())
+
+data = sortslices(
+    readdlm(joinpath(pkgdir(ForcedInterfacialWaves), "notebooks", "if_$(t_dim).csv"), ',', Float64; skipstart=1),
+    dims=1, by=r -> r[6])
+x_bsk = data[:, 6] ./ p.l_c
+y_bsk = data[:, 7] ./ p.l_c
+
+plot(x_grid, sol_sim.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L"x", ylabel=L"\eta \times 10^{3}",
+     xlims=(-6,10), ylims=(-6, 8.2), yticks=[-4, 0, 4, 8],
+     legend=:outerright, size=(800,400))
+plot!(x_bsk, y_bsk .* 1e3; label="Simulation", color="red", ls=:dot)
+```
+
+*Fig. 10: IVP vs nonlinear simulation at $t_{\dim} = 25$ s.*
+
+```matlab
+%% IVP vs nonlinear simulation at t_dim = 25 s (Fig 10)
+t_dim = 25;
+t = t_dim / (100 * t_c);
+
+% Compute IVP profile (same combined-integrand approach as above)
+eta_sim = zeros(size(x_grid));
+for i = 1:length(x_grid)
+    xi = x_grid(i);
+    combined = @(k) ...
+        2*cos(k*xi)./(alpha*(k-k_l).*(k-k_s)) ...
+        - (1+rho_r)*(k+chi(k)).*cos(k*(t-xi)-t*chi(k)) ./ ...
+          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s)) ...
+        - (1+rho_r)*(k-chi(k)).*cos(k*(t-xi)+t*chi(k)) ./ ...
+          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s));
+
+    eta_sim(i) = -F0/(2*pi) * ( ...
+        integral(combined, 0, k_s-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(combined, k_s+epsilon_pv, k_l-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
+        integral(combined, k_l+epsilon_pv, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol));
+end
+
+% Load simulation data
+data = readmatrix('notebooks/if_25.csv');
+data = sortrows(data, 6);
+x_bsk = data(:,6) / l_c;
+y_bsk = data(:,7) / l_c;
+
+figure; hold on;
+plot(x_grid, eta_sim*1e3, 'b--', 'LineWidth', 3);
+plot(x_bsk, y_bsk*1e3, 'r:', 'LineWidth', 3);
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('\eta (IVP)', 'Simulation'); xlim([-6 10]);
+```

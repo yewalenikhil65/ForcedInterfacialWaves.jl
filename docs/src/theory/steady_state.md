@@ -39,95 +39,65 @@ where ,
 k_{l,s} = \frac{1+\rho_r}{2\alpha}\left[1\pm\sqrt{1-\frac{4\alpha\beta}{1+\rho_r}}\right].
 ```
 
-The integral expression for $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ above is solved numerically (in Julia and MATLAB) using the following codes. The Julia side uses [`compute_cg_parameters`](@ref) for the nondimensional parameters and the unicode `∫` alias (exported by the package) for the local-term quadrature.
+The integral expression for $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ above is solved numerically (in Julia and MATLAB) using the following codes. The Julia side uses [`compute_cg_parameters`](@ref) for the nondimensional parameters and [`solve`](@ref) with [`steady`](@ref) for the decomposition into far-field and local components.
 
 ```@example steady_state
-using ForcedInterfacialWaves: ∫
 using ForcedInterfacialWaves
+using Plots, LaTeXStrings
+
+plot_font = "Computer Modern"
+default(fontfamily=plot_font, linewidth=3, framestyle=:box, label=nothing,
+        grid=false, fg_legend=false, background_color_legend=false)
 
 p = compute_cg_parameters()
+x = make_cg_xgrid(p; Nx=2001, xlim=(-15.0, 15.0))
 
-# Spatial grid (nondimensional), excluding x = 0
-x = filter(xi -> abs(xi) > 1e-12, collect(-10:0.01:10))
+# Steady solution without Rayleigh dissipation
+sol = solve(ForcedGCProblem(p, x); method=steady(rayleigh_dissipation=false))
 
-# Far-field steady term
-η_far = @. p.F₀ / (p.α * (p.kₗ - p.kₛ)) *
-           (-sin(p.kₛ * abs(x)) + sin(p.kₗ * abs(x)))
-
-# Local steady term via direct quadrature
-η_local = [p.F₀ * (p.kₗ + p.kₛ) / (π * p.α) *
-           ∫(y -> y * exp(-abs(xi) * y) / ((y^2 + p.kₗ^2) * (y^2 + p.kₛ^2)),
-             0.0, Inf; atol=p.atol, rtol=p.rtol)
-           for xi in x]
-
-extrema(η_far), extrema(η_local)
+plot(x, sol.η_s_local .* 1e3; label="local", color="red",
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-10,10),
+     legend=:outerright, size=(800,400))
+plot!(x, sol.η_s_farfield .* 1e3; label="far-field", color="blue")
 ```
 
-The same components can be plotted directly. Because Plots.jl is available in the documentation
-environment, this block is executed and rendered by Documenter:
-
-```@example steady_state
-using Plots
-plot(x, η_far .* 1e3; label="η_s far-field", lw=1.5)
-plot!(x, η_local .* 1e3; label="η_s local", lw=1.5,
-      xlabel="x", ylabel="η × 10³")
-```
+*Fig. 5a: Steady-state far-field and local components without Rayleigh dissipation.*
 
 ```matlab
-%% Capillary-gravity steady-state decomposition
+%% Steady-state decomposition (no Rayleigh dissipation)
 U = 26.7046; g = 981.0; T = 72.0;
-rho_l = 1.0;  rho_u = 0.001;
-
-% Characteristic scale and nondimensional roots
+rho_l = 1.0; rho_u = 0.001;
 l_c   = U^2 / g;
 alpha = T / (rho_l * U^2 * l_c);
 rho_r = rho_u / rho_l;
+disc  = (1 + rho_r)^2 - 4*alpha*(1 - rho_r);
+k_l   = ((1 + rho_r) + sqrt(disc)) / (2*alpha);
+k_s   = ((1 + rho_r) - sqrt(disc)) / (2*alpha);
+F0    = 0.01*T / (rho_l*U^2*l_c);
 
-discriminant = (1.0 + rho_r)^2 - 4.0 * alpha * (1.0 - rho_r);
-k_l = ((1.0 + rho_r) + sqrt(discriminant)) / (2.0 * alpha);
-k_s = ((1.0 + rho_r) - sqrt(discriminant)) / (2.0 * alpha);
+x = linspace(-15, 15, 2001);
+x(abs(x) < 1e-12) = [];
 
-F0 = 0.01 * T / (rho_l * U^2 * l_c);
-
-% Spatial grid (nondimensional), excluding x = 0
-x = -10:0.01:10;
-x(x == 0) = [];
-
-% Far-field steady term
-eta_far = F0 / (alpha * (k_l - k_s)) .* ...
-    (-sin(k_s * abs(x)) + sin(k_l * abs(x)));
-
-% Local steady term via direct quadrature
+eta_far = F0/(alpha*(k_l - k_s)) .* (-sin(k_s*abs(x)) + sin(k_l*abs(x)));
 eta_local = zeros(size(x));
-
 for i = 1:length(x)
-    integrand = @(y) y .* exp(-abs(x(i)) .* y) ./ ...
-        ((y.^2 + k_l^2) .* (y.^2 + k_s^2));
-
-    I = integral(integrand, 0, Inf, 'AbsTol', 1e-10, 'RelTol', 1e-8);
-
-    eta_local(i) = F0 * (k_l + k_s) / (pi * alpha) * I;
+    eta_local(i) = F0*(k_l + k_s)/(pi*alpha) * ...
+        integral(@(y) y.*exp(-abs(x(i)).*y)./((y.^2+k_l^2).*(y.^2+k_s^2)), ...
+        0, Inf, 'AbsTol', 1e-10, 'RelTol', 1e-8);
 end
 
-% Plot both components (x1e3 for readability)
-figure;
-hold on;
-plot(x, eta_far * 1e3, 'b-', 'LineWidth', 1.5, ...
-    'DisplayName', '\eta_s far-field');
-plot(x, eta_local * 1e3, 'r-', 'LineWidth', 1.5, ...
-    'DisplayName', '\eta_s local');
-xlabel('x');
-ylabel('\eta \times 10^3');
-legend('Location', 'best');
-grid on;
+figure; hold on;
+plot(x, eta_far*1e3, 'b-', 'LineWidth', 2);
+plot(x, eta_local*1e3, 'r-', 'LineWidth', 2);
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('far-field','local'); xlim([-10 10]);
 ```
-
-The resulting figure from both Julia and MATLAB are superimposed  in the following figure, which is a reproduction of fig. $5a$ in the manuscript.
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../assets/Fig5a.png" alt="Figure 5a comparison" style="max-width:60%; height:auto;">
-  <figcaption>Figure 5a: Comparison of steady wave profiles computed in MATLAB vs Julia.</figcaption>
+  <img src="../assets/Fig5a.png" alt="Fig 5a" style="max-width:60%; height:auto;">
+  <figcaption>Fig. 5a: MATLAB and Julia overlay.</figcaption>
 </figure>
 ```
 The steady-state response $\eta(x)$ using the Rayleigh dissipation approach is obtained as:
@@ -143,3 +113,43 @@ The steady-state response $\eta(x)$ using the Rayleigh dissipation approach is o
 ```
 
 It is shown [here](../capillary_gravity_rayleigh_dissipation.md) that $\dfrac{G(x)}{\pi\alpha}$ in eqn. 3.12  is identical to $\dfrac{\eta_s^{\text{local}}(x)}{F_0}$ in eqn. 3.11; the latter expression being preferable compared to $G(x)$ in 3.12 due to the apparence of its local nature via the explicit exponential decay term. Fig. 5b confirms that the steady-state response from the Rayleigh dissipation approach is qualitatively different from that of fig. 5a. Notably, the response employing Rayleigh dissipation is asymmetric about $x=0$ (fig. 5b), consistent with observations. In the next sections, we show that similar results will be arrived at through the IVP approach.
+
+The Rayleigh dissipation steady state is computed using the same `solve` interface with `rayleigh_dissipation=true`. The returned `WaveSolution` carries the same `η_s_local` and `η_s_farfield` fields.
+
+```@example steady_state
+# Steady solution with Rayleigh dissipation
+sol_r = solve(ForcedGCProblem(p, x); method=steady(rayleigh_dissipation=true))
+
+plot(x, sol_r.η_s_local .* 1e3; label="local", color="red",
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-10,10),
+     legend=:outerright, size=(800,400))
+plot!(x, sol_r.η_s_farfield .* 1e3; label="far-field", color="blue")
+```
+
+*Fig. 5b: Steady-state far-field and local components with Rayleigh dissipation. The asymmetric far-field response selects short waves upstream ($x<0$) and long waves downstream ($x>0$).*
+
+```matlab
+%% Steady-state with Rayleigh dissipation (eqn. 3.12)
+% Far-field: asymmetric sinusoidal terms
+eta_far_r = zeros(size(x));
+eta_far_r(x < 0) = -2*F0/(alpha*(k_l - k_s)) .* sin(k_l*x(x < 0));
+eta_far_r(x > 0) = -2*F0/(alpha*(k_l - k_s)) .* sin(k_s*x(x > 0));
+
+% Local: G(x) integral (identical to eqn 3.11 local term)
+eta_local_r = eta_local;   % same local term as the non-Rayleigh case
+
+figure; hold on;
+plot(x, eta_far_r*1e3, 'b-', 'LineWidth', 2);
+plot(x, eta_local_r*1e3, 'r-', 'LineWidth', 2);
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('far-field','local'); xlim([-10 10]);
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../assets/lc_ssl-1.png" alt="Fig 5b lower" style="max-width:48%; height:auto; display:inline-block;">
+  <img src="../assets/uc_ssl-1.png" alt="Fig 5b upper" style="max-width:48%; height:auto; display:inline-block;">
+  <figcaption>Fig. 5b: MATLAB and Julia overlay — Rayleigh dissipation steady state.</figcaption>
+</figure>
+```

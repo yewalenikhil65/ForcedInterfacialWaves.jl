@@ -174,7 +174,131 @@ eta = 7.212029103435171e-05
 | $\eta_{\mathrm{analytical}}$ | `7.21203e-05` | `7.21203e-05` | 12 digits |
 | $\eta_{\mathrm{CPV}}$ | `6.97953e-05` | `6.97953e-05` | 10 digits |
 
-The full spatial profile — analytical solution outside the front band, direct numerical CPV inside and across it — reproduces Figure 6 of the manuscript:
+The full spatial profile at $t = 183.68$ (corresponding to the last panel of manuscript Fig. 6) is computed below. The Julia side uses [`solve`](@ref) on a 2001-point grid; the MATLAB code evaluates the same $T_0$–$T_4$ decomposition on the same grid.
+
+```@example pure_gravity
+using Plots, LaTeXStrings
+
+plot_font = "Computer Modern"
+default(fontfamily=plot_font, linewidth=3, framestyle=:box, label=nothing,
+        grid=false, fg_legend=false, background_color_legend=false)
+
+x_grid = make_gravity_xgrid(pg; Nx=2001)
+t_fig6 = 183.68
+prof = solve(ForcedGravityProblem(pg, x_grid, t_fig6))
+
+plot(x_grid, prof.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-12, 12),
+     ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8],
+     legend=:outerright, size=(800,400))
+plot!(x_grid, prof.η_steady .* 1e3; label=L"\eta_s", color="black")
+plot!(x_grid, prof.η_transient .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
+```
+
+*Fig. 6: Pure-gravity IVP at $t = 183.68$.*
+
+```matlab
+%% Pure-gravity spatial profile at t = 183.68
+t = 183.68;
+Nx = 2001;
+x_grid = linspace(-pg.front_band*t, t + pg.front_band*t, Nx);
+
+% Evaluate T0-T4 on the grid (excluding front band |x - t| < front_band)
+eta       = NaN(1, Nx);
+eta_s     = NaN(1, Nx);
+eta_tr    = NaN(1, Nx);
+
+for i = 1:Nx
+    xi = x_grid(i);
+    a  = t - xi;
+
+    T0a = -pi*sin(beta*abs(xi));
+    T0b = integral(@(y) exp(-y*abs(xi)).*y./(beta^2 + y.^2), ...
+        0, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol);
+    T0_val = (T0a + T0b) / (pi*(1 + rho_r));
+
+    if abs(a) < front_band
+        eta(i)   = NaN;
+        eta_s(i) = T0_val;
+        eta_tr(i)= NaN;
+        continue;
+    end
+
+    b = 0.5*t*sqrt_beta;
+    if a > 0   % x < t
+        T1_val = -sin(beta*xi)/(1 + rho_r);
+        T2_val = -4/(pi*(1+rho_r)*beta) * ...
+            integral(@(v) exp(-2*v.^2*a + v*t*sqrt_beta).*v.^2 .* ...
+            (sqrt_beta*cos(v*t*sqrt_beta) + (2*v-sqrt_beta).*sin(v*t*sqrt_beta)) ./ ...
+            (beta + (2*v-sqrt_beta).^2), 0, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
+        X = b*sqrt(2/(pi*a));
+        T3_val = 1/(pi*(1+rho_r)*sqrt_beta)*(1 + t/(2*a))*sqrt(pi/(2*a)) * ...
+            (cos(b^2/a)*(0.5 - fresnelc(X)) + sin(b^2/a)*(0.5 - fresnels(X)));
+    else       % x > t
+        T1_val = sin(beta*xi)/(1 + rho_r);
+        T2_val = -4/(pi*(1+rho_r)*beta) * ...
+            integral(@(v) exp(2*v.^2*a - v*t*sqrt_beta).*v.^2 .* ...
+            (sqrt_beta*cos(v*t*sqrt_beta) - (2*v-sqrt_beta).*sin(v*t*sqrt_beta)) ./ ...
+            (beta + (2*v-sqrt_beta).^2), 0, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
+        X = b*sqrt(2/(pi*abs(a)));
+        T3_val = 1/(pi*(1+rho_r)*sqrt_beta)*(1 + t/(2*a))*sqrt(pi/(2*abs(a))) * ...
+            (cos(b^2/abs(a))*(0.5 + fresnelc(X)) + sin(b^2/abs(a))*(0.5 + fresnels(X)));
+    end
+    T4_val = -1/(pi*(1+rho_r)) * ...
+        integral(@(v) cos(v.^2*a + v*t*sqrt_beta)./(v + sqrt_beta), ...
+        0, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
+
+    eta_s(i)  = T0_val;
+    eta_tr(i) = T1_val + T2_val + T3_val + T4_val;
+    eta(i)    = eta_s(i) + eta_tr(i);
+end
+
+figure; hold on;
+plot(x_grid, eta*1e3, 'b--', 'LineWidth', 2);
+plot(x_grid, eta_s*1e3, 'k-', 'LineWidth', 2);
+plot(x_grid, eta_tr*1e3, 'm:', 'LineWidth', 2);
+xlabel('x'); ylabel('\eta \times 10^3');
+legend('\eta','\eta_s','\eta_{tr}'); xlim([-12 12]);
+```
+
+The following overlay of Julia and MATLAB spatial profiles at $t_{\dim} = 1$ s confirms agreement across the full $x$-range:
 
 ![Figure 6 comparison](../assets/fig6_comparison.svg)
-*Figure 6: Pure-gravity IVP solution $\eta$, its steady part $\eta_s$, and transient part $\eta_{\mathrm{tr}}$, with independent CPV markers, computed in both Julia and MATLAB.*
+*Fig. 6: Julia and MATLAB overlay at $t_{\dim} = 1$ s.*
+
+## Asymptotic form of the transient integrals and discussion
+
+Among the three integrals in (4.4c–e), the $t\to\infty$ limit is particularly interesting for $\mathbb{T}_2(x,t)$. For $a\equiv t-x>0$ and in the limit $\beta=1$ (zero density ratio), it decays algebraically as $t^{-1/2}$ at every finite $x$; the other, more general cases may be treated similarly.
+
+At sufficiently large $t\gg1$, the asymptotic form of the cosine integral in $\mathbb{T}_2(x,t\to\infty)$ is obtained from the real part of an integral of the standard form
+
+```math
+\mathbb{I}(t)=\int_0^\infty g(\nu)\exp\!\left[t f(\nu)\right]d\nu,
+\qquad
+f(\nu)=-2\nu^2+\nu+i\nu,
+\qquad
+g(\nu)=\frac{\nu^2}{1+(2\nu-1)^2},
+```
+
+where $\nu$ is continued into the complex plane. The convergence at large time is not immediately apparent because
+
+```math
+\exp\!\left[t f(\nu)\right]
+=\exp(t/8)\,
+ \exp\!\left[-t\left\{\left(\sqrt{2}\nu-\frac{1}{2\sqrt{2}}\right)^2-i\nu\right\}\right].
+```
+
+The saddle point is $\nu_0=(1+i)/4$, with $f(\nu_0)=i/4$, $g(\nu_0)=(-1+2i)/20$, and $f''(\nu_0)=-4$. Standard saddle-point integration gives
+
+```math
+\mathbb{I}(t\gg1)
+\sim
+\left(\frac{\pi}{2}\right)^{1/2}
+\left(\frac{-1+2i}{20}\right)t^{-1/2}
+\exp\!\left(\frac{it}{4}\right).
+```
+
+The asymptotic form for the sine term in $\mathbb{T}_2(x,t\to\infty)$ can similarly be obtained by considering the imaginary part of $\mathbb{I}(t)$ with a modified $g(z)$; the algebraic decay of $t^{-1/2}$ is apparent in these results.
+
+For the complete fixed-$x$ asymptotic proof of the two transient integrals, including the pole, stationary-phase, endpoint, and contour-rotation analyses, see the [large-time transient-asymptotics proof](../pure_gravity_transient_asymptotic_proof.md).
