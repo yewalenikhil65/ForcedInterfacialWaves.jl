@@ -6,7 +6,7 @@ This section contains the mathematical formulation and numerical implementation 
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../assets/Fig3.png" alt="Pressure forcing at a two-fluid interface" style="max-width:100%;">
+  <img src="/assets/Fig3.png" alt="Pressure forcing at a two-fluid interface" style="max-width:100%;">
 </figure>
 ```
 
@@ -26,16 +26,10 @@ the key dimensionless groups are
 \beta = \frac{1-\rho_r}{1+\rho_r}.
 ```
 
-The parameter $\alpha$ measures the relative importance of surface tension. Two limiting cases are studied:
+The parameter $\alpha$ measures the relative importance of surface tension. 
+## Structure of the solution according to equation 3.1 in manuscript
 
-| Regime | Condition | Dispersion | Singularity structure |
-|:-------|:---------:|:-----------|:----------------------|
-| Pure gravity | $\alpha = 0$ | $\chi(k) = \sqrt{\beta k}$ | Single CPV pole at $k = \beta$ |
-| Capillary–gravity | $\alpha > 0$ | $\chi(k) = \sqrt{\beta k + \frac{\alpha}{1+\rho_r} k^3}$ | Removable poles at $k_s$, $k_l$ (cancel in combined integrand) |
-
-## Structure of the solution
-
-In both regimes, the interfacial displacement decomposes as
+The interfacial displacement decomposes as
 
 ```math
 \eta(x,t) = \eta_s(x) + \eta_{\mathrm{tr}}(x,t),

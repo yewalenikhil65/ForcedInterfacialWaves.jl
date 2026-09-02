@@ -138,7 +138,7 @@ For a guided, runnable companion covering the physical setup, parameter construc
 pure-gravity and capillary–gravity workflows, and figure generation, see the
 [`forced_interfacial_waves_usage.ipynb` notebook](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/forced_interfacial_waves_usage.ipynb).
 
-## Generating the paper figures
+## Generating the figures in the manuscript
 
 Plotting requires Plots.jl, kept out of the package's runtime dependencies. Use the
 dedicated `scripts` environment:
