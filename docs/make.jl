@@ -1,6 +1,5 @@
 using Documenter
 using ForcedInterfacialWaves
-using Plots  # Preload before @example evaluation (avoids Julia 1.12 world-age warnings).
 
 makedocs(;
     sitename = "ForcedInterfacialWaves.jl",

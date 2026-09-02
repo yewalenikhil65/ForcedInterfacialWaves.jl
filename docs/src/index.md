@@ -59,7 +59,7 @@ gravity) or [`ForcedGCProblem`](@ref) (capillary–gravity). Both accept a scala
 vector spatial grid, and return a [`WaveSolution`](@ref) with fields `η`, `η_steady`,
 `η_s_local`, `η_s_farfield`, `η_transient`, `x`, `t`.
 
-```@example quickstart
+```julia
 using ForcedInterfacialWaves
 
 # ─── Parameters ───
@@ -69,7 +69,7 @@ p  = compute_cg_parameters()           # CapillaryGravityParams (α > 0)
 
 ### Steady state
 
-```@example quickstart
+```julia
 x = make_cg_xgrid(p; Nx=2001, xlim=(-15.0, 15.0))
 
 # Without Rayleigh dissipation (symmetric, eqn. 3.11)
@@ -81,9 +81,15 @@ sol_r = solve(ForcedGCProblem(p, x); method=steady(rayleigh_dissipation=true))
 extrema(sol_r.η)
 ```
 
+```text
+extrema η_s_local:    (1.934697565644447e-6, 0.001000728592754511)
+extrema η_s_farfield: (-0.0038461088893694513, 0.0038618510522912524)
+extrema η (Rayleigh): (-0.00415160043891501, 0.004665947501469389)
+```
+
 ### Pure-gravity IVP
 
-```@example quickstart
+```julia
 t_pg = 183.68                          # nondimensional time (Fig. 6)
 x_pg = make_gravity_xgrid(pg; Nx=2001)
 
@@ -94,9 +100,20 @@ prof_pg.η, prof_pg.η_steady, prof_pg.η_transient  # full, steady, transient
 T₀(-2.0, pg), T₁(-2.0, t_pg, pg), T₂(-2.0, t_pg, pg), T₃(-2.0, t_pg, pg), T₄(-2.0, t_pg, pg)
 ```
 
+```text
+extrema η:           (-0.002801973192045875, 0.0027722613223688736)
+extrema η_steady:    (-0.0013808590875375424, 0.001669134393643845)
+extrema η_transient: (-0.0014211141045083326, 0.0014101650962870139)
+T₀(-2.0, pg)         = -0.8639502272578199
+T₁(-2.0, t_pg, pg)   = 0.910043043935118
+T₂(-2.0, t_pg, pg)   = 0.017347972880823993
+T₃(-2.0, t_pg, pg)   = 2.8543336382737868e-5
+T₄(-2.0, t_pg, pg)   = -2.8607669835722488e-5
+```
+
 ### Capillary–gravity IVP
 
-```@example quickstart
+```julia
 t_cg = 367.35                          # nondimensional time (Fig. 8)
 
 sol_cg = solve(ForcedGCProblem(p, x, t_cg); method=IVP())
@@ -107,25 +124,12 @@ sol_asym = solve(ForcedGCProblem(p, x, t_cg); method=IVP(asym_cancel=true))
 sol_asym.η_steady, sol_asym.η_transient
 ```
 
-### Parameters: Unicode/ASCII aliases and mutability caveat
-
-Both parameter structs are **mutable** and expose the mathematical fields listed in the
-[API reference](api.md) under ASCII and Unicode names (e.g. `p.alpha ≡ p.α`,
-`p.k_l ≡ p.kₗ`), including for destructuring:
-
-```@example quickstart
-(; α, kₗ, kₛ) = p
-α, kₗ, kₛ
-```
-
-Mutating a field does **not** recompute quantities derived from it. For example, `p.α`
-influences `k_l`, `k_s`, and `F0` — changing `p.α` in place leaves those derived fields
-stale. Always build a fresh parameter set with `compute_cg_parameters`/
-`compute_gravity_parameters` keywords when changing a physical input:
-
-```@example quickstart
-p_new = compute_cg_parameters(T=80.0)   # consistently re-derives k_l, k_s, F0, ...
-p_new.k_l, p_new.k_s
+```text
+extrema η:           (-0.004355770522330265, 0.00443105773553412)
+extrema η_steady:    (-0.0038432421228547574, 0.0038638165143344947)
+extrema η_transient: (-0.004351936781613271, 0.004307732492495523)
+extrema η_steady  (asym): (-0.004151600440721169, 0.004665947499729339)
+extrema η_transient (asym): (-0.00024503434796811774, 0.00025058771418859154)
 ```
 
 ## Interactive theory and usage notebook

@@ -2,7 +2,13 @@
 
 This section contains the mathematical formulation and numerical implementation of the forced interfacial wave IVP, following the notation of [Kadari et al. (2026)](https://arxiv.org/abs/2605.12254).
 
-## Physical problem
+## Problem description and nondimensionalisation
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../assets/Fig3.png" alt="Pressure forcing at a two-fluid interface" style="max-width:100%;">
+</figure>
+```
 
 A localised pressure forcing $p_e = F_0\,\delta(x)$ acts at the interface of two inviscid, incompressible, irrotational fluids of infinite depth. Both streams move at uniform speed $U$ rightwards. In the absence of forcing, the interface is flat at $z = 0$.
 
@@ -67,7 +73,7 @@ nondimensional numbers. Julia exposes this through [`compute_gravity_parameters`
 [`compute_cg_parameters`](@ref), which return mutable parameter structs consumed directly by
 `solve`. The MATLAB equivalent computes the same quantities as plain variables.
 
-```@example overview_params
+```julia
 using ForcedInterfacialWaves
 
 # Pure gravity (α = 0)
@@ -83,6 +89,17 @@ println("α        = ", p.α)
 println("kₛ       = ", p.kₛ)
 println("kₗ       = ", p.kₗ)
 println("F₀       = ", p.F₀)
+```
+
+```text
+β        = 0.9980019980019981
+F₀       = 0.0013888559222787725
+l_c [cm] = 0.7269476668297654
+t_c [s]  = 0.027221814475025485
+α        = 0.13888559222787725
+kₛ       = 1.1967001366781338
+kₗ       = 6.010670937188218
+F₀       = 0.0013888559222787723
 ```
 
 ```matlab
@@ -120,6 +137,38 @@ fprintf('k_s       = %.6f\n', k_s);
 fprintf('k_l       = %.6f\n', k_l);
 fprintf('F0        = %.6e\n', F0_cg);
 ```
+
+## Parameter names and mutation
+
+Both parameter structs are **mutable** and expose the mathematical fields listed in the
+[API reference](../api.md) under ASCII and Unicode names (for example, `p.alpha ≡ p.α`
+and `p.k_l ≡ p.kₗ`), including for destructuring:
+
+```julia
+(; α, kₗ, kₛ) = p
+α, kₗ, kₛ
+```
+
+```text
+(0.13888559222787725, 6.010670937188218, 1.1967001366781338)
+```
+
+Mutating a field does **not** recompute quantities derived from it. For example, `p.α`
+influences `k_l`, `k_s`, and `F0`; changing `p.α` in place leaves those derived fields
+stale. Build a fresh parameter set with `compute_cg_parameters` or
+`compute_gravity_parameters` keywords when changing a physical input:
+
+```julia
+p_new = compute_cg_parameters(T=80.0)   # consistently re-derives k_l, k_s, F0, ...
+p_new.k_l, p_new.k_s
+```
+
+```text
+(5.254642763643847, 1.2319912028358704)
+```
+
+Direct mutation is intended for quadrature controls without downstream dependents, such
+as `atol`, `rtol`, `k_max`, and `epsilon_pv`.
 
 Both parameter structs also carry the quadrature tolerances used throughout the theory pages:
 

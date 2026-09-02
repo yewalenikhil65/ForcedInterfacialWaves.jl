@@ -62,7 +62,7 @@ Unlike the $\alpha=0$ case, it was not possible to obtain closed-form expression
 
 The integral expressions for $\eta(x,t)$ [eqn. (4.5a) of the manuscript], $\eta_s(x)$ [eqn. (4.5b)], and $\eta_{\mathrm{tr}}(x,t)$ [eqn. (4.5c)] are evaluated numerically using both Julia and MATLAB with the codes provided below, at $x=3$ and $t=110$. The integrals are computed using a numerical Cauchy principal value (CPV) procedure, in which a small neighborhood of width $\epsilon=10^{-6}$ around each pole, $k=k_s$ and $k=k_l$, is excluded from the numerical integration to avoid direct evaluation at the singularities.
 
-```@example capillary_gravity
+```julia
 using ForcedInterfacialWaves
 
 p = compute_cg_parameters()
@@ -89,6 +89,18 @@ println("η_classical    = ", classical.η)
 
 # Steady G(x) integral
 println("G(3) = ", cg_Gx_integral(3.0, p))
+```
+
+```text
+I(k=2; x=3, t=110) = -2.492590111020123
+I₁ = -10.469830630677311
+I₂ = -3.3709095739316925
+I₃ = 5.152909149338241
+η_ivp          = 0.001920386718354885
+η_s (4.5b)     = -0.0005772670229863901
+η_transient    = 0.002497653741341275
+η_classical    = 0.0018388025677065953
+G(3) = 0.011715104659267
 ```
 
 ```matlab
@@ -212,24 +224,33 @@ The full spatial profile — IVP solution, its steady part, and the transient re
 
 Figure 7 of the manuscript shows the transient component $-\mathbb{I}_4(x,t)/(2\pi)$ at an early time $t = 0.34$, confirming the decay of $\mathbb{I}_4$ as $t\to\infty$.
 
-```@example capillary_gravity
+```julia
 using Plots, LaTeXStrings
-
-plot_font = "Computer Modern"
-default(fontfamily=plot_font, linewidth=3, framestyle=:box, label=nothing,
-        grid=false, fg_legend=false, background_color_legend=false)
 
 x_grid = make_cg_xgrid(p; Nx=2001, xlim=(-15.0, 15.0))
 t_I4 = 0.34
 I4 = compute_cg_I4_profile(x_grid, t_I4, p; method=:threaded_vector)
 
-plot(x_grid, -(1/(2π)) .* I4; color="purple",
+plot(x_grid, -(1/(2π)) .* I4 .* 1e3; color="purple",
      guidefontsize=16, tickfontsize=14,
-     xlabel=L"x", ylabel=L"\frac{-\mathbb{I}_{4}(x,t)}{2\pi}",
-     xlims=(-10,10), ylims=(-10,14), size=(800,400))
+     xlabel=L"x", ylabel=L"\frac{-\mathbb{I}_{4}}{2\pi} \times 10^{3}",
+     xlims=(-10,10), size=(800,400))
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/cg_I4_fig7.png" alt="Fig 7" style="max-width:80%; height:auto;">
+</figure>
 ```
 
 *Fig. 7: $-\mathbb{I}_4/(2\pi)$ at $t = 0.34$.*
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/fig7_overlay.png" alt="Fig 7 overlay" style="max-width:80%; height:auto;">
+  <figcaption>Fig. 7: Julia (line) and MATLAB (markers) overlay.</figcaption>
+</figure>
+```
 
 ```matlab
 %% I4 component at t = 0.34 (Fig 7)
@@ -261,7 +282,7 @@ xlim([-10 10]); ylim([-10 14]);
 
 The capillary–gravity IVP at $t = 367.35$ shows the transient contribution $\eta_{\mathrm{tr}}$ approaching its long-time limit.
 
-```@example capillary_gravity
+```julia
 t_fig8 = 367.35
 sol_8 = solve(ForcedGCProblem(p, x_grid, t_fig8); method=IVP())
 
@@ -273,7 +294,20 @@ plot(x_grid, sol_8.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
 plot!(x_grid, sol_8.η_transient .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
 ```
 
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/cg_ivp_fig8.png" alt="Fig 8" style="max-width:80%; height:auto;">
+</figure>
+```
+
 *Fig. 8: Capillary–gravity IVP at $t = 367.35$.*
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/fig8_overlay.png" alt="Fig 8 overlay" style="max-width:80%; height:auto;">
+  <figcaption>Fig. 8: Julia (lines) and MATLAB (markers) overlay.</figcaption>
+</figure>
+```
 
 ```matlab
 %% Full CG IVP profile at t = 367.35 (Fig 8)
@@ -321,7 +355,7 @@ legend('\eta','\eta_{tr}'); xlim([-10 10]);
 
 The IVP solution is compared against a nonlinear simulation (Basilisk, Navier–Stokes/VOF) at $t_{\dim} = 25$ s. Simulation data are stored in `notebooks/if_25.csv`; valid time indices are $t_{\dim} \in \{1, 3, 7, 15, 25, 60, 145, 300\}$ s.
 
-```@example capillary_gravity
+```julia
 using DelimitedFiles
 
 t_dim = 25
@@ -343,7 +377,20 @@ plot(x_grid, sol_sim.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
 plot!(x_bsk, y_bsk .* 1e3; label="Simulation", color="red", ls=:dot)
 ```
 
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/cg_sim_fig10.png" alt="Fig 10" style="max-width:80%; height:auto;">
+</figure>
+```
+
 *Fig. 10: IVP vs nonlinear simulation at $t_{\dim} = 25$ s.*
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/fig10_overlay.png" alt="Fig 10 overlay" style="max-width:80%; height:auto;">
+  <figcaption>Fig. 10: Julia (line), MATLAB (markers), and Basilisk simulation overlay.</figcaption>
+</figure>
+```
 
 ```matlab
 %% IVP vs nonlinear simulation at t_dim = 25 s (Fig 10)

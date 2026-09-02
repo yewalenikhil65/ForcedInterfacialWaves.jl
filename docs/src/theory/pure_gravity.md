@@ -60,7 +60,7 @@ Putting the $T_0$–$T_4$ terms together gives the full transient-plus-steady so
 
 The integral expressions $\eta(x,t)$ (eqn. (4.1) of the manuscript), $\eta_s(x)$ (eqn. (4.3) of the manuscript) and $\eta_{tr}(x,t)$ (eqn. (4.4) of the manuscript) are evaluated numerically, at $x=-2$ and $t_{\dim}=1\,\mathrm{s}$, using both Julia and MATLAB with the codes below. The Julia side uses the unified [`T₀`](@ref)–[`T₄`](@ref) functions together with the `solve` API — [`solve`](@ref)`(`[`ForcedGravityProblem`](@ref)`(...))` returns a [`WaveSolution`](@ref) with `η`, `η_steady`, and `η_transient` fields directly.
 
-```@example pure_gravity
+```julia
 using ForcedInterfacialWaves
 
 pg = compute_gravity_parameters()
@@ -84,6 +84,19 @@ println("η_transient = ", sol.η_transient)
 η_cpv = gravity_numerical_cpv(x, t, pg)
 println("η_CPV     = ", η_cpv)
 println("|diff|    = ", abs(sol.η - η_cpv))
+```
+
+```text
+T₀ = -0.8639502272578199
+T₁ = 0.910043043935118
+T₂ = 0.005830863275361431
+T₃ = 0.0007044858552279276
+T₄ = -0.0007003237060232554
+η         = 7.212029103433092e-5
+η_steady  = -0.0011999023896811147
+η_transient = 0.0012720226807154456
+η_CPV     = 6.979529999850526e-5
+|diff|    = 2.324991035825656e-6
 ```
 
 ```matlab
@@ -176,12 +189,8 @@ eta = 7.212029103435171e-05
 
 The full spatial profile at $t = 183.68$ (corresponding to the last panel of manuscript Fig. 6) is computed below. The Julia side uses [`solve`](@ref) on a 2001-point grid; the MATLAB code evaluates the same $T_0$–$T_4$ decomposition on the same grid.
 
-```@example pure_gravity
+```julia
 using Plots, LaTeXStrings
-
-plot_font = "Computer Modern"
-default(fontfamily=plot_font, linewidth=3, framestyle=:box, label=nothing,
-        grid=false, fg_legend=false, background_color_legend=false)
 
 x_grid = make_gravity_xgrid(pg; Nx=2001)
 t_fig6 = 183.68
@@ -194,6 +203,12 @@ plot(x_grid, prof.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
      legend=:outerright, size=(800,400))
 plot!(x_grid, prof.η_steady .* 1e3; label=L"\eta_s", color="black")
 plot!(x_grid, prof.η_transient .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/pure_gravity_fig6.png" alt="Fig 6" style="max-width:80%; height:auto;">
+</figure>
 ```
 
 *Fig. 6: Pure-gravity IVP at $t = 183.68$.*

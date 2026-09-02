@@ -41,13 +41,9 @@ k_{l,s} = \frac{1+\rho_r}{2\alpha}\left[1\pm\sqrt{1-\frac{4\alpha\beta}{1+\rho_r
 
 The integral expression for $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ above is solved numerically (in Julia and MATLAB) using the following codes. The Julia side uses [`compute_cg_parameters`](@ref) for the nondimensional parameters and [`solve`](@ref) with [`steady`](@ref) for the decomposition into far-field and local components.
 
-```@example steady_state
+```julia
 using ForcedInterfacialWaves
 using Plots, LaTeXStrings
-
-plot_font = "Computer Modern"
-default(fontfamily=plot_font, linewidth=3, framestyle=:box, label=nothing,
-        grid=false, fg_legend=false, background_color_legend=false)
 
 p = compute_cg_parameters()
 x = make_cg_xgrid(p; Nx=2001, xlim=(-15.0, 15.0))
@@ -60,6 +56,12 @@ plot(x, sol.η_s_local .* 1e3; label="local", color="red",
      xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-10,10),
      legend=:outerright, size=(800,400))
 plot!(x, sol.η_s_farfield .* 1e3; label="far-field", color="blue")
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/steady_no_rayleigh.png" alt="Fig 5a" style="max-width:80%; height:auto;">
+</figure>
 ```
 
 *Fig. 5a: Steady-state far-field and local components without Rayleigh dissipation.*
@@ -96,8 +98,8 @@ legend('far-field','local'); xlim([-10 10]);
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../assets/Fig5a.png" alt="Fig 5a" style="max-width:60%; height:auto;">
-  <figcaption>Fig. 5a: MATLAB and Julia overlay.</figcaption>
+  <img src="../../assets/fig5a_overlay.png" alt="Fig 5a overlay" style="max-width:80%; height:auto;">
+  <figcaption>Fig. 5a: Julia (lines) and MATLAB (markers at peaks/troughs) overlay — without Rayleigh dissipation.</figcaption>
 </figure>
 ```
 The steady-state response $\eta(x)$ using the Rayleigh dissipation approach is obtained as:
@@ -116,7 +118,7 @@ It is shown [here](../capillary_gravity_rayleigh_dissipation.md) that $\dfrac{G(
 
 The Rayleigh dissipation steady state is computed using the same `solve` interface with `rayleigh_dissipation=true`. The returned `WaveSolution` carries the same `η_s_local` and `η_s_farfield` fields.
 
-```@example steady_state
+```julia
 # Steady solution with Rayleigh dissipation
 sol_r = solve(ForcedGCProblem(p, x); method=steady(rayleigh_dissipation=true))
 
@@ -125,6 +127,12 @@ plot(x, sol_r.η_s_local .* 1e3; label="local", color="red",
      xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-10,10),
      legend=:outerright, size=(800,400))
 plot!(x, sol_r.η_s_farfield .* 1e3; label="far-field", color="blue")
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/steady_rayleigh.png" alt="Fig 5b" style="max-width:80%; height:auto;">
+</figure>
 ```
 
 *Fig. 5b: Steady-state far-field and local components with Rayleigh dissipation. The asymmetric far-field response selects short waves upstream ($x<0$) and long waves downstream ($x>0$).*
@@ -148,8 +156,17 @@ legend('far-field','local'); xlim([-10 10]);
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../assets/lc_ssl-1.png" alt="Fig 5b lower" style="max-width:48%; height:auto; display:inline-block;">
-  <img src="../assets/uc_ssl-1.png" alt="Fig 5b upper" style="max-width:48%; height:auto; display:inline-block;">
-  <figcaption>Fig. 5b: MATLAB and Julia overlay — Rayleigh dissipation steady state.</figcaption>
+  <img src="../../assets/fig5b_overlay.png" alt="Fig 5b overlay" style="max-width:80%; height:auto;">
+  <figcaption>Fig. 5b: Julia (lines) and MATLAB (markers at peaks/troughs) overlay — Rayleigh dissipation.</figcaption>
 </figure>
+```
+
+To regenerate these figures from source, run from the repository root:
+
+```bash
+# 1. Generate MATLAB CSV datasets
+matlab -batch "run('matlab/generate_steady_state_comparison_data.m')"
+
+# 2. Generate overlay PNGs
+julia --project=scripts scripts/generate_steady_state_overlays.jl
 ```
