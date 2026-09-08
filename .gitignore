@@ -16,3 +16,12 @@ Manifest.toml
 # Editor
 .vscode/
 *.swp
+
+# Agent tooling
+.kiro/
+
+# Local-only scratch notes (contains private notes/tokens — never push)
+/implementationNotes.md
+
+# Stale build output (duplicate of src/)
+/build/

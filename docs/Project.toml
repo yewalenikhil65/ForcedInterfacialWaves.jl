@@ -4,4 +4,4 @@ ForcedInterfacialWaves = "e5219359-20f7-449b-9a6e-3764ada0d72e"
 LiveServer = "16fef848-5104-11e9-1b77-fb7a48bbb589"
 
 [sources]
-ForcedInterfacialWaves = {path = "/home/nikhil/JFM_Vinod_supplementary/ForcedInterfacialWaves.jl/"}
+ForcedInterfacialWaves = {path = "/Users/nikhil/ForcedInterfacialWaves.jl/"}
