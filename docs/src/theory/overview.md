@@ -6,7 +6,7 @@ This section contains the mathematical formulation and numerical implementation 
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="/assets/Fig3.png" alt="Pressure forcing at a two-fluid interface" style="max-width:100%;">
+  <img src="../../assets/Fig3.png" alt="Pressure forcing at a two-fluid interface" style="max-width:100%;">
 </figure>
 ```
 
