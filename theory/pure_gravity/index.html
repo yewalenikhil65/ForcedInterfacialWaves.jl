@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Pure Gravity · ForcedInterfacialWaves.jl</title><meta name="title" content="Pure Gravity · ForcedInterfacialWaves.jl"/><meta property="og:title" content="Pure Gravity · ForcedInterfacialWaves.jl"/><meta property="twitter:title" content="Pure Gravity · ForcedInterfacialWaves.jl"/><meta name="description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="og:description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="twitter:description" content="Documentation for ForcedInterfacialWaves.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/custom.css" rel="stylesheet" type="text/css"/><script src="../../assets/custom.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">ForcedInterfacialWaves.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Theory</span><ul><li><a class="tocitem" href="../overview/">Overview</a></li><li><a class="tocitem" href="../steady_state/">Steady-State</a></li><li class="is-active"><a class="tocitem" href>Pure Gravity</a><ul class="internal"><li><a class="tocitem" href="#Numerical-evaluation"><span>Numerical evaluation</span></a></li><li><a class="tocitem" href="#Asymptotic-form-of-the-transient-integrals-and-discussion"><span>Asymptotic form of the transient integrals and discussion</span></a></li></ul></li><li><a class="tocitem" href="../capillary_gravity/">Capillary–Gravity</a></li></ul></li><li><a class="tocitem" href="../../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Theory</a></li><li class="is-active"><a href>Pure Gravity</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Pure Gravity</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Pure-Gravity-—-Zero-Capillarity-Limit-(Manuscript-§4.1)"><a class="docs-heading-anchor" href="#Pure-Gravity-—-Zero-Capillarity-Limit-(Manuscript-§4.1)">Pure Gravity — Zero Capillarity Limit (Manuscript §4.1)</a><a id="Pure-Gravity-—-Zero-Capillarity-Limit-(Manuscript-§4.1)-1"></a><a class="docs-heading-anchor-permalink" href="#Pure-Gravity-—-Zero-Capillarity-Limit-(Manuscript-§4.1)" title="Permalink"></a></h1><p>Setting <span>$\alpha = 0$</span> removes capillary forces entirely. The dispersion simplifies to <span>$\chi(k) = \sqrt{\beta k}$</span> and the steady-state integral acquires a single Cauchy principal-value pole at <span>$k = \beta$</span>. This page presents the full analytical decomposition into <span>$T_0$</span>–<span>$T_4^\pm$</span> terms and an independent numerical CPV verification.</p><p>Below eqns. (4.1) and (4.2a,b,c) are obtained by substituting <span>$\alpha=0$</span> in eqn. (3.8) in the manuscript,</p><p class="math-container">\[\eta(x,t) = \eta_{s}(x) + \eta_{tr}^{(1)}(x,t) + \eta_{tr}^{(2)}(x,t) \tag{4.1}\]</p><p class="math-container">\[      \begin{align}
+        \dfrac{\eta_{s}(x)}{F_0} &amp;\equiv \dfrac{1}{2\pi\left(1+\rho_r\right)}\int_{-\infty}^{\infty}dk\; \dfrac{\exp\left(ikx\right)}{|k| - \beta},\quad 0 &lt; \beta \leq 1  \nonumber\\
+        \dfrac{\eta_{tr}^{(1)}(x,t)}{F_0} &amp;\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) + t\sqrt{\beta|k|}\right)\right]}{k+ \sqrt{\beta|k|}},  \nonumber\\
+        \dfrac{\eta_{tr}^{(2)}(x,t)}{F_0} &amp;\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) - t\sqrt{\beta|k|}\right)\right]}{k- \sqrt{\beta|k|}}.
+      \end{align} \tag{4.2a,b,c}\]</p><p>It may be further shown using principal value techniques that (see proof <a href="../../pure_gravity_steady_proof/">here</a>)</p><p class="math-container">\[\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right) + \int_0^\infty \frac{y\,e^{-|x|y}}{\beta^2+y^2}\,dy\right], \quad 0&lt;\beta\leq1,\; -\infty&lt;x&lt;\infty \tag{4.3}\]</p><p>In expression (4.3), <span>$\eta_{s}(x)$</span> is a symmetric function of <span>$x$</span>, implying a symmetric response upstream and downstream of the forcing at <span>$x=0$</span>. However, a contribution to the steady-state <em>also comes</em> from the time-dependent term in eqns. (4.2b),(4.2c). As shown in the  proof(<a href="../../pure_gravity_transient_proof/">here</a>) these transient terms may be further simplified to obtain the following analytical representation valid for all <span>$x,t$</span> i.e.</p><p class="math-container">\[\eta_{\mathrm{tr}}(x,t) \equiv \eta_{\mathrm{tr}}^{(1)}(x,t) + \eta_{\mathrm{tr}}^{(2)}(x,t) = \left\{\mathbb{T}_1(x) +\mathbb{T}_2(x,t) +\mathbb{T}_3(x,t) +\mathbb{T}_4(x,t)\right\}F_0, \tag{4.4a}\]</p><p>where,</p><p class="math-container">\[\mathbb{T}_1(x) \equiv \mp\frac{1}{1+\rho_r}\sin(\beta x) \tag{4.4b}\]</p><p class="math-container">\[\mathbb{T}_2(x,t) \equiv -\frac{4\beta^{-1}}{\pi(1+\rho_r)} \int_0^\infty dv\; v^2 \frac{\exp\!\left(\mp2av^2\pm2bv\right)}{\beta+\left(2v-\beta^{1/2}\right)^2} \left[\beta^{1/2}\cos\!\left(\beta^{1/2}tv\right) \pm \left(2v-\beta^{1/2}\right)\sin\!\left(\beta^{1/2}tv\right)\right] \tag{4.4c}\]</p><p class="math-container">\[\mathbb{T}_3(x,t) \equiv \frac{\beta^{-1/2}}{\pi(1+\rho_r)}\left(1+\frac{t}{2(t-x)}\right)\sqrt{\frac{\pi}{2|a|}} \left[\cos\!\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp\mathrm{C}\!\left(b\sqrt{\frac{2}{\pi|a|}}\right)\right\} + \sin\!\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp\mathrm{S}\!\left(b\sqrt{\frac{2}{\pi|a|}}\right)\right\}\right] \tag{4.4d}\]</p><p class="math-container">\[\mathbb{T}_4(x,t) \equiv -\frac{1}{\pi(1+\rho_r)}\int_0^\infty dv\;\frac{\cos\!\left(av^2+2bv\right)}{v+\beta^{1/2}} \tag{4.4e}\]</p><p>where, <span>$a \equiv t-x, \; b \equiv \dfrac{t\sqrt{\beta}}{2}$</span>, the upper signs in <span>$\mathbb{T}_1(x),\mathbb{T}_2(x,t)$</span> are used for <span>$x&lt;t$</span>, while lower signs are for <span>$x &gt; t$</span>. The Fresnel integrals <span>$\mathrm{C}(\cdot)$</span> and <span>$\mathrm{S}(\cdot)$</span> in eqn. (4.4d) are defined as</p><p class="math-container">\[\mathrm{C}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \cos\left(\frac{\pi t^2}{2}\right),\quad
+	\mathrm{S}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \sin\left(\frac{\pi t^2}{2}\right).\tag{4.4f}\]</p><p>In expressions (4.4), the <em>time-independent term</em>, <span>$\mathbb{T}_1(x)$</span> (eqn. 4.4b), is asymmetric with the same amplitude as the first term on the right hand side of eqn. (4.3). As a result, these two terms reinforce each other for <span>$x&gt;0$</span> but cancel for <span>$x&lt;0$</span>. Further, we note that as <span>$\rho_r\rightarrow 1$</span> <span>$\left(\beta = \dfrac{1-\rho_r}{1 + \rho_r}\rightarrow 0\right)$</span>, the terms diverge. This is physically reasonable because in this limit (<span>$\rho_r\rightarrow 1$</span>), gravity vanishes and in the absence of capillary forces as well (i.e. <span>$\alpha=0$</span> that we are currently assuming), there remains no restoring force to resist deformation due to the external pressure. The analytical strategy is clear now: provided one can show that <span>$\mathbb{T}_2(x,t\rightarrow\infty)\rightarrow0$</span>, <span>$\mathbb{T}_3(x,t\rightarrow\infty)\rightarrow0$</span> and <span>$\mathbb{T}_4(x,t\rightarrow\infty)\rightarrow0$</span>, one obtains the expected steady-state lacking waves upstream (except for small localised deformation of the interface due to the localised integral in eqn. (4.3)) and sinusoidal waves downstream (<span>$x&gt;0$</span>) with wavenumber <span>$\beta$</span>.</p><p>Putting the <span>$T_0$</span>–<span>$T_4$</span> terms together gives the full transient-plus-steady solution <span>$\eta(x,t)$</span> [eqn. (4.1)], and, as an independent cross-check, the original CPV integral can be evaluated directly, bypassing the <span>$T_0$</span>–<span>$T_4$</span> decomposition entirely. The small difference between <span>$\eta$</span> and <span>$\eta_{\mathrm{cpv}}$</span> at <span>$x=-2$</span> reflects that this point lies just inside the front-exclusion band, where the analytical branch and the direct CPV evaluation are not expected to agree to full precision (see the comparison table below).</p><h2 id="Numerical-evaluation"><a class="docs-heading-anchor" href="#Numerical-evaluation">Numerical evaluation</a><a id="Numerical-evaluation-1"></a><a class="docs-heading-anchor-permalink" href="#Numerical-evaluation" title="Permalink"></a></h2><p>The integral expressions <span>$\eta(x,t)$</span> (eqn. (4.1) of the manuscript), <span>$\eta_s(x)$</span> (eqn. (4.3) of the manuscript) and <span>$\eta_{tr}(x,t)$</span> (eqn. (4.4) of the manuscript) are evaluated numerically, at <span>$x=-2$</span> and <span>$t_{\dim}=1\,\mathrm{s}$</span>, using both Julia and MATLAB with the codes below. The Julia side uses the unified <a href="../../api/#ForcedInterfacialWaves.T₀"><code>T₀</code></a>–<a href="../../api/#ForcedInterfacialWaves.T₄"><code>T₄</code></a> functions together with the <code>solve</code> API — <a href="../../api/#CommonSolve.solve"><code>solve</code></a><code>(</code><a href="../../api/#ForcedInterfacialWaves.ForcedGravityProblem"><code>ForcedGravityProblem</code></a><code>(...))</code> returns a <a href="../../api/#ForcedInterfacialWaves.WaveSolution"><code>WaveSolution</code></a> with <code>η</code>, <code>η_steady</code>, and <code>η_transient</code> fields directly.</p><pre><code class="language-julia hljs">using ForcedInterfacialWaves
+
+pg = compute_gravity_parameters()
+t  = 1.0 / pg.t_c
+x  = -2.0
+
+# Individual T-terms
+println(&quot;T₀ = &quot;, T₀(x, pg))
+println(&quot;T₁ = &quot;, T₁(x, t, pg))
+println(&quot;T₂ = &quot;, T₂(x, t, pg))
+println(&quot;T₃ = &quot;, T₃(x, t, pg))
+println(&quot;T₄ = &quot;, T₄(x, t, pg))
+
+# Full solution via solve
+sol = solve(ForcedGravityProblem(pg, x, t))
+println(&quot;η         = &quot;, sol.η)
+println(&quot;η_steady  = &quot;, sol.η_steady)
+println(&quot;η_transient = &quot;, sol.η_transient)
+
+# Independent CPV verification
+η_cpv = gravity_numerical_cpv(x, t, pg)
+println(&quot;η_CPV     = &quot;, η_cpv)
+println(&quot;|diff|    = &quot;, abs(sol.η - η_cpv))</code></pre><pre><code class="language-text hljs">T₀ = -0.8639502272578199
+T₁ = 0.910043043935118
+T₂ = 0.005830863275361431
+T₃ = 0.0007044858552279276
+T₄ = -0.0007003237060232554
+η         = 7.212029103433092e-5
+η_steady  = -0.0011999023896811147
+η_transient = 0.0012720226807154456
+η_CPV     = 6.979529999850526e-5
+|diff|    = 2.324991035825656e-6</code></pre><pre><code class="language-matlab hljs">%% Two-fluid pure-gravity IVP: analytical T0-T4 decomposition
+U     = 26.7046;   % Base flow speed [cm/s]
+g     = 981.0;     % Gravitational acceleration [cm/s^2]
+rho_l = 1.0;       % Lower-fluid density [g/cm^3]
+rho_u = 0.001;     % Upper-fluid density [g/cm^3]
+
+% Characteristic scales and nondimensional density ratio
+t_c   = U / g;
+rho_r = rho_u / rho_l;
+beta  = (1.0 - rho_r) / (1.0 + rho_r);
+sqrt_beta = sqrt(beta);
+
+% Quadrature tolerances
+AbsTol = 1.0e-10;
+RelTol = 1.0e-8;
+K_MAX  = 100.0;
+
+% Evaluation point and time
+t = 1.0 / t_c;
+x = -2.0;
+a = t - x;          % a &gt; 0 =&gt; point lies behind the wavefront
+
+%% T0: steady (time-independent) contribution
+T0a = -pi * sin(beta * abs(x));
+T0b = integral(@(y) exp(-y * abs(x)) .* y ./ (beta^2 + y.^2), ...
+    0, Inf, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+T0 = (T0a + T0b) / (pi * (1.0 + rho_r));
+
+%% T1: closed-form transient term (left region)
+T1 = -sin(beta * x) / (1.0 + rho_r);
+
+%% T2: exponentially-damped oscillatory integral (left region)
+T2_integrand = @(v) exp(-2.0 * v.^2 * a + v * t * sqrt_beta) .* v.^2 .* ...
+    (sqrt_beta * cos(v * t * sqrt_beta) + ...
+     (2.0 * v - sqrt_beta) .* sin(v * t * sqrt_beta)) ./ ...
+    (beta + (2.0 * v - sqrt_beta).^2);
+T2 = -4.0 / (pi * (1.0 + rho_r) * beta) * ...
+    integral(T2_integrand, 0, K_MAX, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+
+%% T3: Fresnel-integral contribution (left region)
+b = 0.5 * t * sqrt_beta;
+X = b * sqrt(2.0 / (pi * a));
+prefactor = (1.0 / (pi * (1.0 + rho_r) * sqrt_beta)) * (1.0 + t / (2.0 * a));
+
+T3 = prefactor * sqrt(pi / (2.0 * a)) * ...
+    (cos(b^2 / a) * (0.5 - fresnelc(X)) + ...
+     sin(b^2 / a) * (0.5 - fresnels(X)));
+
+%% T4: oscillatory integral (left region)
+T4_integrand = @(v) cos(v.^2 * a + v * t * sqrt_beta) ./ (v + sqrt_beta);
+T4 = -1.0 / (pi * (1.0 + rho_r)) * ...
+    integral(T4_integrand, 0, K_MAX, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+
+%% eta: full solution
+eta = T0 + T1 + T2 + T3 + T4;
+
+fprintf(&#39;T0  = %.12e\n&#39;, T0);
+fprintf(&#39;T1- = %.12e\n&#39;, T1);
+fprintf(&#39;T2- = %.12e\n&#39;, T2);
+fprintf(&#39;T3- = %.12e\n&#39;, T3);
+fprintf(&#39;T4- = %.12e\n&#39;, T4);
+fprintf(&#39;eta = %.12e\n&#39;, eta);</code></pre><p><strong>MATLAB output</strong></p><pre><code class="language-text hljs">T0  = -8.639502272578199e-01
+T1- = 9.100430439351180e-01
+T2- = 5.830863275376527e-03
+T3- = 7.044858552279197e-04
+T4- = -7.003237060235279e-04
+eta = 7.212029103435171e-05</code></pre><h3 id="T_0–T_4-comparison-(x-2,-t_{\\dim}1-s)"><a class="docs-heading-anchor" href="#T_0–T_4-comparison-(x-2,-t_{\\dim}1-s)"><span>$T_0$</span>–<span>$T_4$</span> comparison (<span>$x=-2$</span>, <span>$t_{\dim}=1$</span> s)</a><a id="T_0–T_4-comparison-(x-2,-t_{\\dim}1-s)-1"></a><a class="docs-heading-anchor-permalink" href="#T_0–T_4-comparison-(x-2,-t_{\\dim}1-s)" title="Permalink"></a></h3><table><tr><th style="text-align: left">Term</th><th style="text-align: right">Julia</th><th style="text-align: right">MATLAB</th><th style="text-align: left">Agreement</th></tr><tr><td style="text-align: left"><span>$T_0$</span></td><td style="text-align: right"><code>-8.63950227258e-01</code></td><td style="text-align: right"><code>-8.63950227258e-01</code></td><td style="text-align: left">15 digits</td></tr><tr><td style="text-align: left"><span>$T_1^-$</span></td><td style="text-align: right"><code>9.10043043935e-01</code></td><td style="text-align: right"><code>9.10043043935e-01</code></td><td style="text-align: left">15 digits (closed-form)</td></tr><tr><td style="text-align: left"><span>$T_2^-$</span></td><td style="text-align: right"><code>5.83086327536e-03</code></td><td style="text-align: right"><code>5.83086327538e-03</code></td><td style="text-align: left">11 digits</td></tr><tr><td style="text-align: left"><span>$T_3^-$</span></td><td style="text-align: right"><code>7.04485855228e-04</code></td><td style="text-align: right"><code>7.04485855228e-04</code></td><td style="text-align: left">14 digits (Fresnel, no quadrature)</td></tr><tr><td style="text-align: left"><span>$T_4^-$</span></td><td style="text-align: right"><code>-7.00323706023e-04</code></td><td style="text-align: right"><code>-7.00323706024e-04</code></td><td style="text-align: left">11 digits</td></tr><tr><td style="text-align: left"><span>$\eta_{\mathrm{analytical}}$</span></td><td style="text-align: right"><code>7.21203e-05</code></td><td style="text-align: right"><code>7.21203e-05</code></td><td style="text-align: left">12 digits</td></tr><tr><td style="text-align: left"><span>$\eta_{\mathrm{CPV}}$</span></td><td style="text-align: right"><code>6.97953e-05</code></td><td style="text-align: right"><code>6.97953e-05</code></td><td style="text-align: left">10 digits</td></tr></table><p>The full spatial profile at <span>$t = 183.68$</span> (corresponding to the last panel of manuscript Fig. 6) is computed below. The Julia side uses <a href="../../api/#CommonSolve.solve"><code>solve</code></a> on a 2001-point grid; the MATLAB code evaluates the same <span>$T_0$</span>–<span>$T_4$</span> decomposition on the same grid.</p><pre><code class="language-julia hljs">using Plots, LaTeXStrings
+
+x_grid = make_gravity_xgrid(pg; Nx=2001)
+t_fig6 = 183.68
+prof = solve(ForcedGravityProblem(pg, x_grid, t_fig6))
+
+plot(x_grid, prof.η .* 1e3; label=L&quot;\eta&quot;, color=&quot;blue&quot;, ls=:dash,
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L&quot;x&quot;, ylabel=L&quot;\eta \times 10^{3}&quot;, xlims=(-12, 12),
+     ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8],
+     legend=:outerright, size=(800,400))
+plot!(x_grid, prof.η_steady .* 1e3; label=L&quot;\eta_s&quot;, color=&quot;black&quot;)
+plot!(x_grid, prof.η_transient .* 1e3; label=L&quot;\eta_{tr}&quot;, color=&quot;magenta&quot;, ls=:dot)</code></pre><figure style="text-align:center;">
+  <img src="../../assets/pure_gravity_fig6.png" alt="Fig 6" style="max-width:80%; height:auto;">
+</figure><p><em>Fig. 6: Pure-gravity IVP at <span>$t = 183.68$</span>.</em></p><pre><code class="language-matlab hljs">%% Pure-gravity spatial profile at t = 183.68
+t = 183.68;
+Nx = 2001;
+x_grid = linspace(-pg.front_band*t, t + pg.front_band*t, Nx);
+
+% Evaluate T0-T4 on the grid (excluding front band |x - t| &lt; front_band)
+eta       = NaN(1, Nx);
+eta_s     = NaN(1, Nx);
+eta_tr    = NaN(1, Nx);
+
+for i = 1:Nx
+    xi = x_grid(i);
+    a  = t - xi;
+
+    T0a = -pi*sin(beta*abs(xi));
+    T0b = integral(@(y) exp(-y*abs(xi)).*y./(beta^2 + y.^2), ...
+        0, Inf, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+    T0_val = (T0a + T0b) / (pi*(1 + rho_r));
+
+    if abs(a) &lt; front_band
+        eta(i)   = NaN;
+        eta_s(i) = T0_val;
+        eta_tr(i)= NaN;
+        continue;
+    end
+
+    b = 0.5*t*sqrt_beta;
+    if a &gt; 0   % x &lt; t
+        T1_val = -sin(beta*xi)/(1 + rho_r);
+        T2_val = -4/(pi*(1+rho_r)*beta) * ...
+            integral(@(v) exp(-2*v.^2*a + v*t*sqrt_beta).*v.^2 .* ...
+            (sqrt_beta*cos(v*t*sqrt_beta) + (2*v-sqrt_beta).*sin(v*t*sqrt_beta)) ./ ...
+            (beta + (2*v-sqrt_beta).^2), 0, K_MAX, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+        X = b*sqrt(2/(pi*a));
+        T3_val = 1/(pi*(1+rho_r)*sqrt_beta)*(1 + t/(2*a))*sqrt(pi/(2*a)) * ...
+            (cos(b^2/a)*(0.5 - fresnelc(X)) + sin(b^2/a)*(0.5 - fresnels(X)));
+    else       % x &gt; t
+        T1_val = sin(beta*xi)/(1 + rho_r);
+        T2_val = -4/(pi*(1+rho_r)*beta) * ...
+            integral(@(v) exp(2*v.^2*a - v*t*sqrt_beta).*v.^2 .* ...
+            (sqrt_beta*cos(v*t*sqrt_beta) - (2*v-sqrt_beta).*sin(v*t*sqrt_beta)) ./ ...
+            (beta + (2*v-sqrt_beta).^2), 0, K_MAX, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+        X = b*sqrt(2/(pi*abs(a)));
+        T3_val = 1/(pi*(1+rho_r)*sqrt_beta)*(1 + t/(2*a))*sqrt(pi/(2*abs(a))) * ...
+            (cos(b^2/abs(a))*(0.5 + fresnelc(X)) + sin(b^2/abs(a))*(0.5 + fresnels(X)));
+    end
+    T4_val = -1/(pi*(1+rho_r)) * ...
+        integral(@(v) cos(v.^2*a + v*t*sqrt_beta)./(v + sqrt_beta), ...
+        0, K_MAX, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+
+    eta_s(i)  = T0_val;
+    eta_tr(i) = T1_val + T2_val + T3_val + T4_val;
+    eta(i)    = eta_s(i) + eta_tr(i);
+end
+
+figure; hold on;
+plot(x_grid, eta*1e3, &#39;b--&#39;, &#39;LineWidth&#39;, 2);
+plot(x_grid, eta_s*1e3, &#39;k-&#39;, &#39;LineWidth&#39;, 2);
+plot(x_grid, eta_tr*1e3, &#39;m:&#39;, &#39;LineWidth&#39;, 2);
+xlabel(&#39;x&#39;); ylabel(&#39;\eta \times 10^3&#39;);
+legend(&#39;\eta&#39;,&#39;\eta_s&#39;,&#39;\eta_{tr}&#39;); xlim([-12 12]);</code></pre><p>The following overlay of Julia and MATLAB spatial profiles at <span>$t_{\dim} = 1$</span> s confirms agreement across the full <span>$x$</span>-range:</p><p><img src="../../assets/fig6_comparison.svg" alt="Figure 6 comparison"/> <em>Fig. 6: Julia and MATLAB overlay at <span>$t_{\dim} = 1$</span> s.</em></p><h2 id="Asymptotic-form-of-the-transient-integrals-and-discussion"><a class="docs-heading-anchor" href="#Asymptotic-form-of-the-transient-integrals-and-discussion">Asymptotic form of the transient integrals and discussion</a><a id="Asymptotic-form-of-the-transient-integrals-and-discussion-1"></a><a class="docs-heading-anchor-permalink" href="#Asymptotic-form-of-the-transient-integrals-and-discussion" title="Permalink"></a></h2><p>Among the three integrals in (4.4c–e), the <span>$t\to\infty$</span> limit is particularly interesting for <span>$\mathbb{T}_2(x,t)$</span>. For <span>$a\equiv t-x&gt;0$</span> and in the limit <span>$\beta=1$</span> (zero density ratio), it decays algebraically as <span>$t^{-1/2}$</span> at every finite <span>$x$</span>; the other, more general cases may be treated similarly.</p><p>At sufficiently large <span>$t\gg1$</span>, the asymptotic form of the cosine integral in <span>$\mathbb{T}_2(x,t\to\infty)$</span> is obtained from the real part of an integral of the standard form</p><p class="math-container">\[\mathbb{I}(t)=\int_0^\infty g(\nu)\exp\!\left[t f(\nu)\right]d\nu,
+\qquad
+f(\nu)=-2\nu^2+\nu+i\nu,
+\qquad
+g(\nu)=\frac{\nu^2}{1+(2\nu-1)^2},\]</p><p>where <span>$\nu$</span> is continued into the complex plane. The convergence at large time is not immediately apparent because</p><p class="math-container">\[\exp\!\left[t f(\nu)\right]
+=\exp(t/8)\,
+ \exp\!\left[-t\left\{\left(\sqrt{2}\nu-\frac{1}{2\sqrt{2}}\right)^2-i\nu\right\}\right].\]</p><p>The saddle point is <span>$\nu_0=(1+i)/4$</span>, with <span>$f(\nu_0)=i/4$</span>, <span>$g(\nu_0)=(-1+2i)/20$</span>, and <span>$f&#39;&#39;(\nu_0)=-4$</span>. Standard saddle-point integration gives</p><p class="math-container">\[\mathbb{I}(t\gg1)
+\sim
+\left(\frac{\pi}{2}\right)^{1/2}
+\left(\frac{-1+2i}{20}\right)t^{-1/2}
+\exp\!\left(\frac{it}{4}\right).\]</p><p>The asymptotic form for the sine term in <span>$\mathbb{T}_2(x,t\to\infty)$</span> can similarly be obtained by considering the imaginary part of <span>$\mathbb{I}(t)$</span> with a modified <span>$g(z)$</span>; the algebraic decay of <span>$t^{-1/2}$</span> is apparent in these results.</p><p>For the complete fixed-<span>$x$</span> asymptotic proof of the two transient integrals, including the pole, stationary-phase, endpoint, and contour-rotation analyses, see the <a href="../../pure_gravity_transient_asymptotic_proof/">large-time transient-asymptotics proof</a>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../steady_state/">« Steady-State</a><a class="docs-footer-nextpage" href="../capillary_gravity/">Capillary–Gravity »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Wednesday 9 September 2026 10:47">Wednesday 9 September 2026</span>. Using Julia version 1.12.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

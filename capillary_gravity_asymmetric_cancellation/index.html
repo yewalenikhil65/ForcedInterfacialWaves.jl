@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Proof: Asymmetric cancellation at steady state for alpha  0 · ForcedInterfacialWaves.jl</title><meta name="title" content="Proof: Asymmetric cancellation at steady state for alpha  0 · ForcedInterfacialWaves.jl"/><meta property="og:title" content="Proof: Asymmetric cancellation at steady state for alpha  0 · ForcedInterfacialWaves.jl"/><meta property="twitter:title" content="Proof: Asymmetric cancellation at steady state for alpha  0 · ForcedInterfacialWaves.jl"/><meta name="description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="og:description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="twitter:description" content="Documentation for ForcedInterfacialWaves.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/custom.css" rel="stylesheet" type="text/css"/><script src="../assets/custom.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">ForcedInterfacialWaves.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><span class="tocitem">Theory</span><ul><li><a class="tocitem" href="../theory/overview/">Overview</a></li><li><a class="tocitem" href="../theory/steady_state/">Steady-State</a></li><li><a class="tocitem" href="../theory/pure_gravity/">Pure Gravity</a></li><li><a class="tocitem" href="../theory/capillary_gravity/">Capillary–Gravity</a></li></ul></li><li><a class="tocitem" href="../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Proof: Asymmetric cancellation at steady state for <span>$\alpha &gt; 0$</span></a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Proof: Asymmetric cancellation at steady state for <span>$\alpha &gt; 0$</span></a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Proof:-Asymmetric-cancellation-at-steady-state-for-\\alpha-0"><a class="docs-heading-anchor" href="#Proof:-Asymmetric-cancellation-at-steady-state-for-\\alpha-0">Proof: Asymmetric cancellation at steady state for <span>$\alpha &gt; 0$</span></a><a id="Proof:-Asymmetric-cancellation-at-steady-state-for-\\alpha-0-1"></a><a class="docs-heading-anchor-permalink" href="#Proof:-Asymmetric-cancellation-at-steady-state-for-\\alpha-0" title="Permalink"></a></h1><h2 id="Upstream-downstream-asymmetry-as-t\\rightarrow\\infty"><a class="docs-heading-anchor" href="#Upstream-downstream-asymmetry-as-t\\rightarrow\\infty">Upstream-downstream asymmetry as <span>$t\rightarrow\infty$</span></a><a id="Upstream-downstream-asymmetry-as-t\\rightarrow\\infty-1"></a><a class="docs-heading-anchor-permalink" href="#Upstream-downstream-asymmetry-as-t\\rightarrow\\infty" title="Permalink"></a></h2><p>The time-dependent response <span>$\eta_{\mathrm{tr}}(x,t)$</span> is given in eqns. (4.5c) and (4.5d) of the manuscript. We may observe that <span>$\mathbb{I}_4(x,t)$</span> is a decaying non-singular term which can be integrated numerically. This term tends to zero as <span>$t\to\infty$</span> in the form <span>$\mathbb{I}_4\approx 1/\sqrt{t}$</span>, thereby implying that it will not contribute to the steady state (see fig.7 of the manuscript). On the other hand, <span>$\mathbb{I}_3(x,t)$</span> is a singular integral which requires to be solved by the PV method and may contain a term contributing to the steady state as <span>$t\to\infty$</span>.</p><p>Let us define,</p><p class="math-container">\[g(k)=k-\chi(k).
+\tag{C.1}\]</p><p>and</p><p class="math-container">\[z(k)=\alpha k^2+1-\rho_r.
+\tag{C.2}\]</p><p>Substituting <span>$g(k)$</span> and <span>$z(k)$</span> into <span>$\mathbb{I}_3$</span> (eqn. (4.5d) of the manuscript) and writing the cosine function in terms of exponential functions yields,</p><p class="math-container">\[\mathbb{I}_3(x,t) = -\frac{1+\rho_r}{2\alpha}\int_0^\infty dk\; \frac{\left(k+\chi(k)\right)}{z(k)(k-k_l)(k-k_s)}\Big\{\exp\left[i\left(tg(k)-kx\right)\right]+\exp\left[-i\left(tg(k)-kx\right)\right]\Big\}.
+\tag{C.3}\]</p><p>Equation (C.3) is valid for <span>$-\infty&lt;x&lt;\infty$</span>.</p><p>We break <span>$\mathbb{I}_3$</span> into four parts corresponding to the two poles and the two exponential terms in the numerator.</p><p class="math-container">\[\mathbb{I}_3(x,t) = \mathbb{I}&#39;_{3A}(x,t)+\mathbb{I}&#39;&#39;_{3A}(x,t) + \mathbb{I}&#39;_{3B}(x,t)+\mathbb{I}&#39;&#39;_{3B}(x,t).
+\tag{C.4}\]</p><p>where,</p><p class="math-container">\[\mathbb{I}&#39;_{3A}(x,t) = \frac{1+\rho_r}{2\alpha(k_l-k_s)}\int_0^\infty dk\; \frac{\left(k+\chi(k)\right)\left\{\exp\left[itg(k)-ikx\right]\right\}}{z(k)}\left(\frac{1}{k-k_s}\right).
+\tag{C.5}\]</p><p class="math-container">\[\mathbb{I}&#39;&#39;_{3A}(x,t) = \frac{1+\rho_r}{2\alpha(k_l-k_s)}\int_0^\infty dk\; \frac{\left(k+\chi(k)\right)\left\{\exp\left[-itg(k)+ikx\right]\right\}}{z(k)}\left(\frac{1}{k-k_s}\right).
+\tag{C.6}\]</p><p class="math-container">\[\mathbb{I}&#39;_{3B}(x,t) = -\frac{1+\rho_r}{2\alpha(k_l-k_s)}\int_0^\infty dk\; \frac{\left(k+\chi(k)\right)\left\{\exp\left[itg(k)-ikx\right]\right\}}{z(k)}\left(\frac{1}{k-k_l}\right).
+\tag{C.7}\]</p><p class="math-container">\[\mathbb{I}&#39;&#39;_{3B}(x,t) = -\frac{1+\rho_r}{2\alpha(k_l-k_s)}\int_0^\infty dk\; \frac{\left(k+\chi(k)\right)\left\{\exp\left[-itg(k)+ikx\right]\right\}}{z(k)}\left(\frac{1}{k-k_l}\right).
+\tag{C.8}\]</p><p>To evaluate these integrals in the large-time limit, we note that the function <span>$g(k)$</span>, namely,</p><p class="math-container">\[g(k) = k-(1+\rho_r)^{-1/2}k^{1/2}[z(k)]^{1/2},
+\tag{C.9}\]</p><p>satisfies the following relations:</p><p class="math-container">\[g(k_s)=0=g(k_l),
+\tag{C.10}\]</p><p class="math-container">\[g&#39;(k_s)=\frac{\Delta}{2},
+\tag{C.11}\]</p><p class="math-container">\[g&#39;(k_l)=-\frac{\Delta}{2},
+\tag{C.12}\]</p><p>where</p><p class="math-container">\[\Delta = \sqrt{1-\frac{4\alpha\beta}{1+\rho_r}} = \sqrt{1-\frac{\alpha}{\alpha_{\max}}} &gt;0, \qquad \alpha\leq\alpha_{\max} = \frac{1}{4}\frac{(1+\rho_r)^2}{1-\rho_r}.
+\tag{C.13}\]</p><p>Now <span>$\mathbb{I}&#39;_{3A}(x,t)$</span>, <span>$\mathbb{I}&#39;&#39;_{3A}(x,t)$</span>, <span>$\mathbb{I}&#39;_{3B}(x,t)$</span>, and <span>$\mathbb{I}&#39;&#39;_{3B}(x,t)$</span> may be solved separately and added to yield <span>$\mathbb{I}_3(x,t)$</span>.</p><h3 id="Evaluation-of-\\mathbb{I}&#39;_{3A}(x,t)-and-\\mathbb{I}&#39;&#39;_{3A}(x,t)-as-t\\to\\infty"><a class="docs-heading-anchor" href="#Evaluation-of-\\mathbb{I}&#39;_{3A}(x,t)-and-\\mathbb{I}&#39;&#39;_{3A}(x,t)-as-t\\to\\infty">Evaluation of <span>$\mathbb{I}&#39;_{3A}(x,t)$</span> and <span>$\mathbb{I}&#39;&#39;_{3A}(x,t)$</span> as <span>$t\to\infty$</span></a><a id="Evaluation-of-\\mathbb{I}&#39;_{3A}(x,t)-and-\\mathbb{I}&#39;&#39;_{3A}(x,t)-as-t\\to\\infty-1"></a><a class="docs-heading-anchor-permalink" href="#Evaluation-of-\\mathbb{I}&#39;_{3A}(x,t)-and-\\mathbb{I}&#39;&#39;_{3A}(x,t)-as-t\\to\\infty" title="Permalink"></a></h3><p>To evaluate <span>$\mathbb{I}&#39;_{3A}$</span>, we Taylor expand the function <span>$g(k)$</span> around <span>$k_s$</span> using a new variable</p><p class="math-container">\[u=k-k_s.
+\tag{C.14}\]</p><p>Then,</p><p class="math-container">\[g(k) = \frac{u\Delta}{2} + \frac{u^2}{2}g&#39;&#39;(k_s) +\ldots .
+\tag{C.15}\]</p><p>Also,</p><p class="math-container">\[z(k) = (1+\rho_r)k_s + (1+\rho_r)(1-\Delta)u + \alpha u^2.
+\tag{C.16}\]</p><p>and</p><p class="math-container">\[k+\chi(k) = 2u+2k_s -\frac{u\Delta}{2} -\frac{u^2}{2}g&#39;&#39;(k_s).
+\tag{C.17}\]</p><p>Upon substituting eqns. (C.14)–(C.17) into eqn. (C.5), one obtains</p><p class="math-container">\[\begin{aligned}
+\mathbb{I}&#39;_{3A}(x,t)
+={}&amp;
+\frac{1+\rho_r}
+{2\alpha(k_l-k_s)}
+\int_{-k_s}^{\infty}
+\frac{
+\left[
+2u+2k_s-\frac{u\Delta}{2}
+-\frac{u^2}{2}g&#39;&#39;(k_s)
+\right]
+}{
+(1+\rho_r)k_s
++(1+\rho_r)(1-\Delta)u
++\alpha u^2
+}
+\\
+&amp;\qquad\times
+\exp\left\{
+i\left[
+\frac{tu\Delta}{2}
++\frac{tu^2}{2}g&#39;&#39;(k_s)
+-k_sx-ux
+\right]
+\right\}
+\frac{du}{u}.
+\end{aligned}
+\tag{C.18}\]</p><p>With the change of variable to <span>$w$</span>, where</p><p class="math-container">\[w=ut,
+\tag{C.19}\]</p><p>one obtains</p><p class="math-container">\[\begin{aligned}
+\mathbb{I}&#39;_{3A}
+={}&amp;
+\frac{1+\rho_r}
+{2\alpha(k_l-k_s)}
+\int_{-k_st}^{\infty}
+\frac{
+\left[
+\frac{2w}{t}
++2k_s
+-\frac{w\Delta}{2t}
+-\frac{w^2}{2t^2}g&#39;&#39;(k_s)
+\right]
+}{
+(1+\rho_r)k_s
++(1+\rho_r)(1-\Delta)\frac{w}{t}
++\alpha\frac{w^2}{t^2}
+}
+\\
+&amp;\qquad\times
+\exp\left\{
+i\left[
+\frac{w\Delta}{2}
++\frac{w^2}{2t}g&#39;&#39;(k_s)
+-k_sx
+-\frac{w}{t}x
+\right]
+\right\}
+\frac{dw}{w}.
+\end{aligned}
+\tag{C.20}\]</p><p>In the limit <span>$t\to\infty$</span>, the lower limit of integration of the above equation, namely <span>$-k_st$</span>, may be extended to <span>$-\infty$</span>. Furthermore, one may neglect terms containing <span>$1/t$</span> and higher powers of <span>$1/t$</span> both in the prefactors and in the exponential. This yields</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}&#39;_{3A}(x,t)\right] = \frac{\exp\left\{-ik_sx\right\}}{\alpha(k_l-k_s)}\int_{-\infty}^{\infty}\exp\left\{\frac{iw\Delta}{2}\right\}\frac{dw}{w}, \qquad -\infty&lt;x&lt;\infty.
+\tag{C.21}\]</p><p>Equation (C.21) is still a singular integral due to the pole at <span>$w=0$</span>. Following the standard procedure, the PV value of the integral may be evaluated as</p><p class="math-container">\[\operatorname{PV}\!\left[\int_{-\infty}^{\infty}\exp\left\{\pm iw\frac{\Delta}{2}\right\}\frac{dw}{w}\right] = \pm i\pi, \qquad \text{if}\quad \Delta&gt;0.
+\tag{C.22}\]</p><p>With this one obtains</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}&#39;_{3A}(x,t)\right] = \frac{\exp\left\{-ik_sx\right\}}{\alpha(k_l-k_s)}\left(i\pi\right).
+\tag{C.23}\]</p><p>Proceeding exactly in the same manner for <span>$\mathbb{I}&#39;&#39;_{3A}$</span>, one obtains</p><p class="math-container">\[\begin{aligned}
+\lim_{t\rightarrow\infty}
+\left[\mathbb{I}&#39;&#39;_{3A}(x,t)\right]
+={}&amp;
+\frac{
+\exp\left\{ik_sx\right\}
+}{
+\alpha(k_l-k_s)
+}
+\int_{-\infty}^{\infty}
+\exp\left\{
+\frac{-iw\Delta}{2}
+\right\}
+\frac{dw}{w}
+\\
+={}&amp;
+\frac{
+\exp\left\{ik_sx\right\}
+}{
+\alpha(k_l-k_s)
+}
+\left(-i\pi\right).
+\end{aligned}
+\tag{C.24}\]</p><p>Upon combining eqns. (C.23) and (C.24), we obtain the steady-state contribution in the asymptotic limit <span>$t\to\infty$</span>,</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}&#39;_{3A}(x,t)+\mathbb{I}&#39;&#39;_{3A}(x,t)\right] = \frac{2\pi}{\alpha(k_l-k_s)}\sin(k_sx).
+\tag{C.25}\]</p><p>One may perform similar evaluations of the integrals <span>$\mathbb{I}&#39;_{3B}$</span> and <span>$\mathbb{I}&#39;&#39;_{3B}$</span>. For this case, define a variable <span>$u=k-k_l$</span> and note that the Taylor expansion of <span>$g(k)$</span> is</p><p class="math-container">\[g(k) = -\frac{u\Delta}{2} + \frac{u^2}{2}g&#39;&#39;(k_l) +\ldots .
+\tag{C.26}\]</p><p>It must be remarked that since <span>$\Delta$</span> is greater than zero, the coefficient of <span>$u$</span> is negative, in contrast to the previous case (i.e., at <span>$k=k_s$</span>). This is the fundamental difference which causes the asymmetric solution to the problem. Upon proceeding as earlier, one obtains</p><p class="math-container">\[z(k) = (1+\rho_r)k_l + (1+\rho_r)(1+\Delta)u + \alpha u^2.
+\tag{C.27}\]</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}&#39;_{3B}(x,t)\right] = -\frac{\exp\left\{-ik_lx\right\}}{\alpha(k_l-k_s)}\left(-i\pi\right).
+\tag{C.28}\]</p><p>and</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}&#39;&#39;_{3B}(x,t)\right] = -\frac{\exp\left\{ik_lx\right\}}{\alpha(k_l-k_s)}\left(i\pi\right).
+\tag{C.29}\]</p><p>Hence, the solution around the <span>$k_l$</span> pole is</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}&#39;_{3B}(x,t)+\mathbb{I}&#39;&#39;_{3B}(x,t)\right] = \frac{2\pi}{\alpha(k_l-k_s)}\sin(k_lx).
+\tag{C.30}\]</p><p>Substituting eqns. (C.25) and (C.30) into eqn. (C.4) gives</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}_3(x,t)\right] = \frac{2\pi}{\alpha(k_l-k_s)}\left[\sin(k_sx)+\sin(k_lx)\right].
+\tag{C.31}\]</p><p>The limit <span>$t\rightarrow\infty$</span> of <span>$\eta_{\mathrm{tr}}(x,t)$</span>, given by eqn. (4.5c), is</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0}\right] = -\frac{1}{2\pi}\lim_{t\rightarrow\infty}\left[\mathbb{I}_3(x,t)\right] -\frac{1}{2\pi}\lim_{t\rightarrow\infty}\left[\mathbb{I}_4(x,t)\right].
+\tag{C.32}\]</p><p>The integral <span>$\mathbb{I}_4(x,t)$</span> is a decaying integral (Shown in fig.7 of the manuscript), as</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\mathbb{I}_4(x,t)\right] =0.
+\tag{C.33}\]</p><p>Substituting eqn. (C.31) into eqn. (C.32) yields</p><p class="math-container">\[\lim_{t\rightarrow\infty}\left[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0}\right] = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_sx)-\sin(k_lx)\right].
+\tag{C.34}\]</p><p>Upon adding eqn. (C.34) to the time-independent solution, eqn. (4.6) of the manuscript, the final expression for the steady-state interfacial displacement <span>$\eta(x)$</span> is</p><p class="math-container">\[\frac{\eta(x)}{F_0} = \frac{\eta_s(x)}{F_0} + \lim_{t\rightarrow\infty}\left[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0}\right].
+\tag{C.35}\]</p><p>i.e.,</p><p class="math-container">\[\frac{\eta(x)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\Big\{-\sin(k_s|x|)-\sin(k_sx)+\sin(k_l|x|)-\sin(k_lx)\Big\} + \frac{k_l+k_s}{\pi\alpha}\int_0^\infty dy\,\frac{y\exp\left(-|x|y\right)}{\left(y^2+k_l^2\right)\left(y^2+k_s^2\right)}.
+\tag{C.36}\]</p><p>We see that the symmetry that existed in <span>$\eta_s(x)$</span> is now broken by the contribution from the time-dependent term <span>$\eta_{\mathrm{tr}}(x,t)$</span> in the asymptotic limit <span>$t\to\infty$</span>. Explicitly, the solutions for <span>$x&gt;0$</span> and <span>$x&lt;0$</span> may be written as</p><p class="math-container">\[\frac{\eta(x)}{F_0} = -\frac{2}{\alpha(k_l-k_s)}\sin(k_sx) + \frac{k_l+k_s}{\pi\alpha}\int_0^\infty dy\,\frac{y\exp\left(-xy\right)}{\left(y^2+k_l^2\right)\left(y^2+k_s^2\right)}, \qquad x&gt;0.
+\tag{C.37}\]</p><p>and</p><p class="math-container">\[\frac{\eta(x)}{F_0} = -\frac{2}{\alpha(k_l-k_s)}\sin(k_lx) + \frac{k_l+k_s}{\pi\alpha}\int_0^\infty dy\,\frac{y\exp\left(xy\right)}{\left(y^2+k_l^2\right)\left(y^2+k_s^2\right)}, \qquad x&lt;0.
+\tag{C.38}\]</p><p>This is consistent with the observation of a gravity wave (long wavelength) for <span>$x&gt;0$</span> and a capillary wave (short wavelength) for <span>$x&lt;0$</span>.</p></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Wednesday 9 September 2026 10:47">Wednesday 9 September 2026</span>. Using Julia version 1.12.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

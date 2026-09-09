@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Large-time asymptotics of the two-fluid transient integrals I_7(xt) and I_8(xt) · ForcedInterfacialWaves.jl</title><meta name="title" content="Large-time asymptotics of the two-fluid transient integrals I_7(xt) and I_8(xt) · ForcedInterfacialWaves.jl"/><meta property="og:title" content="Large-time asymptotics of the two-fluid transient integrals I_7(xt) and I_8(xt) · ForcedInterfacialWaves.jl"/><meta property="twitter:title" content="Large-time asymptotics of the two-fluid transient integrals I_7(xt) and I_8(xt) · ForcedInterfacialWaves.jl"/><meta name="description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="og:description" content="Documentation for ForcedInterfacialWaves.jl."/><meta property="twitter:description" content="Documentation for ForcedInterfacialWaves.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/custom.css" rel="stylesheet" type="text/css"/><script src="../assets/custom.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">ForcedInterfacialWaves.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><span class="tocitem">Theory</span><ul><li><a class="tocitem" href="../theory/overview/">Overview</a></li><li><a class="tocitem" href="../theory/steady_state/">Steady-State</a></li><li><a class="tocitem" href="../theory/pure_gravity/">Pure Gravity</a></li><li><a class="tocitem" href="../theory/capillary_gravity/">Capillary–Gravity</a></li></ul></li><li><a class="tocitem" href="../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Large-time asymptotics of the two-fluid transient integrals <span>$I_7(x,t)$</span> and <span>$I_8(x,t)$</span></a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Large-time asymptotics of the two-fluid transient integrals <span>$I_7(x,t)$</span> and <span>$I_8(x,t)$</span></a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Large-time-asymptotics-of-the-two-fluid-transient-integrals-I_7(x,t)-and-I_8(x,t)"><a class="docs-heading-anchor" href="#Large-time-asymptotics-of-the-two-fluid-transient-integrals-I_7(x,t)-and-I_8(x,t)">Large-time asymptotics of the two-fluid transient integrals <span>$I_7(x,t)$</span> and <span>$I_8(x,t)$</span></a><a id="Large-time-asymptotics-of-the-two-fluid-transient-integrals-I_7(x,t)-and-I_8(x,t)-1"></a><a class="docs-heading-anchor-permalink" href="#Large-time-asymptotics-of-the-two-fluid-transient-integrals-I_7(x,t)-and-I_8(x,t)" title="Permalink"></a></h1><p><em>Pure-gravity limit, <span>$\alpha=0$</span></em></p><h2 id="Transient-contribution"><a class="docs-heading-anchor" href="#Transient-contribution">Transient contribution</a><a id="Transient-contribution-1"></a><a class="docs-heading-anchor-permalink" href="#Transient-contribution" title="Permalink"></a></h2><p>For the two-fluid problem in the pure-gravity limit <span>$\alpha=0$</span>, the time-dependent contribution to the interface deformation (eqns. 4.2b and 4.2c of the manuscript) can be combined and rewritten as,</p><p class="math-container">\[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0}
+        =
+        -\frac{1}{2\pi(1-\rho_r)}
+        \left[
+        I_7(x,t)+I_8(x,t)
+        \right],\]</p><p>where, we define,</p><p class="math-container">\[I_7(x,t)
+        =
+        \int_0^\infty
+        \frac{k}{k-\sqrt{\beta k}}
+        \cos\left[
+        k(t-x)-t\sqrt{\beta k}
+        \right]\,dk ,\]</p><p>and</p><p class="math-container">\[I_8(x,t)
+        =
+        \int_0^\infty
+        \frac{k}{k+\sqrt{\beta k}}
+        \cos\left[
+        k(t-x)+t\sqrt{\beta k}
+        \right]\,dk ,\]</p><p class="math-container">\[\rho_r=\frac{\rho_u}{\rho_l},
+        \qquad
+        \beta=\frac{1-\rho_r}{1+\rho_r}.\]</p><p>The objective is to determine the large-time behaviour of <span>$I_7(x,t)$</span> and <span>$I_8(x,t)$</span> for</p><p class="math-container">\[t\rightarrow\infty,
+        \qquad
+        x=\text{fixed}.\]</p><h2 id="Large-time-asymptotics-of-the-singular-integral-I_7(x,t)"><a class="docs-heading-anchor" href="#Large-time-asymptotics-of-the-singular-integral-I_7(x,t)">Large-time asymptotics of the singular integral <span>$I_7(x,t)$</span></a><a id="Large-time-asymptotics-of-the-singular-integral-I_7(x,t)-1"></a><a class="docs-heading-anchor-permalink" href="#Large-time-asymptotics-of-the-singular-integral-I_7(x,t)" title="Permalink"></a></h2><p>The defining expression for <span>$I_7(x,t)$</span> may be rewritten as</p><p class="math-container">\[I_7(x,t)
+        =
+        \int_0^\infty
+        \frac{k}{k-\sqrt{\beta k}}
+        \cos\left\{
+        t\left(k-\sqrt{\beta k}\right)-kx
+        \right\}\,dk .\]</p><h3 id="Transformation-of-I_7"><a class="docs-heading-anchor" href="#Transformation-of-I_7">Transformation of <span>$I_7$</span></a><a id="Transformation-of-I_7-1"></a><a class="docs-heading-anchor-permalink" href="#Transformation-of-I_7" title="Permalink"></a></h3><p>Introduce</p><p class="math-container">\[k=\beta z^2.\]</p><p>Then</p><p class="math-container">\[\sqrt{\beta k}=\beta z,
+        \qquad
+        dk=2\beta z\,dz,\]</p><p>and</p><p class="math-container">\[k-\sqrt{\beta k}
+        =
+        \beta z(z-1).\]</p><p>Hence,</p><p class="math-container">\[\frac{k}{k-\sqrt{\beta k}}\,dk
+        =
+        \frac{2\beta z^2}{z-1}\,dz .\]</p><p>The phase becomes</p><p class="math-container">\[\begin{aligned}
+        t\left(k-\sqrt{\beta k}\right)-kx
+        &amp;=
+        t\left(\beta z^2-\beta z\right)
+        -\beta xz^2\\
+        &amp;=
+        \beta
+        \left[
+        t(z^2-z)-xz^2
+        \right].
+
+\end{aligned}\]</p><p>Therefore,</p><p class="math-container">\[\boxed{
+            I_7(x,t)
+            =
+            \int_0^\infty
+            \frac{2\beta z^2}{z-1}
+            \cos\left\{
+            \beta
+            \left[
+            t(z^2-z)-xz^2
+            \right]
+            \right\}\,dz
+        }\]</p><p>The transformed integral has a simple pole at</p><p class="math-container">\[z=z_p=1,\]</p><p>corresponding to</p><p class="math-container">\[k=k_p=\beta.\]</p><p>In addition, the rapidly oscillating phase has a stationary point. The pole and stationary point are distinct, so their leading contributions may be evaluated separately.</p><h3 id="Stationary-phase-contribution-to-I_7"><a class="docs-heading-anchor" href="#Stationary-phase-contribution-to-I_7">Stationary-phase contribution to <span>$I_7$</span></a><a id="Stationary-phase-contribution-to-I_7-1"></a><a class="docs-heading-anchor-permalink" href="#Stationary-phase-contribution-to-I_7" title="Permalink"></a></h3><p>Define the leading <span>$t$</span>-dependent part of the phase as</p><p class="math-container">\[\phi(z)
+        =
+        \beta(z^2-z).\]</p><p>The remaining factor <span>$e^{-i\beta xz^2}$</span> will be retained in the amplitude.</p><p>A stationary point satisfies</p><p class="math-container">\[\phi&#39;(z_s)=0.\]</p><p>Since</p><p class="math-container">\[\phi&#39;(z)
+        =
+        \beta(2z-1),\]</p><p>we obtain</p><p class="math-container">\[\boxed{
+            z_s=\frac{1}{2}.
+        }\]</p><p>Therefore,</p><p class="math-container">\[k_s
+        =
+        \beta z_s^2
+        =
+        \frac{\beta}{4}.\]</p><p>Thus,</p><p class="math-container">\[k_s=\frac{\beta}{4},
+        \qquad
+        k_p=\beta,\]</p><p>and the stationary point is separated from the pole.</p><h4 id="Complex-representation"><a class="docs-heading-anchor" href="#Complex-representation">Complex representation</a><a id="Complex-representation-1"></a><a class="docs-heading-anchor-permalink" href="#Complex-representation" title="Permalink"></a></h4><p>Using</p><p class="math-container">\[\cos\theta
+        =
+        \Re\left(e^{i\theta}\right).\]</p><p>define</p><p class="math-container">\[J_7
+        =
+        \int
+        a(z)
+        e^{\,i\beta[t(z^2-z)-xz^2]}
+        \,dz,\]</p><p>where</p><p class="math-container">\[a(z)
+        =
+        \frac{2\beta z^2}{z-1}.\]</p><p>The complex representation of <span>$J_7$</span> may be written as</p><p class="math-container">\[J_7
+        =
+        \int
+        a(z)e^{-i\beta xz^2}
+        e^{it\phi(z)}
+        \,dz.\]</p><p>Define</p><p class="math-container">\[g(z)
+        =
+        a(z)e^{-i\beta xz^2},\]</p><p>so that</p><p class="math-container">\[J_7
+        =
+        \int
+        g(z)e^{it\phi(z)}
+        \,dz .\]</p><h4 id="Expansion-about-the-stationary-point"><a class="docs-heading-anchor" href="#Expansion-about-the-stationary-point">Expansion about the stationary point</a><a id="Expansion-about-the-stationary-point-1"></a><a class="docs-heading-anchor-permalink" href="#Expansion-about-the-stationary-point" title="Permalink"></a></h4><p>Taylor expanding <span>$\phi(z)$</span> about <span>$z=z_s$</span>,</p><p class="math-container">\[\phi(z)
+        =
+        \phi(z_s)
+        +
+        \phi&#39;(z_s)(z-z_s)
+        +
+        \frac{\phi&#39;&#39;(z_s)}{2}(z-z_s)^2
+        +\cdots .\]</p><p>Since</p><p class="math-container">\[\phi&#39;(z_s)=0,\]</p><p>we have</p><p class="math-container">\[\phi(z)
+        \simeq
+        \phi(z_s)
+        +
+        \frac{\phi&#39;&#39;(z_s)}{2}(z-z_s)^2.\]</p><p>In the present problem <span>$\phi(z)$</span> is quadratic, so this expression is exact for <span>$\phi$</span>.</p><p>Substituting into this standard form,</p><p class="math-container">\[J_{7,\mathrm{SP}}
+        \simeq
+        g(z_s)e^{it\phi(z_s)}
+        \int
+        \exp\left[
+        \frac{it\phi&#39;&#39;(z_s)}{2}(z-z_s)^2
+        \right]\,dz .\]</p><p>Introduce</p><p class="math-container">\[u
+        =
+        \sqrt{
+            \frac{t\phi&#39;&#39;(z_s)}{2}
+        }
+        (z-z_s).\]</p><p>Then</p><p class="math-container">\[dz
+        =
+        \sqrt{
+            \frac{2}
+            {t\phi&#39;&#39;(z_s)}
+        }\,du.\]</p><p>Since <span>$z_s=1/2$</span> is an interior stationary point, the local limits may be extended asymptotically to <span>$-\infty&lt;u&lt;\infty$</span>. Hence,</p><p class="math-container">\[J_{7,\mathrm{SP}}
+        \simeq
+        g(z_s)e^{it\phi(z_s)}
+        \sqrt{
+            \frac{2}
+            {t\phi&#39;&#39;(z_s)}
+        }
+        \int_{-\infty}^{\infty}
+        e^{iu^2}\,du .\]</p><p>Using</p><p class="math-container">\[\int_{-\infty}^{\infty}
+        e^{iu^2}\,du
+        =
+        \sqrt{\pi}\,e^{i\pi/4},\]</p><p>we obtain</p><p class="math-container">\[J_{7,\mathrm{SP}}
+        \simeq
+        g(z_s)
+        e^{it\phi(z_s)}
+        e^{i\pi/4}
+        \sqrt{
+            \frac{2\pi}
+            {t\phi&#39;&#39;(z_s)}
+        }.\]</p><h4 id="Evaluation-at-z_s1/2"><a class="docs-heading-anchor" href="#Evaluation-at-z_s1/2">Evaluation at <span>$z_s=1/2$</span></a><a id="Evaluation-at-z_s1/2-1"></a><a class="docs-heading-anchor-permalink" href="#Evaluation-at-z_s1/2" title="Permalink"></a></h4><p>At the stationary point,</p><p class="math-container">\[a(z_s)
+        =
+        \frac{2\beta(1/4)}{1/2-1}
+        =
+        -\beta.\]</p><p>Furthermore,</p><p class="math-container">\[\phi(z_s)
+        =
+        \beta
+        \left(
+        \frac14-\frac12
+        \right)
+        =
+        -\frac{\beta}{4},\]</p><p>and</p><p class="math-container">\[\phi&#39;&#39;(z_s)
+        =
+        2\beta.\]</p><p>Also,</p><p class="math-container">\[g(z_s)
+        =
+        -\beta e^{-i\beta x/4}.\]</p><p>Substitution into the stationary-phase formula gives</p><p class="math-container">\[\begin{aligned}
+        J_{7,\mathrm{SP}}
+        &amp;\simeq
+        -\beta
+        e^{-i\beta x/4}
+        e^{-i\beta t/4}
+        e^{i\pi/4}
+        \sqrt{\frac{\pi}{\beta t}}\\
+        &amp;=
+        -\sqrt{\frac{\pi\beta}{t}}
+        e^{-i\beta(t+x)/4+i\pi/4}.
+
+\end{aligned}\]</p><p>Taking the real part,</p><p class="math-container">\[\boxed{
+            I_{7,\mathrm{SP}}(x,t)
+            \simeq
+            -\sqrt{\frac{\pi\beta}{t}}
+            \cos\left[
+            \frac{\beta(t+x)}{4}
+            -\frac{\pi}{4}
+            \right]
+        }\]</p><p>as <span>$t\rightarrow\infty$</span>.</p><p>Thus,</p><p class="math-container">\[I_{7,\mathrm{SP}}
+        =
+        O(t^{-1/2}).\]</p><h3 id="Pole-contribution-to-I_7"><a class="docs-heading-anchor" href="#Pole-contribution-to-I_7">Pole contribution to <span>$I_7$</span></a><a id="Pole-contribution-to-I_7-1"></a><a class="docs-heading-anchor-permalink" href="#Pole-contribution-to-I_7" title="Permalink"></a></h3><p>The pole in the original <span>$k$</span>-variable occurs at</p><p class="math-container">\[k=\beta.\]</p><p>Introduce</p><p class="math-container">\[k=\beta+h,
+        \qquad
+        h\rightarrow0.\]</p><p>Define</p><p class="math-container">\[D(k)
+        =
+        k-\sqrt{\beta k}.\]</p><p>Since</p><p class="math-container">\[D(\beta)=0,\]</p><p>Taylor expansion about <span>$k=\beta$</span> gives</p><p class="math-container">\[D(k)
+        =
+        D&#39;(\beta)h
+        +
+        \frac{D&#39;&#39;(\beta)}{2}h^2
+        +\cdots .\]</p><p>Now,</p><p class="math-container">\[D&#39;(k)
+        =
+        1-\frac{\sqrt{\beta}}{2\sqrt{k}},\]</p><p>so that</p><p class="math-container">\[D&#39;(\beta)
+        =
+        \frac12.\]</p><p>Also,</p><p class="math-container">\[D&#39;&#39;(k)
+        =
+        \frac{\sqrt{\beta}}{4k^{3/2}},\]</p><p>and therefore</p><p class="math-container">\[D&#39;&#39;(\beta)
+        =
+        \frac{1}{4\beta}.\]</p><p>Hence,</p><p class="math-container">\[D(k)
+        =
+        \frac{h}{2}
+        +
+        \frac{h^2}{8\beta}
+        +\cdots ,\]</p><p>and to leading order,</p><p class="math-container">\[\boxed{
+            D(k)\simeq\frac{h}{2}.
+        }\]</p><p>Therefore,</p><p class="math-container">\[\begin{aligned}
+        \frac{k}{k-\sqrt{\beta k}}
+        &amp;=
+        \frac{\beta+h}{D(k)}\\
+        &amp;\simeq
+        \frac{\beta+h}{h/2}\\
+        &amp;=
+        \frac{2\beta}{h}+2.
+
+\end{aligned}\]</p><p>The singular part is consequently</p><p class="math-container">\[\boxed{
+            \frac{k}{k-\sqrt{\beta k}}
+            \simeq
+            \frac{2\beta}{h}.
+        }\]</p><h4 id="Phase-near-the-pole"><a class="docs-heading-anchor" href="#Phase-near-the-pole">Phase near the pole</a><a id="Phase-near-the-pole-1"></a><a class="docs-heading-anchor-permalink" href="#Phase-near-the-pole" title="Permalink"></a></h4><p>The phase is</p><p class="math-container">\[tD(k)-kx.\]</p><p>Using <span>$D(k)\simeq h/2$</span> and <span>$k=\beta+h$</span>, the phase near the pole <span>$k=\beta$</span> becomes</p><p class="math-container">\[\begin{aligned}
+        tD(k)-kx
+        &amp;\simeq
+        \frac{th}{2}
+        -(\beta+h)x\\
+        &amp;=
+        -\beta x
+        +
+        \left(
+        \frac{t}{2}-x
+        \right)h.
+
+\end{aligned}\]</p><p>To evaluate the contribution from the neighbourhood of the pole <span>$k=\beta$</span>, consider a small symmetric interval</p><p class="math-container">\[\beta-\delta&lt;k&lt;\beta+\delta,
+        \qquad
+        \delta&gt;0,\]</p><p>where <span>$\delta$</span> is sufficiently small for the above local approximations to remain valid. Since</p><p class="math-container">\[k=\beta+h,
+        \qquad
+        h=k-\beta,\]</p><p>the limits of this local interval transform according to</p><p class="math-container">\[k=\beta-\delta
+        \quad\Longrightarrow\quad
+        h=-\delta,\]</p><p>and</p><p class="math-container">\[k=\beta+\delta
+        \quad\Longrightarrow\quad
+        h=\delta.\]</p><p>Thus, the neighbourhood <span>$\beta-\delta&lt;k&lt;\beta+\delta$</span> of the pole <span>$k=\beta$</span> is mapped to the symmetric interval</p><p class="math-container">\[-\delta&lt;h&lt;\delta,\]</p><p>with the pole itself located at <span>$h=0$</span>.</p><p>Therefore, using the leading-order approximations for the amplitude and phase near <span>$k=\beta$</span>, the local pole contribution is</p><p class="math-container">\[I_{7,\mathrm{pole}}
+        \simeq
+        2\beta\,
+        \operatorname{PV}
+        \int_{-\delta}^{\delta}
+        \frac{
+            \cos\left[
+            -\beta x+
+            \left(
+            \dfrac{t}{2}-x
+            \right)h
+            \right]
+        }{h}\,dh .\]</p><p>The Cauchy principal value is required because the integrand is singular at <span>$h=0$</span>. For an integral over this symmetric neighbourhood, it is defined as</p><p class="math-container">\[\operatorname{PV}
+        \int_{-\delta}^{\delta}
+        f(h)\,dh
+        =
+        \lim_{\epsilon\to0^+}
+        \left[
+        \int_{-\delta}^{-\epsilon}
+        f(h)\,dh
+        +
+        \int_{\epsilon}^{\delta}
+        f(h)\,dh
+        \right].\]</p><p>Here, <span>$\delta$</span> specifies the size of the local neighbourhood around the pole, whereas <span>$\epsilon$</span> denotes the small symmetric interval excluded about <span>$h=0$</span> in defining the Cauchy principal value.</p><p>Define</p><p class="math-container">\[A=-\beta x,
+        \qquad
+        B=\frac{t}{2}-x.\]</p><p>Then</p><p class="math-container">\[I_{7,\mathrm{pole}}
+        \simeq
+        2\beta \operatorname{PV}
+        \int_{-\delta}^{\delta}
+        \frac{\cos(A+Bh)}{h}\,dh.\]</p><p>Using</p><p class="math-container">\[\cos(A+Bh)
+        =
+        \cos A\cos(Bh)
+        -
+        \sin A\sin(Bh),\]</p><p>we obtain</p><p class="math-container">\[\begin{aligned}
+        I_{7,\mathrm{pole}}
+        \simeq
+        2\beta
+        \Bigg[
+        &amp;
+        \cos A
+        \operatorname{PV}
+        \int_{-\delta}^{\delta}
+        \frac{\cos(Bh)}{h}\,dh\\
+        &amp;
+        -
+        \sin A \operatorname{PV}
+        \int_{-\delta}^{\delta}
+        \frac{\sin(Bh)}{h}\,dh
+        \Bigg].
+
+\end{aligned}\]</p><p>The first integral vanishes because <span>$\cos(Bh)/h$</span> is odd:</p><p class="math-container">\[\operatorname{PV}
+        \int_{-\delta}^{\delta}
+        \frac{\cos(Bh)}{h}\,dh
+        =
+        0.\]</p><p>For the second integral, set</p><p class="math-container">\[u=Bh.\]</p><p>Then</p><p class="math-container">\[\int_{-\delta}^{\delta}
+        \frac{\sin(Bh)}{h}\,dh
+        =
+        \int_{-B\delta}^{B\delta}
+        \frac{\sin u}{u}\,du .\]</p><p>For fixed <span>$x$</span>,</p><p class="math-container">\[B=\frac{t}{2}-x
+        \rightarrow\infty
+        \qquad
+        (t\rightarrow\infty).\]</p><p>Therefore,</p><p class="math-container">\[\int_{-B\delta}^{B\delta}
+        \frac{\sin u}{u}\,du
+        \longrightarrow
+        \int_{-\infty}^{\infty}
+        \frac{\sin u}{u}\,du
+        =
+        \pi.\]</p><p>Thus,</p><p class="math-container">\[I_{7,\mathrm{pole}}
+        \simeq
+        -2\pi\beta\sin A.\]</p><p>Since <span>$A=-\beta x$</span>,</p><p class="math-container">\[\boxed{
+            I_{7,\mathrm{pole}}(x,t)
+            \simeq
+            2\pi\beta\sin(\beta x).
+        }\]</p><p>This contribution is independent of <span>$t$</span>.</p><h3 id="Large-time-result-for-I_7"><a class="docs-heading-anchor" href="#Large-time-result-for-I_7">Large-time result for <span>$I_7$</span></a><a id="Large-time-result-for-I_7-1"></a><a class="docs-heading-anchor-permalink" href="#Large-time-result-for-I_7" title="Permalink"></a></h3><p>Combining the stationary-phase and pole contributions,</p><p class="math-container">\[\begin{aligned}
+                I_7(x,t)
+                \sim{}&amp;
+                2\pi\beta\sin(\beta x)
+                \\
+                &amp;-
+                \sqrt{\frac{\pi\beta}{t}}
+                \cos\left[
+                \frac{\beta(t+x)}{4}
+                -\frac{\pi}{4}
+                \right],
+                \qquad
+                t\rightarrow\infty .
+            \end{aligned}\]</p><p>Hence,</p><p class="math-container">\[I_{7,\mathrm{pole}}=O(1),
+        \qquad
+        I_{7,\mathrm{SP}}=O(t^{-1/2}),\]</p><p>and</p><p class="math-container">\[\boxed{
+            \lim_{t\rightarrow\infty}
+            I_7(x,t)
+            =
+            2\pi\beta\sin(\beta x).
+        }\]</p><h3 id="Numerical-verification-of-I_7"><a class="docs-heading-anchor" href="#Numerical-verification-of-I_7">Numerical verification of <span>$I_7$</span></a><a id="Numerical-verification-of-I_7-1"></a><a class="docs-heading-anchor-permalink" href="#Numerical-verification-of-I_7" title="Permalink"></a></h3><p>For the numerical comparison we take</p><p class="math-container">\[\rho_r=0.001,
+        \qquad
+        \beta=\frac{1-\rho_r}{1+\rho_r},
+        \qquad
+        x=1.\]</p><p>The original <span>$I_7$</span> integral is evaluated numerically in the Cauchy principal-value sense by excluding a small symmetric neighbourhood of the pole <span>$k=\beta$</span>.</p><p>The resulting asymptotic form gives</p><p class="math-container">\[\boxed{
+            \sqrt{\frac{t}{\pi\beta}}
+            \left[
+            I_7(x,t)-2\pi\beta\sin(\beta x)
+            \right]
+            \sim
+            -\cos\left[
+            \frac{\beta(t+x)}{4}
+            -\frac{\pi}{4}
+            \right].
+        }\]</p><p>Thus, the compensated comparison verifies the predicted <span>$t^{-1/2}$</span> amplitude together with its phase and frequency.</p><h2 id="Large-time-asymptotics-of-the-non-singular-integral-I_8(x,t)"><a class="docs-heading-anchor" href="#Large-time-asymptotics-of-the-non-singular-integral-I_8(x,t)">Large-time asymptotics of the non-singular integral <span>$I_8(x,t)$</span></a><a id="Large-time-asymptotics-of-the-non-singular-integral-I_8(x,t)-1"></a><a class="docs-heading-anchor-permalink" href="#Large-time-asymptotics-of-the-non-singular-integral-I_8(x,t)" title="Permalink"></a></h2><p>The defining expression for <span>$I_8(x,t)$</span> may be rewritten as</p><p class="math-container">\[I_8(x,t)
+        =
+        \int_0^\infty
+        \frac{k}{k+\sqrt{\beta k}}
+        \cos\left\{
+        t\left(k+\sqrt{\beta k}\right)-kx
+        \right\}\,dk .\]</p><h3 id="Transformation-of-I_8"><a class="docs-heading-anchor" href="#Transformation-of-I_8">Transformation of <span>$I_8$</span></a><a id="Transformation-of-I_8-1"></a><a class="docs-heading-anchor-permalink" href="#Transformation-of-I_8" title="Permalink"></a></h3><p>Introduce</p><p class="math-container">\[k=\beta z^2.\]</p><p>Then</p><p class="math-container">\[\sqrt{\beta k}=\beta z,
+        \qquad
+        dk=2\beta z\,dz,\]</p><p>and</p><p class="math-container">\[k+\sqrt{\beta k}
+        =
+        \beta z(z+1).\]</p><p>Hence,</p><p class="math-container">\[\frac{k}{k+\sqrt{\beta k}}\,dk
+        =
+        \frac{2\beta z^2}{z+1}\,dz.\]</p><p>The phase becomes</p><p class="math-container">\[\begin{aligned}
+        t\left(k+\sqrt{\beta k}\right)-kx
+        &amp;=
+        t\left(\beta z^2+\beta z\right)
+        -\beta xz^2\\
+        &amp;=
+        \beta
+        \left[
+        t(z^2+z)-xz^2
+        \right].
+
+\end{aligned}\]</p><p>Therefore,</p><p class="math-container">\[\boxed{
+            I_8(x,t)
+            =
+            2\beta
+            \int_0^\infty
+            \frac{z^2}{z+1}
+            \cos\left\{
+            \beta
+            \left[
+            t(z^2+z)-xz^2
+            \right]
+            \right\}\,dz.
+        }\]</p><h3 id="Absence-of-poles-and-stationary-points"><a class="docs-heading-anchor" href="#Absence-of-poles-and-stationary-points">Absence of poles and stationary points</a><a id="Absence-of-poles-and-stationary-points-1"></a><a class="docs-heading-anchor-permalink" href="#Absence-of-poles-and-stationary-points" title="Permalink"></a></h3><p>Since</p><p class="math-container">\[z+1&gt;0
+        \qquad
+        (z\ge0),\]</p><p>there is no pole on the integration interval.</p><p>Define the leading <span>$t$</span>-dependent phase as</p><p class="math-container">\[\phi_8(z)
+        =
+        \beta(z^2+z).\]</p><p>A stationary point satisfies</p><p class="math-container">\[\phi_8&#39;(z_s)=0.\]</p><p>Since</p><p class="math-container">\[\phi_8&#39;(z)
+        =
+        \beta(2z+1),\]</p><p>the only stationary point is</p><p class="math-container">\[z_s=-\frac12,\]</p><p>which lies outside the integration interval <span>$z\ge0$</span>.</p><p>Thus, <span>$I_8$</span> has neither a pole nor a stationary point on the path of integration. Its leading large-time behaviour is therefore controlled by the endpoint z=0.</p><h3 id="Endpoint-scaling"><a class="docs-heading-anchor" href="#Endpoint-scaling">Endpoint scaling</a><a id="Endpoint-scaling-1"></a><a class="docs-heading-anchor-permalink" href="#Endpoint-scaling" title="Permalink"></a></h3><p>The phase function is</p><p class="math-container">\[\phi_8(z)
+        =
+        \beta z+\beta z^2.\]</p><p>Near <span>$z=0$</span>,</p><p class="math-container">\[\phi_8(z)
+        =
+        \beta z+O(z^2),\]</p><p>so that</p><p class="math-container">\[t\phi_8(z)
+        =
+        \beta t z+\beta t z^2
+        \sim
+        \beta t z.\]</p><p>Thus, the leading variation of the cosine near the endpoint is controlled by the combination <span>$\beta t z$</span>. In order to resolve the region that contributes to the integral as <span>$t\to\infty$</span>, this combination must remain of order unity, i.e.,</p><p class="math-container">\[\beta t z=O(1).\]</p><p>Consequently, the relevant endpoint region has the scaling</p><p class="math-container">\[z
+        =
+        O\left(\frac{1}{\beta t}\right).\]</p><p>This motivates the introduction of the stretched endpoint variable</p><p class="math-container">\[\boxed{
+            y=\beta t z
+        }.\]</p><p>Equivalently,</p><p class="math-container">\[z=\frac{y}{\beta t},
+        \qquad
+        dz=\frac{dy}{\beta t}.\]</p><p>The amplitude transforms as</p><p class="math-container">\[\begin{aligned}
+        2\beta\frac{z^2}{1+z}\,dz
+        &amp;=
+        \frac{2}{\beta^2t^3}
+        y^2
+        \left(
+        1+\frac{y}{\beta t}
+        \right)^{-1}
+        dy .
+
+\end{aligned}\]</p><p>For <span>$t\rightarrow\infty$</span>,</p><p class="math-container">\[\left(
+        1+\frac{y}{\beta t}
+        \right)^{-1}
+        =
+        1-\frac{y}{\beta t}
+        +
+        O(t^{-2}).\]</p><p>The phase becomes</p><p class="math-container">\[\begin{aligned}
+        \beta
+        \left[
+        t(z^2+z)-xz^2
+        \right]
+        &amp;=
+        y+
+        \frac{y^2}{\beta t}
+        \left(
+        1-\frac{x}{t}
+        \right).
+
+\end{aligned}\]</p><p>Hence,</p><p class="math-container">\[\begin{aligned}
+        I_8(x,t)
+        =
+        \frac{2}{\beta^2t^3}
+        \int_0^\infty
+        y^2
+        \left(
+        1+\frac{y}{\beta t}
+        \right)^{-1}
+        \cos\left[
+        y+
+        \frac{y^2}{\beta t}
+        \left(
+        1-\frac{x}{t}
+        \right)
+        \right]dy .
+
+\end{aligned}\]</p><h3 id="Complex-representation-and-asymptotic-expansion"><a class="docs-heading-anchor" href="#Complex-representation-and-asymptotic-expansion">Complex representation and asymptotic expansion</a><a id="Complex-representation-and-asymptotic-expansion-1"></a><a class="docs-heading-anchor-permalink" href="#Complex-representation-and-asymptotic-expansion" title="Permalink"></a></h3><p>Using</p><p class="math-container">\[\cos\theta
+        =
+        \Re \left(e^{i\theta}\right),\]</p><p>The stretched-variable form becomes</p><p class="math-container">\[\begin{aligned}
+        I_8(x,t)
+        =
+        \frac{2}{\beta^2t^3}
+        \Re
+        \int_0^\infty
+        y^2e^{iy}
+        \left(
+        1+\frac{y}{\beta t}
+        \right)^{-1}
+        \exp\left[
+        \frac{iy^2}{\beta t}
+        \left(
+        1-\frac{x}{t}
+        \right)
+        \right]dy.
+
+\end{aligned}\]</p><p>For fixed <span>$x$</span>,</p><p class="math-container">\[\frac{x}{t}
+        =
+        O(t^{-1}),\]</p><p>and therefore</p><p class="math-container">\[\exp\left[
+        \frac{iy^2}{\beta t}
+        \left(
+        1-\frac{x}{t}
+        \right)
+        \right]
+        =
+        1+
+        \frac{iy^2}{\beta t}
+        +
+        O(t^{-2}).\]</p><p>Multiplying the amplitude and phase expansions,</p><p class="math-container">\[\left(
+        1+\frac{y}{\beta t}
+        \right)^{-1}
+        \exp\left[
+        \frac{iy^2}{\beta t}
+        \left(
+        1-\frac{x}{t}
+        \right)
+        \right]
+        =
+        1
+        -\frac{y}{\beta t}
+        +\frac{iy^2}{\beta t}
+        +
+        O(t^{-2}).\]</p><p>Substituting into the complex representation,</p><p class="math-container">\[\begin{aligned}
+        I_8(x,t)
+        \sim
+        \frac{2}{\beta^2t^3}
+        \Bigg[
+        &amp;
+        \Re
+        \int_0^\infty
+        y^2e^{iy}\,dy\\
+        &amp;
+        -
+        \frac{1}{\beta t}
+        \Re
+        \int_0^\infty
+        y^3e^{iy}\,dy\\
+        &amp;
+        +
+        \frac{1}{\beta t}
+        \Re
+        \left(
+        i\int_0^\infty
+        y^4e^{iy}\,dy
+        \right)
+        \Bigg].
+
+\end{aligned}\]</p><h3 id="Evaluation-of-the-oscillatory-integrals"><a class="docs-heading-anchor" href="#Evaluation-of-the-oscillatory-integrals">Evaluation of the oscillatory integrals</a><a id="Evaluation-of-the-oscillatory-integrals-1"></a><a class="docs-heading-anchor-permalink" href="#Evaluation-of-the-oscillatory-integrals" title="Permalink"></a></h3><p>The resulting oscillatory integrals are understood in the Abel-regularized sense:</p><p class="math-container">\[\int_0^\infty
+        y^n e^{iy}\,dy
+        \equiv
+        \lim_{\epsilon\rightarrow0^+}
+        \int_0^\infty
+        y^n e^{-(\epsilon-i)y}\,dy.\]</p><p>For <span>$\epsilon&gt;0$</span>,</p><p class="math-container">\[\int_0^\infty
+        y^n e^{-(\epsilon-i)y}\,dy
+        =
+        \frac{n!}{(\epsilon-i)^{n+1}},\]</p><p>and therefore</p><p class="math-container">\[\boxed{
+            \int_0^\infty
+            y^n e^{iy}\,dy
+            =
+            \frac{n!}{(-i)^{n+1}}.
+        }\]</p><p>For <span>$n=2$</span>,</p><p class="math-container">\[\int_0^\infty
+        y^2e^{iy}\,dy
+        =
+        -2i,\]</p><p>so that</p><p class="math-container">\[\Re
+        \int_0^\infty
+        y^2e^{iy}\,dy
+        =
+        0.\]</p><p>For <span>$n=3$</span>,</p><p class="math-container">\[\int_0^\infty
+        y^3e^{iy}\,dy
+        =
+        6,\]</p><p>and hence</p><p class="math-container">\[\Re
+        \int_0^\infty
+        y^3e^{iy}\,dy
+        =
+        6.\]</p><p>For <span>$n=4$</span>,</p><p class="math-container">\[\int_0^\infty
+        y^4e^{iy}\,dy
+        =
+        24i.\]</p><p>Therefore,</p><p class="math-container">\[\Re
+        \left[
+        i\int_0^\infty
+        y^4e^{iy}\,dy
+        \right]
+        =
+        -24.\]</p><h3 id="Large-time-result-for-I_8"><a class="docs-heading-anchor" href="#Large-time-result-for-I_8">Large-time result for <span>$I_8$</span></a><a id="Large-time-result-for-I_8-1"></a><a class="docs-heading-anchor-permalink" href="#Large-time-result-for-I_8" title="Permalink"></a></h3><p>Substituting these evaluated integrals,</p><p class="math-container">\[\begin{aligned}
+        I_8(x,t)
+        &amp;\sim
+        \frac{2}{\beta^2t^3}
+        \left[
+        0
+        -\frac{6}{\beta t}
+        -\frac{24}{\beta t}
+        \right]\\
+        &amp;=
+        -\frac{60}{\beta^3t^4}.
+
+\end{aligned}\]</p><p>Thus,</p><p class="math-container">\[I_8(x,t)
+            \sim
+            -\frac{60}{\beta^3t^4},
+            \qquad
+            t\rightarrow\infty,
+            \quad
+            x=\text{fixed}.\]</p><p>Therefore,</p><p class="math-container">\[I_8(x,t)=O(t^{-4}).\]</p><p>The leading contribution is independent of fixed <span>$x$</span>; the <span>$x$</span>-dependence enters only at higher order.</p><h3 id="Contour-rotated-representation-and-numerical-verification-of-I_8"><a class="docs-heading-anchor" href="#Contour-rotated-representation-and-numerical-verification-of-I_8">Contour-rotated representation and numerical verification of <span>$I_8$</span></a><a id="Contour-rotated-representation-and-numerical-verification-of-I_8-1"></a><a class="docs-heading-anchor-permalink" href="#Contour-rotated-representation-and-numerical-verification-of-I_8" title="Permalink"></a></h3><p>To verify the large-time asymptotic result derived above, the integral <span>$I_8(x,t)$</span> is evaluated numerically. Rather than directly evaluating the original oscillatory integral along the positive real axis, it is convenient to first transform it into an exponentially damped integral by rotating the contour into the positive imaginary axis.</p><p>The transformed integral is</p><p class="math-container">\[I_8(x,t)
+        =
+        2\beta
+        \int_0^\infty
+        \frac{z^2}{z+1}
+        \cos\left\{
+        \beta
+        \left[
+        (t-x)z^2+tz
+        \right]
+        \right\}
+        dz .\]</p><p>Using</p><p class="math-container">\[\cos\theta
+        =
+        \Re\left(e^{i\theta}\right),\]</p><p>This integral can be written as</p><p class="math-container">\[I_8(x,t)
+        =
+        \Re\left[J_8(x,t)\right],\]</p><p>where</p><p class="math-container">\[J_8(x,t)
+        =
+        2\beta
+        \int_0^\infty
+        \frac{z^2}{z+1}
+        \exp\left\{
+        i\beta
+        \left[
+        (t-x)z^2+tz
+        \right]
+        \right\}
+        dz .\]</p><h4 id="Rotation-of-the-integration-contour"><a class="docs-heading-anchor" href="#Rotation-of-the-integration-contour">Rotation of the integration contour</a><a id="Rotation-of-the-integration-contour-1"></a><a class="docs-heading-anchor-permalink" href="#Rotation-of-the-integration-contour" title="Permalink"></a></h4><p>For <span>$t&gt;x$</span>, consider the quarter-circle contour in the first quadrant shown schematically in the omitted contour figure. The contour consists of the positive real axis, a quarter-circle of radius <span>$R$</span>, and the positive imaginary axis.</p><p>Writing</p><p class="math-container">\[z=Re^{i\theta},
+        \qquad
+        0\leq\theta\leq\frac{\pi}{2},\]</p><p>the modulus of the quadratic exponential factor is</p><p class="math-container">\[\begin{aligned}
+        \left|
+        e^{\,i\beta(t-x)z^2}
+        \right|
+        &amp;=
+        \left|
+        e^{\,i\beta(t-x)R^2
+            (\cos 2\theta+i\sin 2\theta)}
+        \right|\\
+        &amp;=
+        e^{-\beta(t-x)R^2\sin 2\theta}.
+
+\end{aligned}\]</p><p>Similarly,</p><p class="math-container">\[\begin{aligned}
+        \left|
+        e^{\,i\beta tz}
+        \right|
+        &amp;=
+        \left|
+        e^{\,i\beta tR(\cos\theta+i\sin\theta)}
+        \right|\\
+        &amp;=
+        e^{-\beta tR\sin\theta}.
+
+\end{aligned}\]</p><p>Since</p><p class="math-container">\[\sin\theta\geq0,
+        \qquad
+        \sin2\theta\geq0,
+        \qquad
+        0\leq\theta\leq\frac{\pi}{2},\]</p><p>and <span>$t&gt;x$</span>, both exponential factors are non-growing on the first-quadrant arc. The linear exponential provides exponential decay away from the positive real axis, while the quadratic exponential also decays for <span>$0&lt;\theta&lt;\pi/2$</span>. Consequently, the contribution from the quarter-circle vanishes as <span>$R\to\infty$</span>.</p><p>The integrand has a pole at <span>$z=-1$</span>, which lies outside the first-quadrant contour. Therefore, no residue is enclosed.</p><p>Let</p><p class="math-container">\[f(z)
+        =
+        2\beta
+        \frac{z^2}{z+1}
+        e^{\,i\beta(t-x)z^2}
+        e^{\,i\beta tz}.\]</p><p>Since <span>$f(z)$</span> is analytic inside the first-quadrant contour, Cauchy’s theorem gives</p><p class="math-container">\[\oint_C f(z)\,dz=0.\]</p><p>Decomposing the contour into the positive real axis <span>$\Gamma_1$</span>, the quarter-circle <span>$\Gamma_2$</span>, and the imaginary-axis segment <span>$\Gamma_3$</span>,</p><p class="math-container">\[\int_{\Gamma_1}f(z)\,dz
+        +
+        \int_{\Gamma_2}f(z)\,dz
+        +
+        \int_{\Gamma_3}f(z)\,dz
+        =
+        0.\]</p><p>As <span>$R\to\infty$</span>,</p><p class="math-container">\[\int_{\Gamma_2}f(z)\,dz\longrightarrow0.\]</p><p>The segment <span>$\Gamma_3$</span> is traversed downwards, from <span>$i\infty$</span> to the origin. Parameterizing this segment by</p><p class="math-container">\[z=is,
+        \qquad
+        dz=i\,ds,\]</p><p>its orientation corresponds to <span>$s:\infty\rightarrow0$</span>. Hence,</p><p class="math-container">\[\int_{\Gamma_3}f(z)\,dz
+        =
+        \int_{\infty}^{0}f(is)\,i\,ds
+        =
+        -i\int_0^\infty f(is)\,ds.\]</p><p>Cauchy&#39;s theorem then gives</p><p class="math-container">\[\int_0^\infty f(z)\,dz
+        =
+        i\int_0^\infty f(is)\,ds.\]</p><p>Under the transformation <span>$z=is$</span>,</p><p class="math-container">\[z^2=-s^2,
+        \qquad
+        z+1=1+is,\]</p><p>and the exponential factors become</p><p class="math-container">\[e^{\,i\beta(t-x)z^2}
+        =
+        e^{-i\beta(t-x)s^2},\]</p><p>and</p><p class="math-container">\[e^{\,i\beta tz}
+        =
+        e^{-\beta ts}.\]</p><p>Therefore,</p><p class="math-container">\[\begin{aligned}
+        f(is)
+        &amp;=
+        2\beta
+        \frac{(is)^2}{1+is}
+        e^{-i\beta(t-x)s^2}
+        e^{-\beta ts}\\
+        &amp;=
+        \frac{-2\beta s^2}{1+is}
+        e^{-\beta ts}
+        e^{-i\beta(t-x)s^2}.
+
+\end{aligned}\]</p><p>Thus, the complex integral can be written as</p><p class="math-container">\[\boxed{
+            J_8(x,t)
+            =
+            \int_0^\infty
+            \frac{-2i\beta s^2}{1+is}
+            e^{-\beta ts}
+            e^{-i\beta(t-x)s^2}
+            \,ds
+        }.\]</p><p>Taking the real part gives the required representation of <span>$I_8$</span>,</p><p class="math-container">\[\boxed{
+            I_8(x,t)
+            =
+            \Re
+            \left[
+            \int_0^\infty
+            \frac{-2i\beta s^2}{1+is}
+            e^{-\beta ts}
+            e^{-i\beta(t-x)s^2}
+            \,ds
+            \right]
+        }.\]</p><p>This contour-rotated representation is the form used for the numerical evaluation in MATLAB. In contrast to the original real-axis representation, the factor</p><p class="math-container">\[e^{-\beta ts}\]</p><p>provides exponential damping as <span>$s\to\infty$</span>, making the contour-rotated form particularly convenient for numerical quadrature at large <span>$t$</span>.</p><h4 id="Comparison-with-the-large-time-asymptotic-result"><a class="docs-heading-anchor" href="#Comparison-with-the-large-time-asymptotic-result">Comparison with the large-time asymptotic result</a><a id="Comparison-with-the-large-time-asymptotic-result-1"></a><a class="docs-heading-anchor-permalink" href="#Comparison-with-the-large-time-asymptotic-result" title="Permalink"></a></h4><p>For the numerical comparison, the parameters are chosen as</p><p class="math-container">\[\rho_r=0.001,
+        \qquad
+        \beta=\frac{1-\rho_r}{1+\rho_r},
+        \qquad
+        x=1.\]</p><p>The contour-rotated integral is evaluated numerically and compared with the large-time asymptotic result derived above,</p><p class="math-container">\[I_8(x,t)
+        \sim
+        -\frac{60}{\beta^3t^4},
+        \qquad
+        t\to\infty.\]</p><p>This asymptotic comparison further implies</p><p class="math-container">\[\boxed{
+            \beta^3t^4 I_8(x,t)
+            \longrightarrow
+            -60,
+            \qquad
+            t\to\infty
+        }.\]</p><p>Accordingly, the log–log comparison verifies the predicted <span>$t^{-4}$</span> decay, while the compensated comparison provides a more stringent test of the leading-order coefficient. The convergence of the compensated numerical result to <span>$-60$</span> confirms both the decay exponent and the coefficient in the leading large-time asymptotic expression.</p><h2 id="Combined-large-time-behaviour"><a class="docs-heading-anchor" href="#Combined-large-time-behaviour">Combined large-time behaviour</a><a id="Combined-large-time-behaviour-1"></a><a class="docs-heading-anchor-permalink" href="#Combined-large-time-behaviour" title="Permalink"></a></h2><p>The two transient integrals have the leading asymptotic forms</p><p class="math-container">\[\begin{aligned}
+                I_7(x,t)
+                \sim{}&amp;
+                2\pi\beta\sin(\beta x)
+                -
+                \sqrt{\frac{\pi\beta}{t}}
+                \cos\left[
+                \frac{\beta(t+x)}{4}
+                -\frac{\pi}{4}
+                \right],
+                \\[4pt]
+                I_8(x,t)
+                \sim{}&amp;
+                -\frac{60}{\beta^3t^4}.
+            \end{aligned}\]</p><p>Therefore,</p><p class="math-container">\[I_7(x,t)+I_8(x,t)
+        \sim
+        2\pi\beta\sin(\beta x)
+        -
+        \sqrt{\frac{\pi\beta}{t}}
+        \cos\left[
+        \frac{\beta(t+x)}{4}
+        -\frac{\pi}{4}
+        \right]
+        -
+        \frac{60}{\beta^3t^4}.\]</p><p>Substitution into the transient decomposition gives</p><p class="math-container">\[\begin{aligned}
+                \frac{\eta_{\mathrm{tr}}(x,t)}{F_0}
+                \sim
+                -\frac{1}{2\pi(1-\rho_r)}
+                \Bigg[
+                &amp;
+                2\pi\beta\sin(\beta x)
+                \\
+                &amp;-
+                \sqrt{\frac{\pi\beta}{t}}
+                \cos\left[
+                \frac{\beta(t+x)}{4}
+                -\frac{\pi}{4}
+                \right]
+                \\
+                &amp;-
+                \frac{60}{\beta^3t^4}
+                \Bigg].
+            \end{aligned}\]</p><p>The large-time asymptotic structure may therefore be summarized as</p><p class="math-container">\[I_{7,\mathrm{pole}}=O(1),
+        \qquad
+        I_{7,\mathrm{SP}}=O(t^{-1/2}),
+        \qquad
+        I_8=O(t^{-4}).\]</p><p>Thus, the pole of <span>$I_7$</span> produces the time-independent limiting contribution, while the dominant decaying transient is generated by the stationary-phase contribution of <span>$I_7$</span>. The contribution from <span>$I_8$</span> decays much more rapidly.</p><p>In particular,</p><p class="math-container">\[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0}
+            =
+            -\frac{\beta}{1-\rho_r}
+            \sin(\beta x)
+            +
+            O(t^{-1/2}),
+            \qquad
+            t\rightarrow\infty.\]</p><p>Since</p><p class="math-container">\[\beta
+        =
+        \frac{1-\rho_r}{1+\rho_r},\]</p><p>the limiting time-independent contribution may also be written as</p><p class="math-container">\[\boxed{
+            \frac{\eta_{\mathrm{tr}}(x,t)}{F_0}
+            =
+            -\frac{1}{1+\rho_r}
+            \sin(\beta x)
+            +
+            O(t^{-1/2}).
+        }\]</p><h2 id="Summary"><a class="docs-heading-anchor" href="#Summary">Summary</a><a id="Summary-1"></a><a class="docs-heading-anchor-permalink" href="#Summary" title="Permalink"></a></h2><p>For fixed <span>$x$</span>, the large-time asymptotic behaviour of the two-fluid transient integrals in the pure-gravity limit is</p><p class="math-container">\[\boxed{
+            I_7(x,t)
+            \sim
+            2\pi\beta\sin(\beta x)
+            -
+            \sqrt{\frac{\pi\beta}{t}}
+            \cos\left[
+            \frac{\beta(t+x)}{4}
+            -\frac{\pi}{4}
+            \right],
+        }\]</p><p>and</p><p class="math-container">\[\boxed{
+            I_8(x,t)
+            \sim
+            -\frac{60}{\beta^3t^4}.
+        }\]</p><p>The singular integral <span>$I_7$</span> contains both a non-decaying pole contribution and an oscillatory stationary-phase contribution that decays as <span>$t^{-1/2}$</span>. In contrast, <span>$I_8$</span> has neither a pole nor a stationary point on the integration interval, and its asymptotic behaviour is controlled by the endpoint <span>$z=0$</span>, resulting in the much faster <span>$t^{-4}$</span> decay.</p></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Wednesday 9 September 2026 10:47">Wednesday 9 September 2026</span>. Using Julia version 1.12.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
