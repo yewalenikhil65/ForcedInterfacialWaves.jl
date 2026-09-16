@@ -80,3 +80,78 @@ pre:has(> code.language-matlab)::before {
     background: #0076a8;
     color: #fff;
 }
+
+/* ── Clickable Julia/MATLAB tabs ───────────────────────────────────────────── */
+/* custom.js wraps a paired Julia + MATLAB example in .code-tabs and exposes a
+   .code-tab-bar with two buttons. Only the active panel is shown, so override
+   the two-column grid layout inherited from .code-comparison. */
+
+.code-comparison.code-tabs {
+    display: block;
+    margin: 1rem 0 1.5rem;
+}
+
+.code-tab-bar {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.code-tab-button {
+    font-family: var(--docs-font-family, sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    color: #fff;
+    opacity: 0.5;
+    transition: opacity 0.15s ease-in-out;
+}
+
+.code-tab-button:hover {
+    opacity: 0.8;
+}
+
+.code-tab-button.active {
+    opacity: 1;
+}
+
+.code-tab-button.code-tab-julia {
+    background: #9558b2;
+}
+
+.code-tab-button.code-tab-matlab {
+    background: #0076a8;
+}
+
+/* Panels: only the active one is visible. The per-language label added by the
+   pre::before rules above is redundant inside a tab, so hide it here. */
+.code-tab-panel {
+    display: none;
+}
+
+.code-tab-panel.active {
+    display: block;
+}
+
+.code-tabs pre:has(> code.language-julia)::before,
+.code-tabs pre:has(> code.language-matlab)::before {
+    display: none;
+}
+
+.code-tabs pre {
+    max-width: none;
+    margin: 0 0 0.75rem;
+    overflow-x: auto;
+}
+
+.code-tabs img,
+.code-tabs svg {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.75rem;
+}

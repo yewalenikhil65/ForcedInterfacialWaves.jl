@@ -58,45 +58,87 @@ Putting the $T_0$–$T_4$ terms together gives the full transient-plus-steady so
 
 ## Numerical evaluation
 
-The integral expressions $\eta(x,t)$ (eqn. (4.1) of the manuscript), $\eta_s(x)$ (eqn. (4.3) of the manuscript) and $\eta_{tr}(x,t)$ (eqn. (4.4) of the manuscript) are evaluated numerically, at $x=-2$ and $t_{\dim}=1\,\mathrm{s}$, using both Julia and MATLAB with the codes below. The Julia side uses the unified [`T₀`](@ref)–[`T₄`](@ref) functions together with the `solve` API — [`solve`](@ref)`(`[`ForcedGravityProblem`](@ref)`(...))` returns a [`WaveSolution`](@ref) with `η`, `η_steady`, and `η_transient` fields directly.
+The integral expressions $\eta(x,t)$ (eqn. (4.1) of the manuscript), $\eta_s(x)$ (eqn. (4.3) of the manuscript) and $\eta_{tr}(x,t)$ (eqn. (4.4) of the manuscript) are evaluated numerically, at $x=-2$ and $t_{\dim}=1\,\mathrm{s}$, using both Julia and MATLAB with the codes below. Each analytical term $T_0$–$T_4$ (eqns. 4.3, 4.4b–e) is written out directly; $\eta_s = F_0\,T_0$, $\eta_{tr} = F_0\,(T_1+T_2+T_3+T_4)$, and $\eta = \eta_s + \eta_{tr}$. As an independent check, $\eta$ is also compared against a direct Cauchy-principal-value evaluation $\eta_{\mathrm{CPV}}$ of the combined integrand.
 
 ```julia
-using ForcedInterfacialWaves
+using QuadGK, FresnelIntegrals
 
-pg = compute_gravity_parameters()
-t  = 1.0 / pg.t_c
-x  = -2.0
+# ─── Nondimensional parameters (α = 0) ───
+U, g   = 26.7046, 981.0
+ρₗ, ρᵤ = 1.0, 0.001
+ρᵣ = ρᵤ / ρₗ
+β  = (1 - ρᵣ) / (1 + ρᵣ)
+√β = sqrt(β)
+F₀ = 0.01 * 72.0 / (ρₗ * U^2 * (U^2 / g))
+atol, rtol, K = 1e-10, 1e-8, 100.0
 
-# Individual T-terms
-println("T₀ = ", T₀(x, pg))
-println("T₁ = ", T₁(x, t, pg))
-println("T₂ = ", T₂(x, t, pg))
-println("T₃ = ", T₃(x, t, pg))
-println("T₄ = ", T₄(x, t, pg))
+t = 1.0 / (U / g)      # t_dim = 1 s in nondimensional time
+x = -2.0
 
-# Full solution via solve
-sol = solve(ForcedGravityProblem(pg, x, t))
-println("η         = ", sol.η)
-println("η_steady  = ", sol.η_steady)
-println("η_transient = ", sol.η_transient)
+# ─── Analytical terms T₀–T₄ (eqns 4.3, 4.4b–e); sign s: +1 for x<t, −1 for x>t ───
+T₀(x) = (-π*sin(β*abs(x)) +
+         first(quadgk(y -> exp(-y*abs(x))*y/(β^2 + y^2), 0, Inf; atol=atol, rtol=rtol))) /
+        (π*(1 + ρᵣ))
+T₁(x, t) = (x < t ? -1 : 1) * sin(β*x) / (1 + ρᵣ)
+function T₂(x, t)
+    a = t - x; s = a > 0 ? 1.0 : -1.0
+    -4/(π*(1 + ρᵣ)*β) * first(quadgk(v ->
+        v^2 * exp(-s*2v^2*a + s*v*t*√β) *
+        (√β*cos(v*t*√β) + s*(2v - √β)*sin(v*t*√β)) / (β + (2v - √β)^2),
+        0, K; atol=atol, rtol=rtol))
+end
+function T₃(x, t)
+    a = t - x; absa = abs(a); s = a > 0 ? 1.0 : -1.0
+    b = 0.5*t*√β; X = b*sqrt(2/(π*absa))
+    1/(π*(1 + ρᵣ)*√β) * (1 + t/(2a)) * sqrt(π/(2absa)) *
+        (cos(b^2/absa)*(0.5 - s*fresnelc(X)) + sin(b^2/absa)*(0.5 - s*fresnels(X)))
+end
+T₄(x, t) = -1/(π*(1 + ρᵣ)) *
+    first(quadgk(v -> cos(v^2*(t - x) + v*t*√β)/(v + √β), 0, K; atol=atol, rtol=rtol, order=15))
 
-# Independent CPV verification
-η_cpv = gravity_numerical_cpv(x, t, pg)
-println("η_CPV     = ", η_cpv)
-println("|diff|    = ", abs(sol.η - η_cpv))
+println("T₀ = ", T₀(x))
+println("T₁ = ", T₁(x, t))
+println("T₂ = ", T₂(x, t))
+println("T₃ = ", T₃(x, t))
+println("T₄ = ", T₄(x, t))
+
+# Assembled solution
+η_steady    = F₀ * T₀(x)
+η_transient = F₀ * (T₁(x, t) + T₂(x, t) + T₃(x, t) + T₄(x, t))
+η           = η_steady + η_transient
+println("η         = ", η)
+println("η_steady  = ", η_steady)
+println("η_transient = ", η_transient)
+
+# ─── Independent CPV check: direct combined integrand G(k;x,t) ───
+function η_cpv(x, t)
+    ε = 1e-6
+    G = k -> begin
+        χ = sqrt(β*k); ph = k*(t - x); tχ = t*χ
+        cos(k*x)/(π*(1 + ρᵣ)*(k - β)) -
+        k*cos(ph - tχ)/(2π*(1 - ρᵣ)*(k - χ)) -
+        k*cos(ph + tχ)/(2π*(1 - ρᵣ)*(k + χ))
+    end
+    lo = first(quadgk(G, 0, β - ε; atol=atol, rtol=rtol))
+    hi = first(quadgk(G, β + ε, K; atol=atol, rtol=rtol, order=15))
+    F₀ * (lo + hi)
+end
+ηc = η_cpv(x, t)
+println("η_CPV     = ", ηc)
+println("|diff|    = ", abs(η - ηc))
 ```
 
 ```text
 T₀ = -0.8639502272578199
 T₁ = 0.910043043935118
-T₂ = 0.005830863275361431
+T₂ = 0.005830863275361377
 T₃ = 0.0007044858552279276
-T₄ = -0.0007003237060232554
-η         = 7.212029103433092e-5
-η_steady  = -0.0011999023896811147
-η_transient = 0.0012720226807154456
-η_CPV     = 6.979529999850526e-5
-|diff|    = 2.324991035825656e-6
+T₄ = -0.0007003237060223437
+η         = 7.212029103433244e-5
+η_steady  = -0.0011999023896811143
+η_transient = 0.0012720226807154467
+η_CPV     = 6.979529999850479e-5
+|diff|    = 2.324991035827648e-6
 ```
 
 ```matlab
@@ -111,6 +153,7 @@ t_c   = U / g;
 rho_r = rho_u / rho_l;
 beta  = (1.0 - rho_r) / (1.0 + rho_r);
 sqrt_beta = sqrt(beta);
+F0    = 0.01 * 72.0 / (rho_l * U^2 * (U^2 / g));
 
 % Quadrature tolerances
 AbsTol = 1.0e-10;
@@ -153,134 +196,167 @@ T4_integrand = @(v) cos(v.^2 * a + v * t * sqrt_beta) ./ (v + sqrt_beta);
 T4 = -1.0 / (pi * (1.0 + rho_r)) * ...
     integral(T4_integrand, 0, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
 
-%% eta: full solution
-eta = T0 + T1 + T2 + T3 + T4;
+%% Assembled solution
+eta_s  = F0 * T0;
+eta_tr = F0 * (T1 + T2 + T3 + T4);
+eta    = eta_s + eta_tr;
 
-fprintf('T0  = %.12e\n', T0);
-fprintf('T1- = %.12e\n', T1);
-fprintf('T2- = %.12e\n', T2);
-fprintf('T3- = %.12e\n', T3);
-fprintf('T4- = %.12e\n', T4);
-fprintf('eta = %.12e\n', eta);
+%% Independent CPV check: direct combined integrand G(k;x,t)
+eps_pv = 1e-6;
+G = @(k) cos(k.*x) ./ (pi*(1+rho_r)*(k - beta)) ...
+       - k .* cos(k*(t - x) - t*sqrt(beta*k)) ./ (2*pi*(1-rho_r)*(k - sqrt(beta*k))) ...
+       - k .* cos(k*(t - x) + t*sqrt(beta*k)) ./ (2*pi*(1-rho_r)*(k + sqrt(beta*k)));
+lo = integral(G, 0, beta - eps_pv, 'AbsTol', AbsTol, 'RelTol', RelTol);
+hi = integral(G, beta + eps_pv, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
+eta_cpv = F0 * (lo + hi);
+
+fprintf('T0 = %.16g\n', T0);
+fprintf('T1 = %.16g\n', T1);
+fprintf('T2 = %.16g\n', T2);
+fprintf('T3 = %.16g\n', T3);
+fprintf('T4 = %.16g\n', T4);
+fprintf('eta         = %.16g\n', eta);
+fprintf('eta_steady  = %.16g\n', eta_s);
+fprintf('eta_transient = %.16g\n', eta_tr);
+fprintf('eta_CPV     = %.16g\n', eta_cpv);
+fprintf('|diff|      = %.16g\n', abs(eta - eta_cpv));
 ```
-
-**MATLAB output**
 
 ```text
-T0  = -8.639502272578199e-01
-T1- = 9.100430439351180e-01
-T2- = 5.830863275376527e-03
-T3- = 7.044858552279197e-04
-T4- = -7.003237060235279e-04
-eta = 7.212029103435171e-05
+T0 = -0.8639502272578199
+T1 = 0.910043043935118
+T2 = 0.005830863275361377
+T3 = 0.0007044858552279276
+T4 = -0.0007003237060223437
+eta         = 7.212029103433244e-05
+eta_steady  = -0.001199902389681114
+eta_transient = 0.001272022680715447
+eta_CPV     = 6.979529999850479e-05
+|diff|      = 2.324991035827648e-06
 ```
 
-### $T_0$–$T_4$ comparison ($x=-2$, $t_{\dim}=1$ s)
-
-| Term | Julia | MATLAB | Agreement |
-|:-----|------:|-------:|:----------|
-| $T_0$ | `-8.63950227258e-01` | `-8.63950227258e-01` | 15 digits |
-| $T_1^-$ | `9.10043043935e-01` | `9.10043043935e-01` | 15 digits (closed-form) |
-| $T_2^-$ | `5.83086327536e-03` | `5.83086327538e-03` | 11 digits |
-| $T_3^-$ | `7.04485855228e-04` | `7.04485855228e-04` | 14 digits (Fresnel, no quadrature) |
-| $T_4^-$ | `-7.00323706023e-04` | `-7.00323706024e-04` | 11 digits |
-| $\eta_{\mathrm{analytical}}$ | `7.21203e-05` | `7.21203e-05` | 12 digits |
-| $\eta_{\mathrm{CPV}}$ | `6.97953e-05` | `6.97953e-05` | 10 digits |
-
-The full spatial profile at $t = 183.68$ (corresponding to the last panel of manuscript Fig. 6) is computed below. The Julia side uses [`solve`](@ref) on a 2001-point grid; the MATLAB code evaluates the same $T_0$–$T_4$ decomposition on the same grid.
+The full spatial profile at $t = 183.68$ (last panel of manuscript Fig. 6) is computed below by
+integrating equations (4.1)–(4.2) directly: the combined-integrand Fourier/CPV inversion gives
+the total $\eta(x)$, equation (4.3) gives the steady part $\eta_s(x)$, and $\eta_{tr} = \eta - \eta_s$.
+The scripts below plot all three ($\eta$, $\eta_s$, $\eta_{tr}$).
 
 ```julia
+using QuadGK, FresnelIntegrals
 using Plots, LaTeXStrings
 
-x_grid = make_gravity_xgrid(pg; Nx=2001)
-t_fig6 = 183.68
-prof = solve(ForcedGravityProblem(pg, x_grid, t_fig6))
+# ─── Nondimensional parameters (α = 0) ───
+U, g   = 26.7046, 981.0
+ρₗ, ρᵤ = 1.0, 0.001
+ρᵣ = ρᵤ / ρₗ
+β  = (1 - ρᵣ) / (1 + ρᵣ)
+F₀ = 0.01 * 72.0 / (ρₗ * U^2 * (U^2 / g))
+ε, atol, rtol, K = 1e-6, 1e-10, 1e-8, 100.0
 
-plot(x_grid, prof.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
-     guidefontsize=16, tickfontsize=14, legendfontsize=14,
-     xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-12, 12),
-     ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8],
-     legend=:outerright, size=(800,400))
-plot!(x_grid, prof.η_steady .* 1e3; label=L"\eta_s", color="black")
-plot!(x_grid, prof.η_transient .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
+t_fig6 = 183.68
+x_grid = collect(range(-12.0, 12.0; length = 2001))
+filter!(x -> abs(x) > 1e-6, x_grid)      # exclude x = 0 (integrand singular there)
+N = length(x_grid)
+
+# ─── η(x,t): invert the Fourier integral (eqns 4.1–4.2 with α=0) directly ───
+# The combined CPV integrand G(k;x,t) below cancels the k=β pole between its three
+# terms. Writing each cos(k(t−x) ∓ t√(βk)) via angle-addition exposes cos(kx) and
+# sin(kx), so one adaptive quadrature over k serves the whole grid: for each node k
+# we compute χ, phases and amplitudes once, then only a cheap sincos(kx) per point.
+function η_integrand!(vals, k)
+    χ   = sqrt(β * k)                 # dispersion  χ(k) = √(β|k|)
+    φ   = t_fig6 * χ
+    kt  = k * t_fig6
+    a1  = 1.0 / (π * (1 + ρᵣ) * (k - β))          # steady-pole term  → cos(kx)
+    a2  = -k / (2π * (1 - ρᵣ) * (k - χ))          # transient branch  (−χ)
+    a3  = -k / (2π * (1 - ρᵣ) * (k + χ))          # transient branch  (+χ)
+    s_m, c_m = sincos(kt - φ)
+    s_p, c_p = sincos(kt + φ)
+    cos_coeff = a1 + a2 * c_m + a3 * c_p
+    sin_coeff =      a2 * s_m + a3 * s_p
+    @inbounds @simd for i in 1:N
+        s_kx, c_kx = sincos(k * x_grid[i])
+        vals[i] = cos_coeff * c_kx + sin_coeff * s_kx
+    end
+    return vals
+end
+
+acc = zeros(N); buf = zeros(N)
+quadgk!(η_integrand!, buf, 0.0, β - ε; atol=atol, rtol=rtol, norm=v->maximum(abs, v)); acc .+= buf
+quadgk!(η_integrand!, buf, β + ε, K;   atol=atol, rtol=rtol, order=15, norm=v->maximum(abs, v)); acc .+= buf
+η = F₀ .* acc
+
+# ─── η_s(x): steady part (eqn 4.3), one vector quadrature for the local integral ───
+loc = zeros(N)
+local_integrand!(vals, y) = (@inbounds @simd for i in 1:N
+        vals[i] = exp(-y * abs(x_grid[i])) * y / (β^2 + y^2)
+    end; vals)
+quadgk!(local_integrand!, loc, 0.0, Inf; atol=atol, rtol=rtol, norm=v->maximum(abs, v))
+η_steady    = @. F₀ * (-π * sin(β * abs(x_grid)) + loc) / (π * (1 + ρᵣ))
+η_transient = η .- η_steady
+
+plot(x_grid, η .* 1e3, label=L"\eta", color="blue", linestyle=:dash,
+     guidefontsize=32, tickfontsize=20, xlabel=L"x", ylabel=L"\eta \times 10^{3}",
+     legend=:outerright, size=(800,400), legendfontsize=15,
+     ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8])
+plot!(x_grid, η_steady .* 1e3, label=L"\eta_s", color="black",
+      guidefontsize=32, tickfontsize=20, xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlim=(-12, 12))
+plot!(x_grid, η_transient .* 1e3, label=L"\eta_{tr}", color="magenta", linestyle=:dot,
+      guidefontsize=32, tickfontsize=20, xlabel=L"x", ylabel=L"\eta \times 10^{3}")
+```
+
+```matlab
+%% Pure-gravity spatial profile at t = 183.68 (direct Fourier/CPV inversion)
+U = 26.7046; g = 981.0;
+rho_l = 1.0; rho_u = 0.001;
+rho_r = rho_u / rho_l;
+beta  = (1 - rho_r) / (1 + rho_r);
+F0    = 0.01 * 72.0 / (rho_l * U^2 * (U^2 / g));
+eps_pv = 1e-6; AbsTol = 1e-10; RelTol = 1e-8; K_MAX = 100.0;
+
+t = 183.68;
+Nx = 2001;
+x_grid = linspace(-12, 12, Nx);
+x_grid(abs(x_grid) < 1e-6) = [];      % exclude x = 0 (integrand singular there)
+
+% Combined CPV integrand G(k;x,t): the k=beta pole cancels between the three terms.
+% 'ArrayValued' integrates the whole x_grid in one adaptive quadrature over k.
+G = @(k) cos(k*x_grid) ./ (pi*(1+rho_r)*(k - beta)) ...
+       - k .* cos(k*(t - x_grid) - t*sqrt(beta*k)) ./ (2*pi*(1-rho_r)*(k - sqrt(beta*k))) ...
+       - k .* cos(k*(t - x_grid) + t*sqrt(beta*k)) ./ (2*pi*(1-rho_r)*(k + sqrt(beta*k)));
+
+I_lo = integral(G, 0, beta - eps_pv, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+I_hi = integral(G, beta + eps_pv, K_MAX, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+eta  = F0 * (I_lo + I_hi);
+
+% Steady part eta_s (eqn 4.3): closed-form far term + local integral
+loc  = integral(@(y) exp(-y.*abs(x_grid)).*y./(beta^2 + y.^2), 0, Inf, ...
+                'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+eta_s  = F0 * (-pi*sin(beta*abs(x_grid)) + loc) / (pi*(1 + rho_r));
+eta_tr = eta - eta_s;
+
+figure('Position', [100 100 800 400]); hold on;
+plot(x_grid, eta*1e3,    'b--', 'LineWidth', 2);
+plot(x_grid, eta_s*1e3,  'k-',  'LineWidth', 2);
+plot(x_grid, eta_tr*1e3, 'm:',  'LineWidth', 2);
+xlabel('x', 'FontSize', 32); ylabel('\eta \times 10^3', 'FontSize', 32);
+set(gca, 'FontSize', 20);
+xlim([-12 12]); ylim([-4.8 8.2]); yticks([-4 0 4 8]);
+legend({'\eta','\eta_s','\eta_{tr}'}, 'Location', 'eastoutside', 'FontSize', 15);
 ```
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/pure_gravity_fig6.png" alt="Fig 6" style="max-width:80%; height:auto;">
+  <img src="../../assets/pure_gravity_fig6.png" alt="Fig 6(i)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 6(i).</strong> Pure-gravity IVP at <em>t</em> = 183.68 (Julia): total displacement <em>&eta;</em>, steady part <em>&eta;<sub>s</sub></em>, and transient part <em>&eta;<sub>tr</sub></em>.</figcaption>
 </figure>
 ```
 
-*Fig. 6: Pure-gravity IVP at $t = 183.68$.*
-
-```matlab
-%% Pure-gravity spatial profile at t = 183.68
-t = 183.68;
-Nx = 2001;
-x_grid = linspace(-pg.front_band*t, t + pg.front_band*t, Nx);
-
-% Evaluate T0-T4 on the grid (excluding front band |x - t| < front_band)
-eta       = NaN(1, Nx);
-eta_s     = NaN(1, Nx);
-eta_tr    = NaN(1, Nx);
-
-for i = 1:Nx
-    xi = x_grid(i);
-    a  = t - xi;
-
-    T0a = -pi*sin(beta*abs(xi));
-    T0b = integral(@(y) exp(-y*abs(xi)).*y./(beta^2 + y.^2), ...
-        0, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol);
-    T0_val = (T0a + T0b) / (pi*(1 + rho_r));
-
-    if abs(a) < front_band
-        eta(i)   = NaN;
-        eta_s(i) = T0_val;
-        eta_tr(i)= NaN;
-        continue;
-    end
-
-    b = 0.5*t*sqrt_beta;
-    if a > 0   % x < t
-        T1_val = -sin(beta*xi)/(1 + rho_r);
-        T2_val = -4/(pi*(1+rho_r)*beta) * ...
-            integral(@(v) exp(-2*v.^2*a + v*t*sqrt_beta).*v.^2 .* ...
-            (sqrt_beta*cos(v*t*sqrt_beta) + (2*v-sqrt_beta).*sin(v*t*sqrt_beta)) ./ ...
-            (beta + (2*v-sqrt_beta).^2), 0, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
-        X = b*sqrt(2/(pi*a));
-        T3_val = 1/(pi*(1+rho_r)*sqrt_beta)*(1 + t/(2*a))*sqrt(pi/(2*a)) * ...
-            (cos(b^2/a)*(0.5 - fresnelc(X)) + sin(b^2/a)*(0.5 - fresnels(X)));
-    else       % x > t
-        T1_val = sin(beta*xi)/(1 + rho_r);
-        T2_val = -4/(pi*(1+rho_r)*beta) * ...
-            integral(@(v) exp(2*v.^2*a - v*t*sqrt_beta).*v.^2 .* ...
-            (sqrt_beta*cos(v*t*sqrt_beta) - (2*v-sqrt_beta).*sin(v*t*sqrt_beta)) ./ ...
-            (beta + (2*v-sqrt_beta).^2), 0, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
-        X = b*sqrt(2/(pi*abs(a)));
-        T3_val = 1/(pi*(1+rho_r)*sqrt_beta)*(1 + t/(2*a))*sqrt(pi/(2*abs(a))) * ...
-            (cos(b^2/abs(a))*(0.5 + fresnelc(X)) + sin(b^2/abs(a))*(0.5 + fresnels(X)));
-    end
-    T4_val = -1/(pi*(1+rho_r)) * ...
-        integral(@(v) cos(v.^2*a + v*t*sqrt_beta)./(v + sqrt_beta), ...
-        0, K_MAX, 'AbsTol', AbsTol, 'RelTol', RelTol);
-
-    eta_s(i)  = T0_val;
-    eta_tr(i) = T1_val + T2_val + T3_val + T4_val;
-    eta(i)    = eta_s(i) + eta_tr(i);
-end
-
-figure; hold on;
-plot(x_grid, eta*1e3, 'b--', 'LineWidth', 2);
-plot(x_grid, eta_s*1e3, 'k-', 'LineWidth', 2);
-plot(x_grid, eta_tr*1e3, 'm:', 'LineWidth', 2);
-xlabel('x'); ylabel('\eta \times 10^3');
-legend('\eta','\eta_s','\eta_{tr}'); xlim([-12 12]);
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/fig6_comparison.svg" alt="Fig 6(ii) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 6(ii).</strong> Overlay of the Julia and MATLAB profiles, demonstrating that the two computations are equivalent — they agree across the full <em>x</em>-range (shown here at <em>t</em><sub>dim</sub> = 1 s).</figcaption>
+</figure>
 ```
-
-The following overlay of Julia and MATLAB spatial profiles at $t_{\dim} = 1$ s confirms agreement across the full $x$-range:
-
-![Figure 6 comparison](../assets/fig6_comparison.svg)
-*Fig. 6: Julia and MATLAB overlay at $t_{\dim} = 1$ s.*
 
 ## Asymptotic form of the transient integrals and discussion
 

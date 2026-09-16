@@ -63,43 +63,74 @@ Unlike the $\alpha=0$ case, it was not possible to obtain closed-form expression
 The integral expressions for $\eta(x,t)$ [eqn. (4.5a) of the manuscript], $\eta_s(x)$ [eqn. (4.5b)], and $\eta_{\mathrm{tr}}(x,t)$ [eqn. (4.5c)] are evaluated numerically using both Julia and MATLAB with the codes provided below, at $x=3$ and $t=110$. The integrals are computed using a numerical Cauchy principal value (CPV) procedure, in which a small neighborhood of width $\epsilon=10^{-6}$ around each pole, $k=k_s$ and $k=k_l$, is excluded from the numerical integration to avoid direct evaluation at the singularities.
 
 ```julia
-using ForcedInterfacialWaves
+using QuadGK
 
-p = compute_cg_parameters()
+# ─── Nondimensional parameters (α > 0) ───
+U, g, T = 26.7046, 981.0, 72.0
+ρₗ, ρᵤ  = 1.0, 0.001
+l_c = U^2 / g
+α   = T / (ρₗ * U^2 * l_c)
+ρᵣ  = ρᵤ / ρₗ
+β   = (1 - ρᵣ) / (1 + ρᵣ)
+γᵨ  = 1 / (1 + ρᵣ)
+F₀  = 0.01 * T / (ρₗ * U^2 * l_c)
 
-# Combined integrand at a single point
-println("I(k=2; x=3, t=110) = ", cg_combined_integrand(2.0, 3.0, 110.0, p))
+# Gravity (kₛ) and capillary (kₗ) roots
+Δ  = (1 + ρᵣ)^2 - 4α * (1 - ρᵣ)
+kₗ = ((1 + ρᵣ) + √Δ) / (2α)
+kₛ = ((1 + ρᵣ) - √Δ) / (2α)
 
-# Partial integrals
-I₁, I₂, I₃ = cg_partial_integrals(3.0, 110.0, p)
+ε, atol, rtol = 1e-6, 1e-10, 1e-8
+x, t = 3.0, 110.0
+
+# Two-fluid dispersion χ(k)
+χ(k) = sqrt(β*k + γᵨ*α*k^3)
+
+# Combined integrand 𝕀(k;x,t): steady (4.5b) + 𝕀₃ + 𝕀₄ (4.5d).
+# Summing before quadrature cancels the poles at kₛ, kₗ.
+function 𝕀(k, x, t)
+    invₚ = 1 / (α * (k - kₗ) * (k - kₛ))          # pole factor
+    inv_d = (1 + ρᵣ) / (1 + α*k^2 - ρᵣ)           # dispersion factor
+    c = χ(k); ph = k*(t - x); tc = t*c
+    2cos(k*x)*invₚ - inv_d*(k + c)*cos(ph - tc)*invₚ - inv_d*(k - c)*cos(ph + tc)*invₚ
+end
+
+println("𝕀(k=2; x=3, t=110) = ", 𝕀(2.0, x, t))
+
+# CPV split around the two removable poles kₛ, kₗ
+I₁ = first(quadgk(k -> 𝕀(k, x, t), 0, kₛ - ε; atol=atol, rtol=rtol))
+I₂ = first(quadgk(k -> 𝕀(k, x, t), kₛ + ε, kₗ - ε; atol=atol, rtol=rtol))
+I₃ = first(quadgk(k -> 𝕀(k, x, t), kₗ + ε, Inf; atol=atol, rtol=rtol, order=15))
 println("I₁ = ", I₁)
 println("I₂ = ", I₂)
 println("I₃ = ", I₃)
 
-# Full IVP and the documented (symmetric) decomposition
-sol = solve(ForcedGCProblem(p, 3.0, 110.0))
-println("η_ivp          = ", sol.η)
-println("η_s (4.5b)     = ", sol.η_steady)
-println("η_transient    = ", sol.η_transient)
+η = -F₀ / (2π) * (I₁ + I₂ + I₃)          # full IVP, eqn (4.5a)
 
-# Separate asymmetric classical steady comparison
-classical = solve(ForcedGCProblem(p, 3.0);
-                  method=steady(rayleigh_dissipation=true))
-println("η_classical    = ", classical.η)
+# Steady η_s (4.5b) via Lamb's G(x): symmetric far-field + local integral (eqn 4.7)
+Gₓ = first(quadgk(k -> cos(k*x)/(k + kₛ) - cos(k*x)/(k + kₗ), 0, Inf; atol=atol, rtol=rtol)) / (kₗ - kₛ)
+η_steady    = F₀/(α*(kₗ - kₛ)) * (-sin(kₛ*abs(x)) + sin(kₗ*abs(x))) + F₀*Gₓ/(π*α)
+η_transient = η - η_steady
 
-# Steady G(x) integral
-println("G(3) = ", cg_Gx_integral(3.0, p))
+println("η_ivp          = ", η)
+println("η_s (4.5b)     = ", η_steady)
+println("η_transient    = ", η_transient)
+
+# Asymmetric classical radiation steady (long-time reference), x > 0
+η_classical = F₀ * (-2/(α*(kₗ - kₛ)) * sin(kₛ*x) + Gₓ/(π*α))
+println("η_classical    = ", η_classical)
+println("G(3) = ", Gₓ)
 ```
 
 ```text
-I(k=2; x=3, t=110) = -2.492590111020123
-I₁ = -10.469830630677311
-I₂ = -3.3709095739316925
-I₃ = 5.152909149338241
-η_ivp          = 0.001920386718354885
+𝕀(k=2; x=3, t=110) = -2.4925901110201236
+I₁ = -10.469830630677315
+I₂ = -3.3709095739317627
+I₃ = 5.152909149338946
+η_ivp          = 0.001920386718354745
 η_s (4.5b)     = -0.0005772670229863901
-η_transient    = 0.002497653741341275
-η_classical    = 0.0018388025677065953
+η_transient    = 0.002497653741341135
+η_classical    = 0.0018388025677065956
 G(3) = 0.011715104659267
 ```
 
@@ -147,8 +178,6 @@ total_integrand = @(k) ...
     - (1.0 + rho_r) * (k - chi(k)) ./ (1.0 - rho_r + alpha * k.^2) .* ...
       cos(k * (t - x) + t * chi(k)) ./ (alpha * (k - k_l) .* (k - k_s));
 
-fprintf('I(k=2; x=3, t=110) = %.12e\n', total_integrand(2));
-
 % Split the CPV integral around the two removable poles
 I1 = integral(total_integrand, 0, k_s - epsilon_pv, ...
     'AbsTol', AbsTol, 'RelTol', RelTol);
@@ -159,11 +188,6 @@ I3 = integral(total_integrand, k_l + epsilon_pv, k_max, ...
 
 eta_ivp = -F0 / (2.0 * pi) * (I1 + I2 + I3);
 
-fprintf('I1      = %.12e\n', I1);
-fprintf('I2      = %.12e\n', I2);
-fprintf('I3      = %.12e\n', I3);
-fprintf('eta_ivp = %.12e\n', eta_ivp);
-
 % Steady solution via Lamb's G(x)
 G_integrand = @(k) cos(k * x) ./ (k + k_s) - cos(k * x) ./ (k + k_l);
 G_x = integral(G_integrand, 0, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol) / ...
@@ -172,183 +196,282 @@ G_x = integral(G_integrand, 0, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol) / ...
 eta_s = F0 / (alpha * (k_l - k_s)) * ...
     (-sin(k_s * abs(x)) + sin(k_l * abs(x))) + ...
     F0 * G_x / (pi * alpha);
+eta_transient = eta_ivp - eta_s;
 
 % Asymmetric classical radiation solution for long-time comparison
 eta_classical = F0 * (-2.0 / (alpha * (k_l - k_s)) * sin(k_s * x) + ...
     G_x / (pi * alpha));
 
-fprintf('G(x)          = %.12e\n', G_x);
-fprintf('eta_s (4.5b)  = %.12e\n', eta_s);
-fprintf('eta_classical = %.12e\n', eta_classical);
+fprintf('I(k=2; x=3, t=110) = %.16g\n', total_integrand(2));
+fprintf('I1 = %.16g\n', I1);
+fprintf('I2 = %.16g\n', I2);
+fprintf('I3 = %.16g\n', I3);
+fprintf('eta_ivp          = %.16g\n', eta_ivp);
+fprintf('eta_s (4.5b)     = %.16g\n', eta_s);
+fprintf('eta_transient    = %.16g\n', eta_transient);
+fprintf('eta_classical    = %.16g\n', eta_classical);
+fprintf('G(3) = %.16g\n', G_x);
 ```
-
-**MATLAB output**
 
 ```text
-I(k=2; x=3, t=110) = -2.492590111020124e+00
-I1      = -1.046983063067731e+01
-I2      = -3.370910573931693e+00
-I3      = 5.152900000000000e+00
-eta_ivp = 1.920390000000000e-03
-G(x)          = 1.171509902934500e-02
-eta_s (4.5b)  = -5.772670229863901e-04
-eta_classical = 1.838802567706595e-03
+I(k=2; x=3, t=110) = -2.492590111020124
+I1 = -10.46983063067731
+I2 = -3.370909573932243
+I3 = 5.152903874765406
+eta_ivp          = 0.001920387884263914
+eta_s (4.5b)     = -0.0005772670409069884
+eta_transient    = 0.002497654925170902
+eta_classical    = 0.001838802549785997
+G(3) = 0.011715099029345
 ```
 
-### Partial integrals ($x=3$, $t=110$)
+The full spatial profile — IVP solution, its steady part, and the transient remainder — reproduces Figure 10 of the manuscript.
 
-| Integral | Julia | MATLAB | Agreement |
-|:---------|------:|-------:|:----------|
-| $I_1$ | `-1.04698e+01` | `-1.04698e+01` | 12+ digits |
-| $I_2$ | `-3.37091e+00` | `-3.37091e+00` | 12 digits |
-| $I_3$ | `5.15291e+00` | `5.15290e+00` | ~5 digits ⚠️ |
-| $\eta_{\mathrm{IVP}}$ | `1.92039e-03` | `1.92039e-03` | 5 digits |
+## $\mathbb{I}_4$ transient (Fig. 7)
 
-!!! note
-    MATLAB's `integral` emits a warning on the $[k_l+\varepsilon,\infty)$ interval, reaching its maximum subdivision limit. Julia's QuadGK (`order=15`) resolves the oscillatory tail more completely. The finite-domain integrals $I_1$, $I_2$ agree to machine precision.
-
-### $G(x)$ and steady solution ($x=3$)
-
-| Quantity | Julia | MATLAB | Agreement |
-|:---------|------:|-------:|:----------|
-| $G(3)$ | `1.171510e-02` | `1.171510e-02` | 5 digits (MATLAB hits interval limit on $[0,\infty)$) |
-| $\eta_s$ from (4.5b) | `-5.772670e-04` | `-5.772670e-04` | 6 digits |
-| $\eta_{\mathrm{classical}}$ | `1.838803e-03` | `1.838803e-03` | 6 digits |
-
-The full spatial profile — IVP solution, its steady part, and the transient remainder — reproduces Figure 10 of the manuscript:
-
-![Figure 10 comparison](../assets/fig10_comparison.svg)
-*Fig. 10: Julia and MATLAB overlay.*
-
-## $\mathbb{I}_4$ transient decay (Fig. 7)
-
-Figure 7 of the manuscript shows the transient component $-\mathbb{I}_4(x,t)/(2\pi)$ at an early time $t = 0.34$, confirming the decay of $\mathbb{I}_4$ as $t\to\infty$.
+Figure 7 of the manuscript shows the transient component $-\mathbb{I}_4(x,t)$ at an early time $t = 0.37$, confirming the decay of $\mathbb{I}_4$ as $t\to\infty$.
 
 ```julia
-using Plots, LaTeXStrings
+using QuadGK, Plots, LaTeXStrings
 
-x_grid = make_cg_xgrid(p; Nx=2001, xlim=(-15.0, 15.0))
-t_I4 = 0.34
-I4 = compute_cg_I4_profile(x_grid, t_I4, p; method=:threaded_vector)
+# Standalone regularized 𝕀₄ profile (eqn 4.5d). The pole at k=β-type roots is
+# cancelled analytically, so 𝕀₄ is a single integral over [0,∞). The integrand
+# factors as amp(k)·[cos(t(k+χ))cos(kx) + sin(t(k+χ))sin(kx)], so one vector-valued
+# quadrature over k serves a whole spatial chunk (χ and the time phase are computed
+# once per node); the grid is split across threads for speed.
+function cg_I4_profile(x_grid, t)
+    U, g, T = 26.7046, 981.0, 72.0
+    ρₗ, ρᵤ  = 1.0, 0.001
+    l_c = U^2 / g
+    α   = T / (ρₗ * U^2 * l_c)
+    ρᵣ  = ρᵤ / ρₗ
+    β   = (1 - ρᵣ) / (1 + ρᵣ)
+    γᵨ  = 1 / (1 + ρᵣ)
+    atol, rtol = 1e-10, 1e-8
+    χ(k) = sqrt(β*k + γᵨ*α*k^3)
 
-plot(x_grid, -(1/(2π)) .* I4 .* 1e3; color="purple",
+    function chunk!(x_chunk)
+        M = length(x_chunk); out = zeros(M)
+        function integrand!(vals, k)
+            k == 0 && (fill!(vals, 0.0); return vals)
+            c = χ(k)
+            amp = k / ((k + c) * (1 + α*k^2 - ρᵣ))
+            s_ph, c_ph = sincos(t*(k + c))
+            @inbounds @simd for i in 1:M
+                s_kx, c_kx = sincos(k * x_chunk[i])
+                vals[i] = amp * (c_ph*c_kx + s_ph*s_kx)
+            end
+            vals
+        end
+        quadgk!(integrand!, out, 0.0, Inf; atol=atol, rtol=rtol, order=15,
+                norm=v->maximum(abs, v))
+        out
+    end
+
+    N = length(x_grid); I4 = Vector{Float64}(undef, N)
+    nchunks = min(Threads.nthreads(), N)
+    clen = cld(N, nchunks)
+    Threads.@threads :static for c in 1:nchunks
+        lo = (c-1)*clen + 1; hi = min(c*clen, N)
+        lo <= hi && copyto!(view(I4, lo:hi), chunk!(view(x_grid, lo:hi)))
+    end
+    return I4
+end
+
+x_grid = collect(range(-15.0, 15.0; length=2001))
+filter!(x -> abs(x) > 1e-12, x_grid)
+t_I4 = 0.37
+I4 = cg_I4_profile(x_grid, t_I4)
+
+plot(x_grid, -I4; color="purple", linewidth=3,
      guidefontsize=16, tickfontsize=14,
-     xlabel=L"x", ylabel=L"\frac{-\mathbb{I}_{4}}{2\pi} \times 10^{3}",
-     xlims=(-10,10), size=(800,400))
-```
-
-```@raw html
-<figure style="text-align:center;">
-  <img src="../../assets/cg_I4_fig7.png" alt="Fig 7" style="max-width:80%; height:auto;">
-</figure>
-```
-
-*Fig. 7: $-\mathbb{I}_4/(2\pi)$ at $t = 0.34$.*
-
-```@raw html
-<figure style="text-align:center;">
-  <img src="../../assets/fig7_overlay.png" alt="Fig 7 overlay" style="max-width:80%; height:auto;">
-  <figcaption>Fig. 7: Julia (line) and MATLAB (markers) overlay.</figcaption>
-</figure>
+     xlabel=L"x", ylabel=L"-\mathbb{I}_{4}",
+     xlims=(-10,10), ylims=(-2,14), size=(800,400))
 ```
 
 ```matlab
-%% I4 component at t = 0.34 (Fig 7)
-t = 0.34;
+%% Standalone regularized I4 profile at t = 0.37 (Fig 7)
+U = 26.7046; g = 981.0; T = 72.0;
+rho_l = 1.0; rho_u = 0.001;
+l_c   = U^2 / g;
+alpha = T / (rho_l * U^2 * l_c);
+rho_r = rho_u / rho_l;
+beta      = (1 - rho_r) / (1 + rho_r);
+gamma_rho = 1 / (1 + rho_r);
+AbsTol = 1e-10; RelTol = 1e-8;
+chi = @(k) sqrt(beta*k + gamma_rho*alpha*k.^3);
+
+t = 0.37;
 x_grid = linspace(-15, 15, 2001);
 x_grid(abs(x_grid) < 1e-12) = [];
 
-I4 = zeros(size(x_grid));
-for i = 1:length(x_grid)
-    xi = x_grid(i);
-    integrand_I4 = @(k) -(1+rho_r)/alpha * ...
-        (k - chi(k)) .* cos(t*(k + chi(k)) - k*xi) ./ ...
-        ((1 + alpha*k.^2 - rho_r) .* (k - k_l) .* (k - k_s));
-    I4(i) = integral(integrand_I4, 0, k_s - epsilon_pv, ...
-        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(integrand_I4, k_s + epsilon_pv, k_l - epsilon_pv, ...
-        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(integrand_I4, k_l + epsilon_pv, Inf, ...
-        'AbsTol', AbsTol, 'RelTol', RelTol);
-end
+% Regularized I4 integrand (pole cancelled): single integral over [0, Inf).
+% 'ArrayValued' integrates the whole x_grid in one adaptive quadrature over k.
+I4_integrand = @(k) (k == 0) * zeros(1, numel(x_grid)) + (k ~= 0) * ...
+    ( k .* cos(t*(k + chi(k)) - k*x_grid) ./ ((k + chi(k)) * (1 + alpha*k^2 - rho_r)) );
+I4 = integral(I4_integrand, 0, Inf, 'ArrayValued', true, ...
+              'AbsTol', AbsTol, 'RelTol', RelTol);
 
 figure;
-plot(x_grid, -(1/(2*pi))*I4, 'Color', [0.5 0 0.5], 'LineWidth', 3);
-xlabel('x'); ylabel('-I_4/(2\pi)');
-xlim([-10 10]); ylim([-10 14]);
+plot(x_grid, -I4, 'Color', [0.5 0 0.5], 'LineWidth', 3);
+xlabel('x'); ylabel('-I_4');
+xlim([-10 10]); ylim([-2 14]);
 ```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/cg_I4_fig7.png" alt="Fig 7(i)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 7(i).</strong> Transient component <em>-&#x1D540;<sub>4</sub></em> at <em>t</em> = 0.37 (Julia).</figcaption>
+</figure>
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/fig7_overlay.png" alt="Fig 7(ii) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 7(ii).</strong> Julia (line) and MATLAB (markers) overlay, demonstrating the two computations are equivalent.</figcaption>
+</figure>
+```
+This is plotted ($t=0.37 profile$) as Fig 7 in the manuscript showing time evolution of $I_4(x, t)$ from eqn. 4.5(d) for $\rho_r = 0.001$ and $\alpha = 0.1389$. 
 
 ## Full IVP profile (Fig. 8)
 
-The capillary–gravity IVP at $t = 367.35$ shows the transient contribution $\eta_{\mathrm{tr}}$ approaching its long-time limit.
+The capillary–gravity IVP has the transient contribution $\eta_{\mathrm{tr}}$. The follwoing code blocks in Julia/MATLAB reproduce the fig. 8 in the manuscript that plots $\eta$ and $\eta_{tr}$ at $t=367.35$
 
 ```julia
-t_fig8 = 367.35
-sol_8 = solve(ForcedGCProblem(p, x_grid, t_fig8); method=IVP())
+using QuadGK, Plots, LaTeXStrings
 
-plot(x_grid, sol_8.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
+# Full CG IVP profile: replicates compute_cg_ivp_profile + compute_cg_steady_profile
+# using the package's :threaded_vector structure. Each thread processes a spatial
+# chunk: IVP η from the combined CPV integrand (eqn 4.5a–d, 3 pole-split quadratures)
+# and steady G(x) for η_s (eqn 4.5b via Lamb's formula) are computed together per chunk.
+function cg_ivp_profile(x_grid, t)
+    U, g, T = 26.7046, 981.0, 72.0
+    ρₗ, ρᵤ  = 1.0, 0.001
+    l_c = U^2 / g
+    α   = T / (ρₗ * U^2 * l_c)
+    ρᵣ  = ρᵤ / ρₗ
+    β   = (1 - ρᵣ) / (1 + ρᵣ)
+    γᵨ  = 1 / (1 + ρᵣ)
+    F₀  = 0.01 * T / (ρₗ * U^2 * l_c)
+    Δ   = (1 + ρᵣ)^2 - 4α * (1 - ρᵣ)
+    kₗ  = ((1 + ρᵣ) + √Δ) / (2α)
+    kₛ  = ((1 + ρᵣ) - √Δ) / (2α)
+    ε, atol, rtol = 1e-6, 1e-10, 1e-8
+    χ(k) = sqrt(β*k + γᵨ*α*k^3)
+
+    N = length(x_grid)
+    η = Vector{Float64}(undef, N)
+    G = Vector{Float64}(undef, N)  # Lamb G(x) for η_s
+
+    nchunks = min(Threads.nthreads(), N); clen = cld(N, nchunks)
+    Threads.@threads :static for ci in 1:nchunks
+        lo = (ci-1)*clen + 1; hi = min(ci*clen, N); lo > hi && continue
+        xc = view(x_grid, lo:hi); M = length(xc)
+
+        # IVP η: combined integrand 𝕀(k;x,t), split at kₛ±ε and kₗ±ε
+        I1 = zeros(M); I2 = zeros(M); I3 = zeros(M)
+        function ivp!(vals, k)
+            c = χ(k); invp = 1/(α*(k-kₗ)*(k-kₛ)); invd = (1+ρᵣ)/(1+α*k^2-ρᵣ)
+            am = invd*(k+c); ap = invd*(k-c)
+            sm, cm = sincos(t*(k-c)); sp, cp = sincos(t*(k+c))
+            cc = 2*invp - (am*cm + ap*cp)*invp
+            sc =        - (am*sm + ap*sp)*invp
+            @inbounds @simd for i in 1:M
+                s_kx, c_kx = sincos(k*xc[i]); vals[i] = cc*c_kx + sc*s_kx
+            end; vals
+        end
+        quadgk!(ivp!, I1, 0.0, kₛ-ε; atol=atol, rtol=rtol, norm=v->maximum(abs,v))
+        quadgk!(ivp!, I2, kₛ+ε, kₗ-ε; atol=atol, rtol=rtol, norm=v->maximum(abs,v))
+        quadgk!(ivp!, I3, kₗ+ε, Inf;   atol=atol, rtol=rtol, order=15, norm=v->maximum(abs,v))
+        @inbounds @simd for i in 1:M; η[lo+i-1] = -F₀/(2π)*(I1[i]+I2[i]+I3[i]); end
+
+        # Steady G(x): Lamb integrand (kₗ−kₛ in denominator already cancelled)
+        Gc = zeros(M)
+        function gint!(vals, k)
+            coeff = (1/(k+kₛ) - 1/(k+kₗ)) / (kₗ - kₛ)
+            @inbounds @simd for i in 1:M; vals[i] = coeff*cos(k*xc[i]); end; vals
+        end
+        quadgk!(gint!, Gc, 0.0, Inf; atol=atol, rtol=rtol, norm=v->maximum(abs,v))
+        copyto!(view(G, lo:hi), Gc)
+    end
+
+    η_s = similar(η)
+    @inbounds @simd for i in 1:N
+        xv = x_grid[i]
+        η_s[i] = F₀/(α*(kₗ-kₛ)) * (-sin(kₛ*abs(xv)) + sin(kₗ*abs(xv))) + F₀*G[i]/(π*α)
+    end
+    return η, η_s, η .- η_s
+end
+
+x_grid = collect(range(-15.0, 15.0; length=2001))
+filter!(x -> abs(x) > 1e-12, x_grid)
+t_fig8 = 367.35
+η, η_s, η_tr = cg_ivp_profile(x_grid, t_fig8)
+
+plot(x_grid, η .* 1e3; label=L"\eta", color="blue", ls=:dash, linewidth=3,
      guidefontsize=16, tickfontsize=14, legendfontsize=14,
      xlabel=L"x", ylabel=L"\eta \times 10^{3}",
      xlims=(-10,10), ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8],
      legend=:outerright, size=(800,400))
-plot!(x_grid, sol_8.η_transient .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
-```
-
-```@raw html
-<figure style="text-align:center;">
-  <img src="../../assets/cg_ivp_fig8.png" alt="Fig 8" style="max-width:80%; height:auto;">
-</figure>
-```
-
-*Fig. 8: Capillary–gravity IVP at $t = 367.35$.*
-
-```@raw html
-<figure style="text-align:center;">
-  <img src="../../assets/fig8_overlay.png" alt="Fig 8 overlay" style="max-width:80%; height:auto;">
-  <figcaption>Fig. 8: Julia (lines) and MATLAB (markers) overlay.</figcaption>
-</figure>
+plot!(x_grid, η_tr .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot, linewidth=3)
 ```
 
 ```matlab
 %% Full CG IVP profile at t = 367.35 (Fig 8)
+U = 26.7046; g = 981.0; T = 72.0;
+rho_l = 1.0; rho_u = 0.001;
+l_c   = U^2 / g;
+alpha = T / (rho_l * U^2 * l_c);
+rho_r = rho_u / rho_l;
+gamma_rho = 1 / (1 + rho_r);
+discriminant = (1 + rho_r)^2 - 4*alpha*(1 - rho_r);
+k_l = ((1 + rho_r) + sqrt(discriminant)) / (2*alpha);
+k_s = ((1 + rho_r) - sqrt(discriminant)) / (2*alpha);
+F0  = 0.01 * T / (rho_l * U^2 * l_c);
+epsilon_pv = 1e-6; AbsTol = 1e-10; RelTol = 1e-8;
+chi = @(k) sqrt((1-rho_r)/(1+rho_r)*k + gamma_rho*alpha*k.^3);
+
+x_grid = linspace(-15, 15, 2001); x_grid(abs(x_grid) < 1e-12) = [];
 t = 367.35;
 
-eta_8     = zeros(size(x_grid));
-eta_s_8   = zeros(size(x_grid));
+% Combined integrand 𝕀(k;x,t) — ArrayValued integrates the whole x_grid at once.
+combined = @(k) ...
+    2*cos(k*x_grid) ./ (alpha*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k + chi(k)).*cos(k*(t - x_grid) - t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k - chi(k)).*cos(k*(t - x_grid) + t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s));
 
-for i = 1:length(x_grid)
-    xi = x_grid(i);
+I_lo = integral(combined, 0, k_s - epsilon_pv, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+I_mi = integral(combined, k_s + epsilon_pv, k_l - epsilon_pv, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+I_hi = integral(combined, k_l + epsilon_pv, Inf, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+eta_8 = -F0/(2*pi) * (I_lo + I_mi + I_hi);
 
-    combined = @(k) ...
-        2*cos(k*xi)./(alpha*(k - k_l).*(k - k_s)) ...
-        - (1+rho_r)*(k + chi(k)).*cos(k*(t-xi) - t*chi(k)) ./ ...
-          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s)) ...
-        - (1+rho_r)*(k - chi(k)).*cos(k*(t-xi) + t*chi(k)) ./ ...
-          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s));
-
-    I_total = integral(combined, 0, k_s-epsilon_pv, ...
-        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(combined, k_s+epsilon_pv, k_l-epsilon_pv, ...
-        'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(combined, k_l+epsilon_pv, Inf, ...
-        'AbsTol', AbsTol, 'RelTol', RelTol);
-
-    eta_8(i) = -F0/(2*pi) * I_total;
-
-    steady_int = @(k) cos(k*xi)./(alpha*(k-k_l).*(k-k_s));
-    eta_s_8(i) = -F0/pi * ( ...
-        integral(steady_int, 0, k_s-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(steady_int, k_s+epsilon_pv, k_l-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(steady_int, k_l+epsilon_pv, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol));
-end
-
+% Steady η_s (eqn 4.5b) via Lamb G(x) — ArrayValued
+G_int = @(k) (cos(k*x_grid)./(k + k_s) - cos(k*x_grid)./(k + k_l)) / (k_l - k_s);
+G_x   = integral(G_int, 0, Inf, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+eta_s_8  = F0/(alpha*(k_l - k_s)) .* (-sin(k_s*abs(x_grid)) + sin(k_l*abs(x_grid))) + F0*G_x/(pi*alpha);
 eta_tr_8 = eta_8 - eta_s_8;
 
 figure; hold on;
-plot(x_grid, eta_8*1e3, 'b--', 'LineWidth', 3);
-plot(x_grid, eta_tr_8*1e3, 'm:', 'LineWidth', 3);
+plot(x_grid, eta_8*1e3,    'b--', 'LineWidth', 3);
+plot(x_grid, eta_tr_8*1e3, 'm:',  'LineWidth', 3);
 xlabel('x'); ylabel('\eta \times 10^3');
-legend('\eta','\eta_{tr}'); xlim([-10 10]);
+legend('\eta', '\eta_{tr}'); xlim([-10 10]);
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/cg_ivp_fig8.png" alt="Fig 8(i)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 8(i).</strong> Capillary–gravity IVP at <em>t</em> = 367.35 (Julia): total displacement <em>&eta;</em> and transient part <em>&eta;<sub>tr</sub></em>.</figcaption>
+</figure>
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/fig8_overlay.png" alt="Fig 8(ii) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 8(ii).</strong> Julia (lines) and MATLAB (markers) overlay, demonstrating the two computations are equivalent.</figcaption>
+</figure>
 ```
 
 ## Comparison with nonlinear simulations (Fig. 10)
@@ -356,73 +479,90 @@ legend('\eta','\eta_{tr}'); xlim([-10 10]);
 The IVP solution is compared against a nonlinear simulation (Basilisk, Navier–Stokes/VOF) at $t_{\dim} = 25$ s. Simulation data are stored in `notebooks/if_25.csv`; valid time indices are $t_{\dim} \in \{1, 3, 7, 15, 25, 60, 145, 300\}$ s.
 
 ```julia
-using DelimitedFiles
+using DelimitedFiles, Plots, LaTeXStrings
+
+# Nondimensional time and length scales (no API)
+U, g = 26.7046, 981.0
+t_c = U / g          # characteristic time [s]
+l_c = U^2 / g        # characteristic length [cm]
 
 t_dim = 25
-t_sim = t_dim / (100 * p.t_c)
+t_sim = t_dim / (100 * t_c)   # nondimensional (data in CGS: 1 cm = l_c)
 
-sol_sim = solve(ForcedGCProblem(p, x_grid, t_sim); method=IVP())
+# IVP η using the same cg_ivp_profile driver as Fig. 8 (defined above)
+x_grid = collect(range(-15.0, 15.0; length=2001)); filter!(x -> abs(x) > 1e-12, x_grid)
+η_sim, _, _ = cg_ivp_profile(x_grid, t_sim)
 
-data = sortslices(
-    readdlm(joinpath(pkgdir(ForcedInterfacialWaves), "notebooks", "if_$(t_dim).csv"), ',', Float64; skipstart=1),
-    dims=1, by=r -> r[6])
-x_bsk = data[:, 6] ./ p.l_c
-y_bsk = data[:, 7] ./ p.l_c
+# Basilisk simulation data: column 6 = x [cm], column 7 = y [cm]
+data  = sortslices(readdlm(joinpath("notebooks", "if_25.csv"), ',', Float64; skipstart=1),
+                   dims=1, by=r -> r[6])
+x_bsk = data[:, 6] ./ l_c
+y_bsk = data[:, 7] ./ l_c
 
-plot(x_grid, sol_sim.η .* 1e3; label=L"\eta", color="blue", ls=:dash,
+plot(x_grid, η_sim .* 1e3; label=L"\eta", color="blue", ls=:dash, linewidth=3,
      guidefontsize=16, tickfontsize=14, legendfontsize=14,
      xlabel=L"x", ylabel=L"\eta \times 10^{3}",
      xlims=(-6,10), ylims=(-6, 8.2), yticks=[-4, 0, 4, 8],
      legend=:outerright, size=(800,400))
-plot!(x_bsk, y_bsk .* 1e3; label="Simulation", color="red", ls=:dot)
-```
-
-```@raw html
-<figure style="text-align:center;">
-  <img src="../../assets/cg_sim_fig10.png" alt="Fig 10" style="max-width:80%; height:auto;">
-</figure>
-```
-
-*Fig. 10: IVP vs nonlinear simulation at $t_{\dim} = 25$ s.*
-
-```@raw html
-<figure style="text-align:center;">
-  <img src="../../assets/fig10_overlay.png" alt="Fig 10 overlay" style="max-width:80%; height:auto;">
-  <figcaption>Fig. 10: Julia (line), MATLAB (markers), and Basilisk simulation overlay.</figcaption>
-</figure>
+plot!(x_bsk, y_bsk .* 1e3; label="Simulation", color="red", ls=:dot, linewidth=3)
 ```
 
 ```matlab
 %% IVP vs nonlinear simulation at t_dim = 25 s (Fig 10)
-t_dim = 25;
-t = t_dim / (100 * t_c);
+U = 26.7046; g = 981.0; T = 72.0;
+rho_l = 1.0; rho_u = 0.001;
+l_c   = U^2 / g;
+t_c   = U / g;
+alpha = T / (rho_l * U^2 * l_c);
+rho_r = rho_u / rho_l;
+gamma_rho = 1 / (1 + rho_r);
+discriminant = (1 + rho_r)^2 - 4*alpha*(1 - rho_r);
+k_l = ((1 + rho_r) + sqrt(discriminant)) / (2*alpha);
+k_s = ((1 + rho_r) - sqrt(discriminant)) / (2*alpha);
+F0  = 0.01 * T / (rho_l * U^2 * l_c);
+epsilon_pv = 1e-6; AbsTol = 1e-10; RelTol = 1e-8;
+chi = @(k) sqrt((1-rho_r)/(1+rho_r)*k + gamma_rho*alpha*k.^3);
 
-% Compute IVP profile (same combined-integrand approach as above)
-eta_sim = zeros(size(x_grid));
-for i = 1:length(x_grid)
-    xi = x_grid(i);
-    combined = @(k) ...
-        2*cos(k*xi)./(alpha*(k-k_l).*(k-k_s)) ...
-        - (1+rho_r)*(k+chi(k)).*cos(k*(t-xi)-t*chi(k)) ./ ...
-          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s)) ...
-        - (1+rho_r)*(k-chi(k)).*cos(k*(t-xi)+t*chi(k)) ./ ...
-          ((1-rho_r+alpha*k.^2).*alpha.*(k-k_l).*(k-k_s));
+x_grid = linspace(-15, 15, 2001); x_grid(abs(x_grid) < 1e-12) = [];
+t_dim  = 25;
+t      = t_dim / (100 * t_c);
 
-    eta_sim(i) = -F0/(2*pi) * ( ...
-        integral(combined, 0, k_s-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(combined, k_s+epsilon_pv, k_l-epsilon_pv, 'AbsTol', AbsTol, 'RelTol', RelTol) + ...
-        integral(combined, k_l+epsilon_pv, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol));
-end
+% IVP η — ArrayValued combined-integrand inversion (same as Fig 8)
+combined = @(k) ...
+    2*cos(k*x_grid) ./ (alpha*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k + chi(k)).*cos(k*(t - x_grid) - t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k - chi(k)).*cos(k*(t - x_grid) + t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s));
 
-% Load simulation data
-data = readmatrix('notebooks/if_25.csv');
-data = sortrows(data, 6);
+I_lo = integral(combined, 0, k_s - epsilon_pv, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+I_mi = integral(combined, k_s + epsilon_pv, k_l - epsilon_pv, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+I_hi = integral(combined, k_l + epsilon_pv, Inf, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
+eta_sim = -F0/(2*pi) * (I_lo + I_mi + I_hi);
+
+% Basilisk simulation data
+data  = readmatrix('notebooks/if_25.csv');
+data  = sortrows(data, 6);
 x_bsk = data(:,6) / l_c;
 y_bsk = data(:,7) / l_c;
 
 figure; hold on;
 plot(x_grid, eta_sim*1e3, 'b--', 'LineWidth', 3);
-plot(x_bsk, y_bsk*1e3, 'r:', 'LineWidth', 3);
+plot(x_bsk,  y_bsk*1e3,  'r:',  'LineWidth', 3);
 xlabel('x'); ylabel('\eta \times 10^3');
 legend('\eta (IVP)', 'Simulation'); xlim([-6 10]);
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/cg_sim_fig10.png" alt="Fig 10(i)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 10(i).</strong> IVP vs nonlinear simulation (Basilisk, Navier–Stokes/VOF) at <em>t</em><sub>dim</sub> = 25 s (Julia).</figcaption>
+</figure>
+```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/fig10_overlay.png" alt="Fig 10(ii) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 10(ii).</strong> Julia (lines), MATLAB (markers), and Basilisk simulation overlay, demonstrating the two computations are equivalent.</figcaption>
+</figure>
 ```

@@ -28,6 +28,5 @@ makedocs(;
             "Pure Gravity"              => "theory/pure_gravity.md",
             "Capillary–Gravity"         => "theory/capillary_gravity.md",
         ],
-        "API Reference"            => "api.md",
     ],
 )
