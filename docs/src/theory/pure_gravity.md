@@ -358,7 +358,18 @@ legend({'\eta','\eta_s','\eta_{tr}'}, 'Location', 'eastoutside', 'FontSize', 15)
 </figure>
 ```
 
-## Asymptotic form of the transient integrals and discussion
+## Asymptotic form of the transient integral(s) and discussion  - section 3.1.1 in the manuscript.
+
+In order to see the transient behaviour of the time-dependent integrals $\mathbb{T}_2(x,t),\mathbb{T}_3(x,t)$ and $\mathbb{T}_4(x,t)$, it is useful to revert to eqns. 3.2(b), (c) in the manuscript which maybe re-written as $\int_0^\infty \frac{k}{k+\sqrt{\beta k}}	\cos\left\{t\left(k+\sqrt{\beta k}\right)-kx \right\}\,dk$ and $\int_0^\infty\frac{k}{k-\sqrt{\beta k}}	\cos\left\{	t\left(k-\sqrt{\beta k}\right)-kx \right\}\,dk$ respectively. It may then be shown using the method of stationary-phase (see [large-time transient-asymptotics proof](../pure_gravity_transient_asymptotic_proof.md)) that for $t\to\infty$:
+
+```math
+\begin{align}
+        \int_0^\infty \frac{k}{k+\sqrt{\beta k}} \cos\left\{t\left(k+\sqrt{\beta k}\right)-kx\right\}\,dk &\sim -\left(\dfrac{60}{\beta^3}\right)t^{-4} \\[8pt]
+        \int_0^\infty \frac{k}{k-\sqrt{\beta k}} \cos\left\{t\left(k-\sqrt{\beta k}\right)-kx\right\}\,dk &\sim 2\pi\beta\sin(\beta x) - \sqrt{\pi\beta}\;t^{-1/2}\cos\left[\frac{\beta(t+x)}{4}-\frac{\pi}{4}\right]
+\end{align}
+```
+
+
 
 Among the three integrals in (4.4c–e), the $t\to\infty$ limit is particularly interesting for $\mathbb{T}_2(x,t)$. For $a\equiv t-x>0$ and in the limit $\beta=1$ (zero density ratio), it decays algebraically as $t^{-1/2}$ at every finite $x$; the other, more general cases may be treated similarly.
 
