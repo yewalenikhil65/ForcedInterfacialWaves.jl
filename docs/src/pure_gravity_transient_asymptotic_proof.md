@@ -838,6 +838,19 @@ For the numerical comparison we take
 
 The original $I_7$ integral is evaluated numerically in the Cauchy principal-value sense by excluding a small symmetric neighbourhood of the pole $k=\beta$.
 
+```@raw html
+<figure style="text-align:center;">
+  <img src="https://raw.githubusercontent.com/yewalenikhil65/ForcedInterfacialWaves.jl/main/docs/src/assets/I7_complete_comparison.png" alt="I7 complete comparison" style="max-width:48%; height:auto;">
+  <img src="https://raw.githubusercontent.com/yewalenikhil65/ForcedInterfacialWaves.jl/main/docs/src/assets/I7_compensated.png" alt="I7 compensated" style="max-width:48%; height:auto;">
+  <figcaption>
+    Numerical verification of the large-time asymptotic behaviour of the singular integral
+    $I_7(x,t)$. Left: numerical CPV evaluation of $I_7(x,t)$ compared with the complete
+    large-time asymptotic approximation. Right: compensated stationary-phase contribution
+    after subtraction of the time-independent pole term.
+  </figcaption>
+</figure>
+```
+
 The resulting asymptotic form gives
 
 ```math
@@ -1404,7 +1417,18 @@ J_8(x,t)
 
 #### Rotation of the integration contour
 
-For $t>x$, consider the quarter-circle contour in the first quadrant shown schematically in the omitted contour figure. The contour consists of the positive real axis, a quarter-circle of radius $R$, and the positive imaginary axis.
+For $t>x$, consider the quarter-circle contour in the first quadrant shown schematically below. The contour consists of the positive real axis, a quarter-circle of radius $R$, and the positive imaginary axis.
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="https://raw.githubusercontent.com/yewalenikhil65/ForcedInterfacialWaves.jl/main/docs/src/assets/I8_contour.png" alt="I8 contour" style="max-width:60%; height:auto;">
+  <figcaption>
+    Quarter-circle contour in the first quadrant used to rotate the integration path for
+    $J_8(x,t)$ from the positive real axis to the positive imaginary axis. The pole at
+    $z=-1$ lies outside the contour.
+  </figcaption>
+</figure>
+```
 
 Writing
 
@@ -1628,6 +1652,20 @@ I_8(x,t)
 ```
 
 This asymptotic comparison further implies
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="https://raw.githubusercontent.com/yewalenikhil65/ForcedInterfacialWaves.jl/main/docs/src/assets/I8_loglog_comparison.png" alt="I8 log-log comparison" style="max-width:48%; height:auto;">
+  <img src="https://raw.githubusercontent.com/yewalenikhil65/ForcedInterfacialWaves.jl/main/docs/src/assets/I8_compensated.png" alt="I8 compensated" style="max-width:48%; height:auto;">
+  <figcaption>
+    Numerical verification of the large-time asymptotic behaviour of $I_8(x,t)$ for
+    $\rho_r=0.001$ and $x=1$, obtained from the contour-rotated representation. Left:
+    log&ndash;log comparison of $\lvert I_8(x,t)\rvert$ with the asymptotic prediction
+    $60/(\beta^3t^4)$. Right: compensated representation $\beta^3t^4 I_8(x,t)$, which
+    approaches $-60$ as $t\to\infty$.
+  </figcaption>
+</figure>
+```
 
 ```math
 \boxed{
