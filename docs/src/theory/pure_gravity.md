@@ -364,43 +364,9 @@ In order to see the transient behaviour of the time-dependent integrals $\mathbb
 
 ```math
 \begin{align}
-        \int_0^\infty \frac{k}{k+\sqrt{\beta k}} \cos\left\{t\left(k+\sqrt{\beta k}\right)-kx\right\}\,dk &\sim -\left(\dfrac{60}{\beta^3}\right)t^{-4} \\[8pt]
+        \int_0^\infty \frac{k}{k+\sqrt{\beta k}} \cos\left\{t\left(k+\sqrt{\beta k}\right)-kx\right\}\,dk &\sim -\left(\dfrac{60}{\beta^3}\right)t^{-4} \nonumber \\[8pt]
         \int_0^\infty \frac{k}{k-\sqrt{\beta k}} \cos\left\{t\left(k-\sqrt{\beta k}\right)-kx\right\}\,dk &\sim 2\pi\beta\sin(\beta x) - \sqrt{\pi\beta}\;t^{-1/2}\cos\left[\frac{\beta(t+x)}{4}-\frac{\pi}{4}\right] \tag{3.5a,b}
 \end{align}
 ```
 
-
-
-Among the three integrals in (4.4c–e), the $t\to\infty$ limit is particularly interesting for $\mathbb{T}_2(x,t)$. For $a\equiv t-x>0$ and in the limit $\beta=1$ (zero density ratio), it decays algebraically as $t^{-1/2}$ at every finite $x$; the other, more general cases may be treated similarly.
-
-At sufficiently large $t\gg1$, the asymptotic form of the cosine integral in $\mathbb{T}_2(x,t\to\infty)$ is obtained from the real part of an integral of the standard form
-
-```math
-\mathbb{I}(t)=\int_0^\infty g(\nu)\exp\!\left[t f(\nu)\right]d\nu,
-\qquad
-f(\nu)=-2\nu^2+\nu+i\nu,
-\qquad
-g(\nu)=\frac{\nu^2}{1+(2\nu-1)^2},
-```
-
-where $\nu$ is continued into the complex plane. The convergence at large time is not immediately apparent because
-
-```math
-\exp\!\left[t f(\nu)\right]
-=\exp(t/8)\,
- \exp\!\left[-t\left\{\left(\sqrt{2}\nu-\frac{1}{2\sqrt{2}}\right)^2-i\nu\right\}\right].
-```
-
-The saddle point is $\nu_0=(1+i)/4$, with $f(\nu_0)=i/4$, $g(\nu_0)=(-1+2i)/20$, and $f''(\nu_0)=-4$. Standard saddle-point integration gives
-
-```math
-\mathbb{I}(t\gg1)
-\sim
-\left(\frac{\pi}{2}\right)^{1/2}
-\left(\frac{-1+2i}{20}\right)t^{-1/2}
-\exp\!\left(\frac{it}{4}\right).
-```
-
-The asymptotic form for the sine term in $\mathbb{T}_2(x,t\to\infty)$ can similarly be obtained by considering the imaginary part of $\mathbb{I}(t)$ with a modified $g(z)$; the algebraic decay of $t^{-1/2}$ is apparent in these results.
-
-For the complete fixed-$x$ asymptotic proof of the two transient integrals, including the pole, stationary-phase, endpoint, and contour-rotation analyses, see the [large-time transient-asymptotics proof](../pure_gravity_transient_asymptotic_proof.md).
+It is clear from these expressions that the slower decay is of the form $t^{-1/2}$. In the [large-time transient-asymptotics proof](../pure_gravity_transient_asymptotic_proof.md) ,comparisons of these asymptotic estimates alongwith numerical solutions to the integrals on the left hand side of eqns. (3.5a, b) are provided.
