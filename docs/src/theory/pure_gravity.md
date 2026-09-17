@@ -364,8 +364,8 @@ In order to see the transient behaviour of the time-dependent integrals $\mathbb
 
 ```math
 \begin{align}
-        \int_0^\infty \frac{k}{k+\sqrt{\beta k}} \cos\left\{t\left(k+\sqrt{\beta k}\right)-kx\right\}\,dk &\sim -\left(\dfrac{60}{\beta^3}\right)t^{-4} \tag{3.5a}\\[8pt]
-        \int_0^\infty \frac{k}{k-\sqrt{\beta k}} \cos\left\{t\left(k-\sqrt{\beta k}\right)-kx\right\}\,dk &\sim 2\pi\beta\sin(\beta x) - \sqrt{\pi\beta}\;t^{-1/2}\cos\left[\frac{\beta(t+x)}{4}-\frac{\pi}{4}\right] \tag{3.5b}
+        \int_0^\infty \frac{k}{k+\sqrt{\beta k}} \cos\left\{t\left(k+\sqrt{\beta k}\right)-kx\right\}\,dk &\sim -\left(\dfrac{60}{\beta^3}\right)t^{-4} \\[8pt]
+        \int_0^\infty \frac{k}{k-\sqrt{\beta k}} \cos\left\{t\left(k-\sqrt{\beta k}\right)-kx\right\}\,dk &\sim 2\pi\beta\sin(\beta x) - \sqrt{\pi\beta}\;t^{-1/2}\cos\left[\frac{\beta(t+x)}{4}-\frac{\pi}{4}\right] \tag{3.5a,b}
 \end{align}
 ```
 
