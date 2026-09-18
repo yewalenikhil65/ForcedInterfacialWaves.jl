@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basilisk setup for forced Capillary-Gravity waves · Interfacial Waves from Pressure Forcing</title><meta name="title" content="Basilisk setup for forced Capillary-Gravity waves · Interfacial Waves from Pressure Forcing"/><meta property="og:title" content="Basilisk setup for forced Capillary-Gravity waves · Interfacial Waves from Pressure Forcing"/><meta property="twitter:title" content="Basilisk setup for forced Capillary-Gravity waves · Interfacial Waves from Pressure Forcing"/><meta name="description" content="Documentation for Interfacial Waves from Pressure Forcing."/><meta property="og:description" content="Documentation for Interfacial Waves from Pressure Forcing."/><meta property="twitter:description" content="Documentation for Interfacial Waves from Pressure Forcing."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/custom.css" rel="stylesheet" type="text/css"/><script src="../../assets/custom.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Interfacial Waves from Pressure Forcing</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Theory</span><ul><li><a class="tocitem" href="../overview/">Overview</a></li><li><a class="tocitem" href="../steady_state/">Steady-State</a></li><li><a class="tocitem" href="../pure_gravity/">Pure Gravity</a></li><li><a class="tocitem" href="../capillary_gravity/">Capillary–Gravity</a></li><li class="is-active"><a class="tocitem" href>Basilisk setup for forced Capillary-Gravity waves</a><ul class="internal"><li><a class="tocitem" href="#Headers"><span>Headers</span></a></li><li><a class="tocitem" href="#Physical-Parameters"><span>Physical Parameters</span></a></li><li><a class="tocitem" href="#Boundary-Conditions"><span>Boundary Conditions</span></a></li><li><a class="tocitem" href="#Main-Function"><span>Main Function</span></a></li><li><a class="tocitem" href="#Event:-Pressure-Forcing-(acceleration)"><span>Event: Pressure Forcing (<code>acceleration</code>)</span></a></li><li><a class="tocitem" href="#Event:-Initial-Condition-(init)"><span>Event: Initial Condition (<code>init</code>)</span></a></li><li><a class="tocitem" href="#Event:-Adaptive-Mesh-Refinement-(adapt)"><span>Event: Adaptive Mesh Refinement (<code>adapt</code>)</span></a></li><li><a class="tocitem" href="#Event:-Output-(dump_i1)"><span>Event: Output (<code>dump_i1</code>)</span></a></li><li><a class="tocitem" href="#Running-the-Simulation"><span>Running the Simulation</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li></ul></li><li><span class="tocitem">Validation</span><ul><li><a class="tocitem" href="../../validation/cfd_conformal_mapping/">Nonlinear-regime : Capillary-Gravity waves evolution</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Theory</a></li><li class="is-active"><a href>Basilisk setup for forced Capillary-Gravity waves</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Basilisk setup for forced Capillary-Gravity waves</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Basilisk-CFD:-Capillary-Gravity-Waves-from-Pressure-Forcing"><a class="docs-heading-anchor" href="#Basilisk-CFD:-Capillary-Gravity-Waves-from-Pressure-Forcing">Basilisk CFD: Capillary-Gravity Waves from Pressure Forcing</a><a id="Basilisk-CFD:-Capillary-Gravity-Waves-from-Pressure-Forcing-1"></a><a class="docs-heading-anchor-permalink" href="#Basilisk-CFD:-Capillary-Gravity-Waves-from-Pressure-Forcing" title="Permalink"></a></h1><p>This page describes the Basilisk<sup class="footnote-reference"><a id="citeref-1" href="#footnote-1" class="footnote-ref">[1]</a><span class="footnote-preview" id="fn-1"></span></sup> simulation used to generate the nonlinear CFD reference data compared against the IVP theory in the <a href="../capillary_gravity/">Capillary–Gravity</a> section (Fig. 10 of the manuscript). The simulation solves the two-phase incompressible Navier–Stokes equations with surface tension for a localized Lorentzian pressure forcing applied at the interface between two fluids in uniform horizontal motion. The simulation is dimensional in CGS units. The full source file is <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/capillary_gravity_forced.c"><code>notebooks/capillary_gravity_forced.c</code></a>.</p><hr/><h2 id="Headers"><a class="docs-heading-anchor" href="#Headers">Headers</a><a id="Headers-1"></a><a class="docs-heading-anchor-permalink" href="#Headers" title="Permalink"></a></h2><pre><code class="language-c hljs">#include &quot;navier-stokes/centered.h&quot;
+#include &quot;two-phase.h&quot;
+#include &quot;reduced.h&quot;
+#include &quot;tension.h&quot;</code></pre><p>The Basilisk headers provide: the cell-centred Navier–Stokes solver (<code>centered.h</code>), the two-phase VOF interface tracking (<code>two-phase.h</code>), the reduced-gravity body-force formulation (<code>reduced.h</code>), and the continuum surface force (CSF) surface tension model (<code>tension.h</code>).</p><hr/><h2 id="Physical-Parameters"><a class="docs-heading-anchor" href="#Physical-Parameters">Physical Parameters</a><a id="Physical-Parameters-1"></a><a class="docs-heading-anchor-permalink" href="#Physical-Parameters" title="Permalink"></a></h2><pre><code class="language-c hljs">#define g_    981.0
+#define rho_w 1.0
+#define rho_a (rho_w/1000.0)
+#define L     75.5996</code></pre><p>The lower (heavier) fluid has density <span>$\rho_l = 1\ \mathrm{g/cm^3}$</span> and the upper (lighter) fluid <span>$\rho_u = 10^{-3}\ \mathrm{g/cm^3}$</span>, giving a density ratio</p><p class="math-container">\[\rho_r = \frac{\rho_u}{\rho_l} = 10^{-3}.\]</p><p>The computational domain is a square of side <span>$L = 75.5996\ \mathrm{cm}$</span>, centred at the origin.</p><hr/><h2 id="Boundary-Conditions"><a class="docs-heading-anchor" href="#Boundary-Conditions">Boundary Conditions</a><a id="Boundary-Conditions-1"></a><a class="docs-heading-anchor-permalink" href="#Boundary-Conditions" title="Permalink"></a></h2><pre><code class="language-c hljs">u.t[top]    = dirichlet(26.7046);
+u.n[top]    = dirichlet(0.);
+
+u.t[bottom] = dirichlet(26.7046);
+u.n[bottom] = dirichlet(0.);
+
+u.n[left]   = dirichlet(26.7046);
+u.t[left]   = dirichlet(0.);
+
+u.n[right]  = dirichlet(26.7046);
+u.t[right]  = dirichlet(0.);
+
+p[right]  = dirichlet(0.);
+pf[right] = dirichlet(0.);
+
+p[left]   = neumann(0.);
+pf[left]  = neumann(0.);
+
+p[top]    = neumann(0.);
+pf[top]   = neumann(0.);
+
+p[bottom]  = neumann(0.);
+pf[bottom] = neumann(0.);
+
+f[left]   = neumann(0.);
+f[right]  = neumann(0.);
+f[top]    = neumann(0.);
+f[bottom] = neumann(0.);</code></pre><p>A uniform horizontal base velocity <span>$U = 26.7046\ \mathrm{cm/s}$</span> is imposed as a Dirichlet condition on the tangential velocity component at all four boundaries. The normal velocity is zero everywhere. The pressure is fixed to zero at the right boundary; zero-normal-gradient (Neumann) conditions are applied at all other boundaries. The volume fraction <span>$f$</span> satisfies Neumann conditions at all boundaries to prevent artificial flux at the domain edges.</p><hr/><h2 id="Main-Function"><a class="docs-heading-anchor" href="#Main-Function">Main Function</a><a id="Main-Function-1"></a><a class="docs-heading-anchor-permalink" href="#Main-Function" title="Permalink"></a></h2><pre><code class="language-c hljs">int main()
+{
+  origin (-L/2., -L/2.);
+
+  G.y = -g_;
+
+  rho1 = rho_w;
+  rho2 = rho_a;
+
+  f.sigma = 72.0;
+
+  size (L);
+  init_grid (256);
+
+  run();
+}</code></pre><p>The domain origin is placed at the domain centre <span>$(-L/2, -L/2)$</span>. Gravity acts downward (<span>$G_y = -981\ \mathrm{cm/s^2}$</span>). The lower-fluid density is <code>rho1</code> <span>$= \rho_l$</span>, the upper-fluid density is <code>rho2</code> <span>$= \rho_u$</span>, and the surface tension coefficient is <span>$T = 72\ \mathrm{dyn/cm}$</span>. The simulation starts on a uniform <span>$256 \times 256$</span> base grid and calls <code>run()</code> to advance through all registered events. The simulation is inviscid (viscosity terms are commented out).</p><hr/><h2 id="Event:-Pressure-Forcing-(acceleration)"><a class="docs-heading-anchor" href="#Event:-Pressure-Forcing-(acceleration)">Event: Pressure Forcing (<code>acceleration</code>)</a><a id="Event:-Pressure-Forcing-(acceleration)-1"></a><a class="docs-heading-anchor-permalink" href="#Event:-Pressure-Forcing-(acceleration)" title="Permalink"></a></h2><pre><code class="language-c hljs">event acceleration (i++)
+{
+  face vector ia = a;
+  scalar pressure_phi[];
+
+  double T_      = 72.0;
+  double prefac_ = 0.01;
+
+  foreach_face(y) {
+
+    double b_ = Delta;
+
+    pressure_phi[] =
+      (prefac_*T_*b_)/(pi*(sq(b_) + sq(x)));
+
+    ia.y[] += alpha.y[]/(fm.y[] + SEPS)*
+      pressure_phi[]*(f[] - f[0,-1])/Delta;
+  }
+}</code></pre><p>A Lorentzian pressure distribution is applied at the interface at every time step:</p><p class="math-container">\[p_e(x) = \frac{F_0}{\pi}\frac{b}{b^2 + x^2}, \qquad F_0 = 0.01\,T.\]</p><p>The half-width <span>$b = \Delta$</span> equals the local grid-cell size. In the limit <span>$b \to 0$</span> this approaches a Dirac delta forcing. The forcing is implemented as an additional acceleration on the vertical face-velocity component, weighted by the VOF gradient <span>$(f[] - f[0,-1])/\Delta$</span> which is non-zero only at the interface — confining the forcing to the two-fluid interface.</p><hr/><h2 id="Event:-Initial-Condition-(init)"><a class="docs-heading-anchor" href="#Event:-Initial-Condition-(init)">Event: Initial Condition (<code>init</code>)</a><a id="Event:-Initial-Condition-(init)-1"></a><a class="docs-heading-anchor-permalink" href="#Event:-Initial-Condition-(init)" title="Permalink"></a></h2><pre><code class="language-c hljs">event init (t = 0)
+{
+  fraction (f, -y);
+  boundary ({f});
+
+  foreach() {
+    u.x[] = 26.7046;
+    u.y[] = 0.;
+  }
+
+  boundary ({u, p});
+}</code></pre><p>The interface is initialized as a flat horizontal surface at <span>$y = 0$</span>: the <code>fraction</code> function sets <span>$f = 1$</span> for <span>$y &lt; 0$</span> (lower fluid) and <span>$f = 0$</span> for <span>$y &gt; 0$</span> (upper fluid). Both fluids start with the uniform horizontal velocity <span>$u_x = U = 26.7046\ \mathrm{cm/s}$</span> and zero vertical velocity <span>$u_y = 0$</span>.</p><hr/><h2 id="Event:-Adaptive-Mesh-Refinement-(adapt)"><a class="docs-heading-anchor" href="#Event:-Adaptive-Mesh-Refinement-(adapt)">Event: Adaptive Mesh Refinement (<code>adapt</code>)</a><a id="Event:-Adaptive-Mesh-Refinement-(adapt)-1"></a><a class="docs-heading-anchor-permalink" href="#Event:-Adaptive-Mesh-Refinement-(adapt)" title="Permalink"></a></h2><pre><code class="language-c hljs">double uemax = 0.001;
+
+#define fErr   (1e-3)
+#define KErr   (1e-6)
+#define VelErr (uemax)
+
+#define MAXLEVEL 13
+
+scalar KAPPA[];
+
+event adapt (i++)
+{
+  curvature (f, KAPPA);
+
+  foreach() {
+    if (KAPPA[] == nodata)
+      KAPPA[] = 0.;
+
+    if (x &lt; -30. || x &gt; 30.)
+      KAPPA[] = 0.;
+  }
+
+  boundary ((scalar *) {KAPPA});
+
+  adapt_wavelet ((scalar *) {f, u.x, u.y, KAPPA},
+                 (double[]) {fErr, VelErr, VelErr, KErr},
+                 MAXLEVEL, 5);
+}</code></pre><p>At every time step, the mesh is adapted using wavelet-based refinement on the volume fraction <span>$f$</span> (threshold <span>$10^{-3}$</span>), both velocity components <span>$u_x$</span>, <span>$u_y$</span> (threshold <span>$10^{-3}$</span>), and the interface curvature <span>$\kappa$</span> (threshold <span>$10^{-6}$</span>). The maximum refinement level is <strong>13</strong> (minimum <strong>5</strong>), corresponding to an effective maximum resolution of <span>$2^{13} = 8192$</span> cells per side. Curvature-based refinement is suppressed for <span>$|x| &gt; 30\ \mathrm{cm}$</span> (the buffer regions near the left and right boundaries), preventing unnecessary refinement far from the active interface region. Cells where the curvature is undefined (<code>nodata</code>) are also set to zero before adaptation.</p><hr/><h2 id="Event:-Output-(dump_i1)"><a class="docs-heading-anchor" href="#Event:-Output-(dump_i1)">Event: Output (<code>dump_i1</code>)</a><a id="Event:-Output-(dump_i1)-1"></a><a class="docs-heading-anchor-permalink" href="#Event:-Output-(dump_i1)" title="Permalink"></a></h2><pre><code class="language-c hljs">event dump_i1 (t = 0; t += 0.01; t &lt;= 5.02)
+{
+  char name4[128];
+  sprintf (name4, &quot;./data/snapshot-%g&quot;, t);
+
+  scalar pid[];
+
+  foreach()
+    pid[] = fmod(pid()*(npe() + 37), npe());
+
+  boundary ({pid});
+
+  dump (name4);
+}</code></pre><p>The complete simulation state is written to <code>./data/snapshot-&lt;t&gt;</code> every <span>$0.01\ \mathrm{s}$</span>, from <span>$t = 0$</span> to <span>$t = 5.02\ \mathrm{s}$</span>. Each dump file contains the full field data (velocity, pressure, volume fraction, and mesh) and can be restarted or post-processed independently. The <code>pid[]</code> scalar records the MPI process ID for each cell, useful for visualizing the domain decomposition in parallel runs. The interface profiles at selected times are extracted from these dump files and stored as <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv"><code>if_1.csv</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv"><code>if_3.csv</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv"><code>if_7.csv</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv"><code>if_15.csv</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv"><code>if_25.csv</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv"><code>if_60.csv</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv"><code>if_145.csv</code></a>, and <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv"><code>if_300.csv</code></a>, used in the <a href="../capillary_gravity/#comparison-with-nonlinear-simulations-fig-10">Capillary–Gravity</a> comparison.</p><hr/><h2 id="Running-the-Simulation"><a class="docs-heading-anchor" href="#Running-the-Simulation">Running the Simulation</a><a id="Running-the-Simulation-1"></a><a class="docs-heading-anchor-permalink" href="#Running-the-Simulation" title="Permalink"></a></h2><pre><code class="language-bash hljs"># Compile (serial)
+qcc -O2 -o capillary_gravity_forced capillary_gravity_forced.c -lm
+mkdir -p data
+./capillary_gravity_forced
+
+# Compile and run in parallel (MPI)
+qcc -O2 -D_MPI=1 -o capillary_gravity_forced capillary_gravity_forced.c -lm
+mpirun -np &lt;N&gt; ./capillary_gravity_forced</code></pre><hr/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Popinet, S., &amp; collaborators. (2013–2026). <em>Basilisk: Free software for solving partial differential equations on adaptive Cartesian meshes</em>. <a href="http://basilisk.fr">http://basilisk.fr</a></li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../capillary_gravity/">« Capillary–Gravity</a><a class="docs-footer-nextpage" href="../../validation/cfd_conformal_mapping/">Nonlinear-regime : Capillary-Gravity waves evolution »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Friday 18 September 2026 13:26">Friday 18 September 2026</span>. Using Julia version 1.13.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

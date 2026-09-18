@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Nonlinear-regime : Capillary-Gravity waves evolution · Interfacial Waves from Pressure Forcing</title><meta name="title" content="Nonlinear-regime : Capillary-Gravity waves evolution · Interfacial Waves from Pressure Forcing"/><meta property="og:title" content="Nonlinear-regime : Capillary-Gravity waves evolution · Interfacial Waves from Pressure Forcing"/><meta property="twitter:title" content="Nonlinear-regime : Capillary-Gravity waves evolution · Interfacial Waves from Pressure Forcing"/><meta name="description" content="Documentation for Interfacial Waves from Pressure Forcing."/><meta property="og:description" content="Documentation for Interfacial Waves from Pressure Forcing."/><meta property="twitter:description" content="Documentation for Interfacial Waves from Pressure Forcing."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/custom.css" rel="stylesheet" type="text/css"/><script src="../../assets/custom.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Interfacial Waves from Pressure Forcing</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Theory</span><ul><li><a class="tocitem" href="../../theory/overview/">Overview</a></li><li><a class="tocitem" href="../../theory/steady_state/">Steady-State</a></li><li><a class="tocitem" href="../../theory/pure_gravity/">Pure Gravity</a></li><li><a class="tocitem" href="../../theory/capillary_gravity/">Capillary–Gravity</a></li><li><a class="tocitem" href="../../theory/basilisk_capillary_gravity/">Basilisk setup for forced Capillary-Gravity waves</a></li></ul></li><li><span class="tocitem">Validation</span><ul><li class="is-active"><a class="tocitem" href>Nonlinear-regime : Capillary-Gravity waves evolution</a><ul class="internal"><li><a class="tocitem" href="#Installation"><span>Installation</span></a></li><li><a class="tocitem" href="#1.-Conformal-Mapping-Formulation-[2]"><span>1. Conformal-Mapping Formulation <sup class="footnote-reference"><a id="citeref-2" href="#footnote-2" class="footnote-ref">[2]</a><span class="footnote-preview" id="fn-2"></span></sup></span></a></li><li><a class="tocitem" href="#2.-Setup-and-Spectral-Helpers"><span>2. Setup and Spectral Helpers</span></a></li><li><a class="tocitem" href="#3.-Steady-Base-State-Initialization-(Pure-Gravity,-B-0)"><span>3. Steady Base State Initialization (Pure Gravity, <span>$B = 0$</span>)</span></a></li><li><a class="tocitem" href="#4.-Physical-Parameters-and-Initial-Condition"><span>4. Physical Parameters and Initial Condition</span></a></li><li><a class="tocitem" href="#5.-ODE-Right-Hand-Side"><span>5. ODE Right-Hand Side</span></a></li><li><a class="tocitem" href="#6.-Time-Integration"><span>6. Time Integration</span></a></li><li><a class="tocitem" href="#7.-Basilisk-CFD-Simulation"><span>7. Basilisk CFD Simulation</span></a></li><li><a class="tocitem" href="#8.-Comparison:-Conformal-IVP-vs-Basilisk"><span>8. Comparison: Conformal IVP vs Basilisk</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Validation</a></li><li class="is-active"><a href>Nonlinear-regime : Capillary-Gravity waves evolution</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Nonlinear-regime : Capillary-Gravity waves evolution</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Evolution-of-capillary-gravity-waves-with-CFD-(Basilisk)-and-unsteady-Conformal-Mapping"><a class="docs-heading-anchor" href="#Evolution-of-capillary-gravity-waves-with-CFD-(Basilisk)-and-unsteady-Conformal-Mapping">Evolution of capillary-gravity waves with CFD (Basilisk) and unsteady Conformal Mapping</a><a id="Evolution-of-capillary-gravity-waves-with-CFD-(Basilisk)-and-unsteady-Conformal-Mapping-1"></a><a class="docs-heading-anchor-permalink" href="#Evolution-of-capillary-gravity-waves-with-CFD-(Basilisk)-and-unsteady-Conformal-Mapping" title="Permalink"></a></h1><p>This page implements  IVP for gravity–capillary waves in deep water using a conformal mapping approach (initialised as pure-gravity Stokes wave), and compares the results against direct numerical simulations from the Basilisk VOF solver.<sup class="footnote-reference"><a id="citeref-1" href="#footnote-1" class="footnote-ref">[1]</a><span class="footnote-preview" id="fn-1"></span></sup> Every FFT and spectral operation is written explicitly using plain <code>FFTW.fft</code>/<code>FFTW.ifft</code> calls.</p><p>The IVP is evolved in a frame co-moving with the steady wave at speed <span>$c = 24$</span> cm/s. The computed surface profiles are compared against Basilisk VOF simulation data from <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data"><code>notebooks/basilisk_gc_ivp/interface_data/</code></a>.</p><p>Physical parameters (CGS): <span>$N = 1024$</span>, <span>$\varepsilon = 0.9$</span>, <span>$c = 24$</span> cm/s, <span>$T = 0.26$</span> s (final simulation time).</p><hr/><h2 id="Installation"><a class="docs-heading-anchor" href="#Installation">Installation</a><a id="Installation-1"></a><a class="docs-heading-anchor-permalink" href="#Installation" title="Permalink"></a></h2><p>Install the required Julia packages from the REPL before running the code on this page:</p><pre><code class="language-julia-repl hljs">julia&gt; using Pkg
+julia&gt; Pkg.add([&quot;FFTW&quot;, &quot;OrdinaryDiffEq&quot;, &quot;OrdinaryDiffEqRosenbrock&quot;, &quot;LinearSolve&quot;,
+                &quot;NonlinearSolve&quot;, &quot;Plots&quot;, &quot;LaTeXStrings&quot;])</code></pre><p>Or equivalently in Pkg mode (press <code>]</code> in the REPL):</p><pre><code class="nohighlight hljs">pkg&gt; add FFTW OrdinaryDiffEq OrdinaryDiffEqRosenbrock LinearSolve NonlinearSolve Plots LaTeXStrings</code></pre><table><tr><th style="text-align: left">Package</th><th style="text-align: left">Purpose</th></tr><tr><td style="text-align: left"><code>FFTW</code></td><td style="text-align: left">Fast Fourier transforms for spectral derivatives</td></tr><tr><td style="text-align: left"><code>OrdinaryDiffEq</code></td><td style="text-align: left">ODE solvers (<code>ODEProblem</code>, <code>solve</code>)</td></tr><tr><td style="text-align: left"><code>OrdinaryDiffEqRosenbrock</code></td><td style="text-align: left">Rosenbrock stiff solver (<code>ROK4a</code>) used for time integration</td></tr><tr><td style="text-align: left"><code>LinearSolve</code></td><td style="text-align: left">Linear solver backend (<code>KrylovJL</code>) for the Rosenbrock method</td></tr><tr><td style="text-align: left"><code>NonlinearSolve</code></td><td style="text-align: left">Root-finding algorithms for the steady-state energy continuation</td></tr></table><hr/><h2 id="1.-Conformal-Mapping-Formulation-[2]"><a class="docs-heading-anchor" href="#1.-Conformal-Mapping-Formulation-[2]">1. Conformal-Mapping Formulation <sup class="footnote-reference"><a id="citeref-2" href="#footnote-2" class="footnote-ref">[2]</a><span class="footnote-preview" id="fn-2"></span></sup></a><a id="1.-Conformal-Mapping-Formulation-[2]-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Conformal-Mapping-Formulation-[2]" title="Permalink"></a></h2><p>We work in the co-moving conformal frame with <span>$\xi \in [-\tfrac{1}{2}, \tfrac{1}{2})$</span>, where the unknowns are the free-surface elevation <span>$Y(\xi, t)$</span> and the velocity potential on the free surface <span>$\varphi(\xi, t)$</span>. The physical horizontal coordinate is recovered via the Hilbert transform:</p><p class="math-container">\[X_\xi = 1 - \mathcal{H}[Y_\xi], \qquad X_{\xi\xi} = -\mathcal{H}[Y_{\xi\xi}],\]</p><p>and the Jacobian of the conformal map is <span>$J = X_\xi^2 + Y_\xi^2$</span>. The stream function satisfies <span>$\psi_\xi = Y_\xi$</span> (kinematic identity), and <span>$\varphi_\xi = -\mathcal{H}[\psi_\xi]$</span> by the Cauchy–Riemann relation.</p><h3 id="Evolution-Equations"><a class="docs-heading-anchor" href="#Evolution-Equations">Evolution Equations</a><a id="Evolution-Equations-1"></a><a class="docs-heading-anchor-permalink" href="#Evolution-Equations" title="Permalink"></a></h3><p>Defining the normal velocity <span>$V = (Y_\xi - \mathcal{H}[\varphi_\xi])/J$</span>, the kinematic and dynamic equations are:</p><p class="math-container">\[\frac{\partial Y}{\partial t} = X_\xi \, V - Y_\xi \, \mathcal{H}[V]\]</p><p class="math-container">\[\frac{\partial \varphi}{\partial t} = \frac{\psi_\xi^2 - \varphi_\xi^2}{2J} - \frac{Y}{F^2} + \frac{B}{F^2} \frac{X_\xi Y_{\xi\xi} - Y_\xi X_{\xi\xi}}{J^{3/2}} + \frac{X_\xi \varphi_\xi}{J} - \varphi_\xi \, \mathcal{H}[V]\]</p><p>where <span>$\psi_\xi = \mathcal{H}[\varphi_\xi]$</span>, <span>$F$</span> is the Froude number, and <span>$B$</span> is the Bond number.</p><hr/><h2 id="2.-Setup-and-Spectral-Helpers"><a class="docs-heading-anchor" href="#2.-Setup-and-Spectral-Helpers">2. Setup and Spectral Helpers</a><a id="2.-Setup-and-Spectral-Helpers-1"></a><a class="docs-heading-anchor-permalink" href="#2.-Setup-and-Spectral-Helpers" title="Permalink"></a></h2><pre><code class="language-julia hljs">using FFTW
+using OrdinaryDiffEq, OrdinaryDiffEqRosenbrock, LinearSolve
+using NonlinearSolve
+using Plots, LaTeXStrings, Printf
+using DelimitedFiles</code></pre><pre><code class="language-julia hljs">const N = 1024
+
+ξ = [(-1/2) + j/N for j in 0:N-1]
+k = [0:(N÷2)-1; 0; (-N÷2)+1:-1]
+d = 2π * im .* k
+h = im .* sign.(k);  h[1] = 0;  h[N÷2+1] = 0
+
+# Readable spectral helpers (allocating, simple)
+deriv(Y)         = real(ifft(d .* fft(Y)))
+deriv2(Y)        = real(ifft(d.^2 .* fft(Y)))
+hilbert(Y)       = real(ifft(h .* fft(Y)))
+hilbert_deriv(Y) = real(ifft(h .* d .* fft(Y)))
+
+function spectral_integrate(f)
+    f̂ = fft(f);  F̂ = f̂ ./ d
+    F̂[1] = 0;  F̂[N÷2+1] = 0
+    return real(ifft(F̂))
+end
+
+# Composite Simpson weights on the endpoint-excluded uniform grid.
+# These match the GravityProblem energy quadrature used for the Basilisk IC.
+function simpson_weights_uniform(ξ)
+    n = length(ξ)
+    Δξ = ξ[2] - ξ[1]
+    w = fill(2 * Δξ / 3, n)
+    w[2:2:n-3] .= 4 * Δξ / 3
+    w[1] = Δξ / 3
+    w[n-2] = 5 * Δξ / 4
+    w[n-1] = Δξ
+    w[n] = 5 * Δξ / 12
+    return w
+end
+
+simpson_w = simpson_weights_uniform(ξ)
+simpson_integral(f) = sum(simpson_w .* f)
+
+println(&quot;Grid: N=$N&quot;)</code></pre><hr/><h2 id="3.-Steady-Base-State-Initialization-(Pure-Gravity,-B-0)"><a class="docs-heading-anchor" href="#3.-Steady-Base-State-Initialization-(Pure-Gravity,-B-0)">3. Steady Base State Initialization (Pure Gravity, <span>$B = 0$</span>)</a><a id="3.-Steady-Base-State-Initialization-(Pure-Gravity,-B-0)-1"></a><a class="docs-heading-anchor-permalink" href="#3.-Steady-Base-State-Initialization-(Pure-Gravity,-B-0)" title="Permalink"></a></h2><p>The IVP initial condition is the steady-state wave profile, computed via <strong>energy continuation</strong> from a small linear seed up to target steepness <span>$\varepsilon = 0.9$</span>. During this phase <span>$B = 0$</span> exactly (pure gravity), so curvature and second-derivative terms in the Bernoulli equation contribute nothing to the residual. The continuation solves the nonlinear system at each <span>$\varepsilon$</span> step using Newton–Raphson, with the previous solution as the initial guess.</p><p>The energy functional (kinetic + potential) is</p><p class="math-container">\[E = \frac{F^2}{2}\int \varphi\,(-\psi_\xi)\,d\xi + \frac{1}{2}\int Y^2 X_\xi\,d\xi,\]</p><p>and <span>$\varepsilon$</span> is defined via <span>$E = \varepsilon \cdot E_{hw}$</span>, where <span>$E_{hw} = 0.00184$</span> is the energy of the steepest Stokes wave<sup class="footnote-reference"><a id="citeref-2" href="#footnote-2" class="footnote-ref">[2]</a><span class="footnote-preview" id="fn-2"></span></sup>. The continuation ramps <span>$\varepsilon$</span> from <span>$10^{-7}$</span> up to <span>$0.9$</span>, producing the Froude number and surface profile used to populate <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/params.h"><code>params.h</code></a> for Basilisk.</p><p>The steady surface profile <span>$Y(\xi)$</span> and <span>$F_{\text{steady}}$</span> from this continuation are used to construct <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/FreeSurface.dat"><code>FreeSurface.dat</code></a> (the dimensional free-surface interface profile <span>$(x, y)$</span>) and <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/velocity_interpolated_below.dat"><code>velocity_interpolated_below.dat</code></a> (the dimensional velocity field sampled just below the interface), which <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c"><code>run_gc_ivp.c</code></a> reads for initialization.</p><pre><code class="language-julia hljs">const Ehw = 0.00184
+
+function gravity_residual!(du, u, ε)
+    Y = u[1:N]
+    F = u[end]
+    F2 = F^2
+
+    Yξ = deriv(Y)
+    Xξ = 1.0 .- hilbert_deriv(Y)
+    J = Xξ.^2 .+ Yξ.^2
+
+    ψξ = Yξ
+    ϕξ = -hilbert(ψξ)
+    ϕ = spectral_integrate(ϕξ)
+    ϕ .-= sum(ϕ .* Xξ) / sum(Xξ)
+
+    for i in 1:N
+        du[i] = -F2 * (Xξ[i] * ϕξ[i] + Yξ[i] * ψξ[i]) / J[i] +
+                F2 * (ϕξ[i]^2 + ψξ[i]^2) / (2 * J[i]) + Y[i]
+    end
+
+    KE = (F2 / 2) * simpson_integral(-ϕ .* ψξ)
+    PE = simpson_integral(Y.^2 .* Xξ) / 2
+    du[N+1] = (KE + PE) / Ehw - ε
+end
+
+Y0 = 1e-5 .* cos.(2π .* ξ)
+F0 = sqrt(1 / (2π))
+u0_steady = vcat(Y0, F0)
+
+ε_target = 0.9
+ε_schedule = Float64[]
+ε = 1e-7
+while ε &lt; 1e-2
+    push!(ε_schedule, ε)
+    ε *= 2
+end
+append!(ε_schedule, 0.01:0.01:min(0.50, ε_target))
+if ε_target &gt; 0.50
+    append!(ε_schedule, 0.52:0.02:ε_target)
+end
+
+println(&quot;Running pure-gravity energy continuation ($(length(ε_schedule)) steps) ...&quot;)
+@time for (step, ε) in enumerate(ε_schedule)
+    prob = NonlinearProblem(gravity_residual!, u0_steady, ε)
+    sol = NonlinearSolve.solve(prob,
+        NewtonRaphson(; autodiff=AutoFiniteDiff());
+        abstol=1e-10, maxiters=100)
+    global u0_steady = sol.u
+    if step % 20 == 0 || step == length(ε_schedule)
+        F_s = sol.u[end]
+        kH2 = (maximum(sol.u[1:N]) - minimum(sol.u[1:N])) * π
+        @printf(&quot;  step %3d: ε=%.2f, F=%.6f, kH/2=%.4f, %s\n&quot;,
+            step, ε, F_s, kH2, sol.retcode)
+    end
+end
+
+Y_steady = u0_steady[1:N]
+F_steady = u0_steady[end]
+@printf(&quot;Steady state: F = %.10f, kH/2 = %.6f\n&quot;, F_steady, (maximum(Y_steady) - minimum(Y_steady)) * π)</code></pre><hr/><h2 id="4.-Physical-Parameters-and-Initial-Condition"><a class="docs-heading-anchor" href="#4.-Physical-Parameters-and-Initial-Condition">4. Physical Parameters and Initial Condition</a><a id="4.-Physical-Parameters-and-Initial-Condition-1"></a><a class="docs-heading-anchor-permalink" href="#4.-Physical-Parameters-and-Initial-Condition" title="Permalink"></a></h2><p>We fix <span>$c = 24$</span> cm/s to match the Basilisk comparison data. The Bond number <span>$B$</span> is derived from the computed wavelength:</p><pre><code class="language-julia hljs">const g_cgs  = 981.0
+const σ_cgs  = 72.0
+const ρ_cgs  = 1.0
+const c_cgs  = 24.0
+
+λ_cm  = c_cgs^2 / (F_steady^2 * g_cgs)
+B_ivp = σ_cgs / (ρ_cgs * g_cgs * λ_cm^2)
+
+@printf(&quot;F = %.10f\n&quot;, F_steady)
+@printf(&quot;λ = %.6f cm\n&quot;, λ_cm)
+@printf(&quot;B = %.10f\n&quot;, B_ivp)
+@printf(&quot;c = %.1f cm/s\n&quot;, c_cgs)
+
+# Reconstruct ϕ from the steady kinematic relation
+ϕξ_steady = -hilbert(deriv(Y_steady))
+ϕ_steady  = spectral_integrate(ϕξ_steady)
+Xξ_steady = 1.0 .- hilbert_deriv(Y_steady)
+ϕ_steady .-= sum(ϕ_steady .* Xξ_steady) / sum(Xξ_steady)
+
+u0_ivp = vcat(Y_steady, ϕ_steady)
+println(&quot;IVP state: 2×$N = $(length(u0_ivp))&quot;)</code></pre><hr/><h2 id="5.-ODE-Right-Hand-Side"><a class="docs-heading-anchor" href="#5.-ODE-Right-Hand-Side">5. ODE Right-Hand Side</a><a id="5.-ODE-Right-Hand-Side-1"></a><a class="docs-heading-anchor-permalink" href="#5.-ODE-Right-Hand-Side" title="Permalink"></a></h2><p>Readable, allocating RHS — every line corresponds directly to the conformal-mapping equations in §1:</p><pre><code class="language-julia hljs">function gc_rhs!(du, u, p, t)
+    F, B = p
+    Y = u[1:N];  ϕ = u[N+1:2N]
+
+    Yξ   = deriv(Y)
+    Yξξ  = deriv2(Y)
+    Xξ   = 1.0 .- hilbert_deriv(Y)
+    Xξξ  = -hilbert(deriv2(Y))
+    J    = Xξ.^2 .+ Yξ.^2
+
+    ϕξ  = deriv(ϕ)
+    ψξ  = hilbert(ϕξ)
+
+    V  = (Yξ .- ψξ) ./ J
+    HV = hilbert(V)
+
+    # Kinematic
+    du[1:N] .= Xξ .* V .- Yξ .* HV
+
+    # Dynamic
+    F2 = F^2
+    curvature = (Xξ .* Yξξ .- Yξ .* Xξξ) ./ J.^(3/2)
+    du[N+1:2N] .= (ψξ.^2 .- ϕξ.^2) ./ (2 .* J) .-
+        Y ./ F2 .+ (B / F2) .* curvature .+
+        Xξ .* ϕξ ./ J .- ϕξ .* HV
+end</code></pre><hr/><h2 id="6.-Time-Integration"><a class="docs-heading-anchor" href="#6.-Time-Integration">6. Time Integration</a><a id="6.-Time-Integration-1"></a><a class="docs-heading-anchor-permalink" href="#6.-Time-Integration" title="Permalink"></a></h2><pre><code class="language-julia hljs">T_phys   = 0.26     # s
+Δt_save  = 0.01     # s
+τ_per_s  = c_cgs / λ_cm
+τ_final  = τ_per_s * T_phys
+τ_save   = τ_per_s .* collect(0:Δt_save:T_phys)
+t_phys   = collect(0:Δt_save:T_phys)
+
+println(&quot;Integrating for $T_phys s ($(length(τ_save)) snapshots) ...&quot;)
+
+f_ivp = ODEFunction(gc_rhs!)
+prob  = ODEProblem(f_ivp, u0_ivp, (0.0, τ_final), (F_steady, B_ivp))
+
+@time sol = solve(prob, ROK4a(autodiff=AutoFiniteDiff(), linsolve=KrylovJL());
+    saveat=τ_save, abstol=1e-11, reltol=1e-11, maxiters=10^7)
+
+println(&quot;Solver: $(sol.retcode), $(length(sol.u)) snapshots&quot;)</code></pre><hr/><h2 id="7.-Basilisk-CFD-Simulation"><a class="docs-heading-anchor" href="#7.-Basilisk-CFD-Simulation">7. Basilisk CFD Simulation</a><a id="7.-Basilisk-CFD-Simulation-1"></a><a class="docs-heading-anchor-permalink" href="#7.-Basilisk-CFD-Simulation" title="Permalink"></a></h2><p>The following commands require <a href="http://basilisk.fr/">Basilisk</a> to be installed. All source files are in <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp"><code>notebooks/basilisk_gc_ivp/</code></a>.</p><p><strong>Prerequisites:</strong> <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/FreeSurface.dat"><code>FreeSurface.dat</code></a> (dimensional free-surface interface profile) and <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/velocity_interpolated_below.dat"><code>velocity_interpolated_below.dat</code></a> (dimensional velocity field just below the interface) must be present in <code>notebooks/basilisk_gc_ivp/</code> before running — these are generated from the conformal mapping steady-state solution above.</p><h3 id="[run_gc_ivp.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c)"><a class="docs-heading-anchor" href="#[run_gc_ivp.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c)"><a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c"><code>run_gc_ivp.c</code></a></a><a id="[run_gc_ivp.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c)-1"></a><a class="docs-heading-anchor-permalink" href="#[run_gc_ivp.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c)" title="Permalink"></a></h3><p>Reads <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/FreeSurface.dat"><code>FreeSurface.dat</code></a> and <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/velocity_interpolated_below.dat"><code>velocity_interpolated_below.dat</code></a> for initialization, then writes Basilisk dumps to <code>dumpfile/dump-*</code> and interface facets directly to <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data"><code>interface_data/interface-*.dat</code></a>.</p><pre><code class="language-bash hljs"># Compile and run the Basilisk IVP solver (serial)
+qcc -O2 -o run_gc_ivp run_gc_ivp.c -lm
+./run_gc_ivp</code></pre><h3 id="[extract.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/extract.c)"><a class="docs-heading-anchor" href="#[extract.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/extract.c)"><a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/extract.c"><code>extract.c</code></a></a><a id="[extract.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/extract.c)-1"></a><a class="docs-heading-anchor-permalink" href="#[extract.c](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/extract.c)" title="Permalink"></a></h3><p>Converts <code>dumpfile/dump-*</code> snapshots to VTU format, generating <code>vtufiles/series.pvd</code> for visualization in ParaView.</p><pre><code class="language-bash hljs"># Post-process: Basilisk dumps → VTU files
+qcc -O2 -o extract extract.c -lm
+./extract</code></pre><h3 id="[vtu_to_interface_dat.py](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/vtu_to_interface_dat.py)"><a class="docs-heading-anchor" href="#[vtu_to_interface_dat.py](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/vtu_to_interface_dat.py)"><a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/vtu_to_interface_dat.py"><code>vtu_to_interface_dat.py</code></a></a><a id="[vtu_to_interface_dat.py](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/vtu_to_interface_dat.py)-1"></a><a class="docs-heading-anchor-permalink" href="#[vtu_to_interface_dat.py](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/vtu_to_interface_dat.py)" title="Permalink"></a></h3><p>Extracts the interface contour <span>$(x,\,y)$</span> from each VTU snapshot and writes it to <code>interface_data/interface-*.dat</code>. Requires <a href="https://www.paraview.org/download/">ParaView</a> with <code>pvpython</code> support. This step is optional if <code>run_gc_ivp.c</code> has already written the interface facets directly.</p><pre><code class="language-bash hljs"># Post-process: VTU → interface geometry DAT files
+# Replace &lt;path_to_pvpython&gt; with the pvpython executable from your ParaView installation
+# e.g.  /usr/bin/pvpython                                        (Linux)
+#       /opt/paraview/bin/pvpython                               (Linux, custom install)
+#       /Applications/ParaView-X.Y.Z.app/Contents/bin/pvpython  (macOS)
+
+&lt;path_to_pvpython&gt; vtu_to_interface_dat.py \
+       vtufiles/series.pvd \
+       --output-dir interface_data \
+       --overwrite</code></pre><p>The resulting <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data"><code>interface_data/interface-*.dat</code></a> files contain the PLIC (Piecewise Linear Interface Construction) facet endpoints used for comparison below.</p><hr/><h2 id="8.-Comparison:-Conformal-IVP-vs-Basilisk"><a class="docs-heading-anchor" href="#8.-Comparison:-Conformal-IVP-vs-Basilisk">8. Comparison: Conformal IVP vs Basilisk</a><a id="8.-Comparison:-Conformal-IVP-vs-Basilisk-1"></a><a class="docs-heading-anchor-permalink" href="#8.-Comparison:-Conformal-IVP-vs-Basilisk" title="Permalink"></a></h2><p>The native Basilisk <code>output_facets()</code> files are read from <code>interface_data/interface-&lt;index&gt;.dat</code>. Each non-blank line is a PLIC facet endpoint <span>$(x, y)$</span>; blank lines separate facets. They are plotted as adaptive-grid scatter points without profile resampling.</p><pre><code class="language-julia hljs">basilisk_interface_dir = joinpath(@__DIR__, &quot;basilisk_gc_ivp&quot;, &quot;interface_data&quot;)
+
+function read_basilisk_facet_endpoints(path::AbstractString)
+    endpoints = NTuple{2, Float64}[]
+    for raw in eachline(path)
+        line = strip(raw)
+        isempty(line) &amp;&amp; continue
+        values = split(line)
+        length(values) == 2 || error(&quot;Invalid Basilisk facet line in $path: $raw&quot;)
+        push!(endpoints, (parse(Float64, values[1]), parse(Float64, values[2])))
+    end
+    isempty(endpoints) &amp;&amp; error(&quot;No Basilisk facet endpoints in $path&quot;)
+    return endpoints
+end
+
+basilisk_endpoints = Dict{Int, Vector{NTuple{2, Float64}}}()
+for idx in 0:length(t_phys)-1
+    path = joinpath(basilisk_interface_dir, &quot;interface-$idx.dat&quot;)
+    if isfile(path)
+        basilisk_endpoints[idx] = read_basilisk_facet_endpoints(path)
+    end
+end
+
+println(&quot;Loaded $(length(basilisk_endpoints)) direct Basilisk facet snapshots&quot;)</code></pre><p>The animation overlays the conformal IVP solution (blue) with the native Basilisk PLIC facet endpoints (red), matched by snapshot index and physical time:</p><pre><code class="language-julia hljs">function surface_lab(u, t_s)
+    Y = u[1:N]
+    x_co = λ_cm .* (ξ .- hilbert(Y))
+    return x_co .+ c_cgs * t_s, λ_cm .* Y
+end
+
+anim = @animate for (frame, (u, t_s)) in enumerate(zip(sol.u, t_phys))
+    idx = frame - 1
+    x, y = surface_lab(u, t_s)
+
+    p = plot(;
+        xlims=(-λ_cm, λ_cm),
+        xlabel=L&quot;x \; [\mathrm{cm}]&quot;,
+        ylabel=L&quot;\eta \; [\mathrm{cm}]&quot;,
+        title=@sprintf(&quot; t=%.2f s&quot;, t_s),
+        legend=:topright,
+    )
+
+    for m in -2:2
+        plot!(p, x .+ m * λ_cm, y;
+            color=:blue, linewidth=2,
+            label=(m == -2 ? &quot;Unsteady Conformal map&quot; : false))
+    end
+
+    if haskey(basilisk_endpoints, idx)
+        endpoints = basilisk_endpoints[idx]
+        scatter!(p, [point[1] for point in endpoints], [point[2] for point in endpoints];
+            color=:red, markersize=1.2, markerstrokewidth=0,
+            label=&quot;Basilisk Sim&quot;)
+    end
+    p
+end
+
+gif(anim, &quot;gc_ivp_comparison.gif&quot;; fps=5)</code></pre><figure style="text-align:center;">
+  <img src="../../assets/gc_ivp_comparison.gif" alt="Conformal IVP vs Basilisk animation" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;">
+    Animation of the conformal mapping IVP solution (blue) overlaid with native Basilisk
+    PLIC facet endpoints (red), at matching snapshot times over $T = 0.26$ s.
+  </figcaption>
+</figure><hr/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Popinet, S., &amp; collaborators. (2013–2026). <em>Basilisk: Free software for solving partial differential equations on adaptive Cartesian meshes</em>. <a href="http://basilisk.fr">http://basilisk.fr</a></li><li class="footnote" id="footnote-2"><a class="tag is-link" href="#citeref-2">2</a>Shelton, J., Milewski, P., &amp; Trinh, P. H. (2021). On the structure of steady parasitic gravity-capillary waves in the small surface tension limit. <em>Journal of Fluid Mechanics</em>, <strong>922</strong>, A16. <a href="https://doi.org/10.1017/jfm.2021.507">https://doi.org/10.1017/jfm.2021.507</a></li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../theory/basilisk_capillary_gravity/">« Basilisk setup for forced Capillary-Gravity waves</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Friday 18 September 2026 13:26">Friday 18 September 2026</span>. Using Julia version 1.13.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Capillary–Gravity · Interfacial Waves from Pressure Forcing</title><meta name="title" content="Capillary–Gravity · Interfacial Waves from Pressure Forcing"/><meta property="og:title" content="Capillary–Gravity · Interfacial Waves from Pressure Forcing"/><meta property="twitter:title" content="Capillary–Gravity · Interfacial Waves from Pressure Forcing"/><meta name="description" content="Documentation for Interfacial Waves from Pressure Forcing."/><meta property="og:description" content="Documentation for Interfacial Waves from Pressure Forcing."/><meta property="twitter:description" content="Documentation for Interfacial Waves from Pressure Forcing."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/custom.css" rel="stylesheet" type="text/css"/><script src="../../assets/custom.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Interfacial Waves from Pressure Forcing</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Theory</span><ul><li><a class="tocitem" href="../overview/">Overview</a></li><li><a class="tocitem" href="../steady_state/">Steady-State</a></li><li><a class="tocitem" href="../pure_gravity/">Pure Gravity</a></li><li class="is-active"><a class="tocitem" href>Capillary–Gravity</a><ul class="internal"><li><a class="tocitem" href="#Formulation"><span>Formulation</span></a></li><li><a class="tocitem" href="#Numerical-evaluation"><span>Numerical evaluation</span></a></li><li><a class="tocitem" href="#\\mathbb{I}_4-transient-(Fig.-7)"><span><span>$\mathbb{I}_4$</span> transient (Fig. 7)</span></a></li><li><a class="tocitem" href="#Full-IVP-profile-(Fig.-8)"><span>Full IVP profile (Fig. 8)</span></a></li><li><a class="tocitem" href="#Comparison-with-nonlinear-simulations-(Fig.-10)"><span>Comparison with nonlinear simulations (Fig. 10)</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li><li><a class="tocitem" href="../basilisk_capillary_gravity/">Basilisk setup for forced Capillary-Gravity waves</a></li></ul></li><li><span class="tocitem">Validation</span><ul><li><a class="tocitem" href="../../validation/cfd_conformal_mapping/">Nonlinear-regime : Capillary-Gravity waves evolution</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Theory</a></li><li class="is-active"><a href>Capillary–Gravity</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Capillary–Gravity</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Capillary–Gravity-(Manuscript-§4.2)"><a class="docs-heading-anchor" href="#Capillary–Gravity-(Manuscript-§4.2)">Capillary–Gravity (Manuscript §4.2)</a><a id="Capillary–Gravity-(Manuscript-§4.2)-1"></a><a class="docs-heading-anchor-permalink" href="#Capillary–Gravity-(Manuscript-§4.2)" title="Permalink"></a></h1><p>With surface tension present (<span>$\alpha &gt; 0$</span>), both gravity and capillary restoring forces act on the interface. The dispersion relation gains a cubic term, producing two distinct real poles <span>$k_s$</span> (gravity root) and <span>$k_l$</span> (capillary root). The key numerical technique is combining all integrand contributions so that the singularities cancel <em>before</em> quadrature.</p><h2 id="Formulation"><a class="docs-heading-anchor" href="#Formulation">Formulation</a><a id="Formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Formulation" title="Permalink"></a></h2><p>We now turn to the case of <span>$\alpha&gt;0$</span>. As <span>$\rho_r&lt;1$</span>, we have both capillary and gravitational forces. For this case, eqn. (3.8) of the manuscript can be rewritten as (Note that the integrals in eqn.(3.8) are folded onto the positive k-axis to get rid of the <span>$|k|$</span> terms),</p><p class="math-container">\[\eta(x,t) = \eta_s(x)+\eta_{\mathrm{tr}}(x,t) \tag{4.5a}\]</p><p>where,</p><p class="math-container">\[\frac{\eta_s(x)}{F_0} \equiv -\frac{1}{\pi}\int_0^\infty dk\;\frac{\cos(kx)}{\alpha (k-k_l)(k-k_s)} \tag{4.5b}\]</p><p class="math-container">\[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0} \equiv -\frac{1}{2\pi}\left[\mathbb{I}_3(x,t)+\mathbb{I}_4(x,t)\right] \tag{4.5c}\]</p><p class="math-container">\[\mathbb{I}_{3,4}(x,t) \equiv -\frac{1+\rho_r}{\alpha}\int_0^\infty dk\,\frac{\left(k\pm\chi(k)\right)\cos\left[t\left(k\mp\chi(k)\right)-kx\right]}{\left(1+\alpha k^2-\rho_r\right)\left(k-k_l\right)\left(k-k_s\right)} \tag{4.5d}\]</p><p>Summing the steady term (4.5b) and both transient terms (4.5d) into a single combined integrand before quadrature cancels the poles at <span>$k_s,k_l$</span> analytically, leaving a smooth function to integrate numerically. The combined integrand is then split into three pieces around the (now removable) singularities at <span>$k_s$</span> and <span>$k_l$</span> and integrated separately. The symmetric <span>$\eta_s$</span> from (4.5b) is used as the steady part; the transient remainder is <span>$\eta-\eta_s$</span>.</p><p>The asymmetric classical radiation solution is a separate steady reference, representing the long-time limit of the full IVP solution after the transient contribution has decayed and supplied the asymmetric cancellation described below. It can be obtained either from the full time-dependent decomposition by tracking the asymmetric cancellation, or directly as the time-independent profile via the Rayleigh dissipation approach.</p><p class="math-container">\[\chi(k) \equiv \sqrt{\beta k+\frac{\alpha}{1+\rho_r}k^3},\]</p><p class="math-container">\[k_{l,s} = \frac{1+\rho_r}{2\alpha}\left[1\pm\sqrt{1-\frac{4\alpha\beta}{1+\rho_r}}\right].\]</p><p>Similar to the previous section (<span>$\alpha=0$</span> case), the interface shape due to the time-independent response <span>$\eta_s(x)$</span>, given by eqn. (4.5b), is also symmetric about <span>$x=0$</span>, (see the <a href="../../steady_proof/">Steady-state proof</a>). Note that eqn. (4.5b) is identical to eqn. (3.9) of the manuscript after excluding all terms arising from the Dirac delta function. This symmetric response is shown by the black solid curve in panel (a) of Figure 8 of the manuscript.</p><p>We now turn to a formal demonstration of the asymmetric cancellations about <span>$x=0$</span> as <span>$t\rightarrow\infty$</span>. The expression for <span>$\eta_s(x)$</span> in eqn. (4.5b), after application of principal-value techniques, may be written as (see the <a href="../../steady_proof/">Steady-state proof</a>):</p><p class="math-container">\[\frac{\eta_s(x)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_s|x|)+\sin(k_l|x|)\right] + \frac{k_l+k_s}{\alpha\pi}\int_0^\infty dy\,\frac{y\exp\left(-|x|y\right)}{\left(y^2+k_l^2\right)\left(y^2+k_s^2\right)} \tag{4.7}\]</p><p>The second, integral term above is <span>$G(x)$</span> (up to the prefactor); it is evaluated numerically in the code section below.</p><p>After lengthy calculations involving contour integration and stationary-phase approximation (see the <a href="../../capillary_gravity_asymmetric_cancellation/">Capillary-gravity asymmetric cancellation proof</a>), we may show that</p><p class="math-container">\[\frac{\eta_{\mathrm{tr}}(x,t\rightarrow\infty)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_sx)-\sin(k_lx)\right], \quad x\in(-\infty,\infty). \tag{4.8}\]</p><p>This contribution to the steady state essentially stems from the term <span>$\mathbb{I}_3(x,t)$</span> in eqn. (4.5d), whereas the term <span>$\mathbb{I}_4(x,t)$</span> in the same equation tends to zero as <span>$t\rightarrow\infty$</span>. Figure 7 of the manuscript confirms this decay for large time, <span>$t\gg1$</span>.</p><p>The sum of eqns. (4.7) and (4.8) yields the final form of the steady-state interface at all <span>$x$</span>. The asymmetric cancellation in <span>$\eta(x,t\rightarrow\infty)=\eta_s(x)+\eta_{\mathrm{tr}}(x,t\rightarrow\infty)$</span>, upstream (<span>$x&lt;0$</span>) and downstream (<span>$x&gt;0$</span>) of the forcing, may readily be observed by comparing these expressions. We reiterate that the short waves for <span>$x&lt;0$</span> and the long waves for <span>$x&gt;0$</span> seen at steady state result from this cancellation.</p><p>Unlike the <span>$\alpha=0$</span> case, it was not possible to obtain closed-form expressions in terms of real integrals for the <span>$\eta_{\mathrm{tr}}(x,t)$</span> terms in eqn. (4.5d). Hence, we have evaluated these integrals directly numerically in the principal-value sense around the pole(s).</p><h2 id="Numerical-evaluation"><a class="docs-heading-anchor" href="#Numerical-evaluation">Numerical evaluation</a><a id="Numerical-evaluation-1"></a><a class="docs-heading-anchor-permalink" href="#Numerical-evaluation" title="Permalink"></a></h2><p>The integral expressions for <span>$\eta(x,t)$</span> [eqn. (4.5a) of the manuscript], <span>$\eta_s(x)$</span> [eqn. (4.5b)], and <span>$\eta_{\mathrm{tr}}(x,t)$</span> [eqn. (4.5c)] are evaluated numerically using both Julia and MATLAB with the codes provided below, at <span>$x=3$</span> and <span>$t=110$</span>. The integrals are computed using a numerical Cauchy principal value (CPV) procedure, in which a small neighborhood of width <span>$\epsilon=10^{-6}$</span> around each pole, <span>$k=k_s$</span> and <span>$k=k_l$</span>, is excluded from the numerical integration to avoid direct evaluation at the singularities.</p><pre><code class="language-julia hljs">using QuadGK
+
+# ─── Nondimensional parameters (α &gt; 0) ───
+U, g, T = 26.7046, 981.0, 72.0
+ρₗ, ρᵤ  = 1.0, 0.001
+l_c = U^2 / g
+α   = T / (ρₗ * U^2 * l_c)
+ρᵣ  = ρᵤ / ρₗ
+β   = (1 - ρᵣ) / (1 + ρᵣ)
+γᵨ  = 1 / (1 + ρᵣ)
+F₀  = 0.01 * T / (ρₗ * U^2 * l_c)
+
+# Gravity (kₛ) and capillary (kₗ) roots
+Δ  = (1 + ρᵣ)^2 - 4α * (1 - ρᵣ)
+kₗ = ((1 + ρᵣ) + √Δ) / (2α)
+kₛ = ((1 + ρᵣ) - √Δ) / (2α)
+
+ε, atol, rtol = 1e-6, 1e-10, 1e-8
+x, t = 3.0, 110.0
+
+# Two-fluid dispersion χ(k)
+χ(k) = sqrt(β*k + γᵨ*α*k^3)
+
+# Combined integrand 𝕀(k;x,t): steady (4.5b) + 𝕀₃ + 𝕀₄ (4.5d).
+# Summing before quadrature cancels the poles at kₛ, kₗ.
+function 𝕀(k, x, t)
+    invₚ = 1 / (α * (k - kₗ) * (k - kₛ))          # pole factor
+    inv_d = (1 + ρᵣ) / (1 + α*k^2 - ρᵣ)           # dispersion factor
+    c = χ(k); ph = k*(t - x); tc = t*c
+    2cos(k*x)*invₚ - inv_d*(k + c)*cos(ph - tc)*invₚ - inv_d*(k - c)*cos(ph + tc)*invₚ
+end
+
+println(&quot;𝕀(k=2; x=3, t=110) = &quot;, 𝕀(2.0, x, t))
+
+# CPV split around the two removable poles kₛ, kₗ
+I₁ = first(quadgk(k -&gt; 𝕀(k, x, t), 0, kₛ - ε; atol=atol, rtol=rtol))
+I₂ = first(quadgk(k -&gt; 𝕀(k, x, t), kₛ + ε, kₗ - ε; atol=atol, rtol=rtol))
+I₃ = first(quadgk(k -&gt; 𝕀(k, x, t), kₗ + ε, Inf; atol=atol, rtol=rtol, order=15))
+println(&quot;I₁ = &quot;, I₁)
+println(&quot;I₂ = &quot;, I₂)
+println(&quot;I₃ = &quot;, I₃)
+
+η = -F₀ / (2π) * (I₁ + I₂ + I₃)          # full IVP, eqn (4.5a)
+
+# Steady η_s (4.5b) via G(x): symmetric far-field + local integral (eqn 4.7)
+Gₓ = first(quadgk(k -&gt; cos(k*x)/(k + kₛ) - cos(k*x)/(k + kₗ), 0, Inf; atol=atol, rtol=rtol)) / (kₗ - kₛ)
+η_steady    = F₀/(α*(kₗ - kₛ)) * (-sin(kₛ*abs(x)) + sin(kₗ*abs(x))) + F₀*Gₓ/(π*α)
+η_transient = η - η_steady
+
+println(&quot;η_ivp          = &quot;, η)
+println(&quot;η_s (4.5b)     = &quot;, η_steady)
+println(&quot;η_transient    = &quot;, η_transient)
+
+# Asymmetric classical radiation steady (long-time reference), x &gt; 0
+η_classical = F₀ * (-2/(α*(kₗ - kₛ)) * sin(kₛ*x) + Gₓ/(π*α))
+println(&quot;η_classical    = &quot;, η_classical)
+println(&quot;G(3) = &quot;, Gₓ)</code></pre><pre><code class="language-text hljs">𝕀(k=2; x=3, t=110) = -2.4925901110201236
+I₁ = -10.469830630677315
+I₂ = -3.3709095739317627
+I₃ = 5.152909149338946
+η_ivp          = 0.001920386718354745
+η_s (4.5b)     = -0.0005772670229863901
+η_transient    = 0.002497653741341135
+η_classical    = 0.0018388025677065956
+G(3) = 0.011715104659267</code></pre><pre><code class="language-matlab hljs">%% Two-fluid capillary-gravity IVP via CPV integration
+U     = 26.7046;   % Base flow speed [cm/s]
+g     = 981.0;     % Gravitational acceleration [cm/s^2]
+T     = 72.0;      % Surface tension [dyn/cm]
+rho_l = 1.0;       % Lower-fluid density [g/cm^3]
+rho_u = 0.001;     % Upper-fluid density [g/cm^3]
+
+% Characteristic scales and nondimensional parameters
+l_c   = U^2 / g;
+alpha = T / (rho_l * U^2 * l_c);
+rho_r = rho_u / rho_l;
+beta      = (1.0 - rho_r) / (1.0 + rho_r);
+gamma_rho = 1.0 / (1.0 + rho_r);
+
+% Gravity and capillary wave roots
+discriminant = (1.0 + rho_r)^2 - 4.0 * alpha * (1.0 - rho_r);
+k_l = ((1.0 + rho_r) + sqrt(discriminant)) / (2.0 * alpha);
+k_s = ((1.0 + rho_r) - sqrt(discriminant)) / (2.0 * alpha);
+
+F0 = 0.01 * T / (rho_l * U^2 * l_c);
+
+% Quadrature parameters
+epsilon_pv = 1.0e-6;
+AbsTol     = 1.0e-10;
+RelTol     = 1.0e-8;
+k_max      = Inf;
+
+% Evaluation point and time
+x = 3.0;
+t = 110.0;
+
+% Two-fluid dispersion function
+chi = @(k) sqrt(beta * k + gamma_rho * alpha * k.^3);
+
+% Combined integrand: steady term + two transient terms.
+% Summing before integration cancels the poles at k_s, k_l.
+total_integrand = @(k) ...
+    2.0 * cos(k * x) ./ (alpha * (k - k_l) .* (k - k_s)) ...
+    - (1.0 + rho_r) * (k + chi(k)) ./ (1.0 - rho_r + alpha * k.^2) .* ...
+      cos(k * (t - x) - t * chi(k)) ./ (alpha * (k - k_l) .* (k - k_s)) ...
+    - (1.0 + rho_r) * (k - chi(k)) ./ (1.0 - rho_r + alpha * k.^2) .* ...
+      cos(k * (t - x) + t * chi(k)) ./ (alpha * (k - k_l) .* (k - k_s));
+
+% Split the CPV integral around the two removable poles
+I1 = integral(total_integrand, 0, k_s - epsilon_pv, ...
+    &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+I2 = integral(total_integrand, k_s + epsilon_pv, k_l - epsilon_pv, ...
+    &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+I3 = integral(total_integrand, k_l + epsilon_pv, k_max, ...
+    &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+
+eta_ivp = -F0 / (2.0 * pi) * (I1 + I2 + I3);
+
+% Steady solution via G(x)
+G_integrand = @(k) cos(k * x) ./ (k + k_s) - cos(k * x) ./ (k + k_l);
+G_x = integral(G_integrand, 0, Inf, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol) / ...
+    (k_l - k_s);
+
+eta_s = F0 / (alpha * (k_l - k_s)) * ...
+    (-sin(k_s * abs(x)) + sin(k_l * abs(x))) + ...
+    F0 * G_x / (pi * alpha);
+eta_transient = eta_ivp - eta_s;
+
+% Asymmetric classical radiation solution for long-time comparison
+eta_classical = F0 * (-2.0 / (alpha * (k_l - k_s)) * sin(k_s * x) + ...
+    G_x / (pi * alpha));
+
+fprintf(&#39;I(k=2; x=3, t=110) = %.16g\n&#39;, total_integrand(2));
+fprintf(&#39;I1 = %.16g\n&#39;, I1);
+fprintf(&#39;I2 = %.16g\n&#39;, I2);
+fprintf(&#39;I3 = %.16g\n&#39;, I3);
+fprintf(&#39;eta_ivp          = %.16g\n&#39;, eta_ivp);
+fprintf(&#39;eta_s (4.5b)     = %.16g\n&#39;, eta_s);
+fprintf(&#39;eta_transient    = %.16g\n&#39;, eta_transient);
+fprintf(&#39;eta_classical    = %.16g\n&#39;, eta_classical);
+fprintf(&#39;G(3) = %.16g\n&#39;, G_x);</code></pre><pre><code class="language-text hljs">I(k=2; x=3, t=110) = -2.492590111020124
+I1 = -10.46983063067731
+I2 = -3.370909573932243
+I3 = 5.152903874765406
+eta_ivp          = 0.001920387884263914
+eta_s (4.5b)     = -0.0005772670409069884
+eta_transient    = 0.002497654925170902
+eta_classical    = 0.001838802549785997
+G(3) = 0.011715099029345</code></pre><p>The full spatial profile — IVP solution, its steady part, and the transient remainder — reproduces Figure 10 of the manuscript.</p><h2 id="\\mathbb{I}_4-transient-(Fig.-7)"><a class="docs-heading-anchor" href="#\\mathbb{I}_4-transient-(Fig.-7)"><span>$\mathbb{I}_4$</span> transient (Fig. 7)</a><a id="\\mathbb{I}_4-transient-(Fig.-7)-1"></a><a class="docs-heading-anchor-permalink" href="#\\mathbb{I}_4-transient-(Fig.-7)" title="Permalink"></a></h2><p>Figure 7 of the manuscript shows the transient component <span>$-\mathbb{I}_4(x,t)$</span> at an early time <span>$t = 0.37$</span>, confirming the decay of <span>$\mathbb{I}_4$</span> as <span>$t\to\infty$</span>.</p><pre><code class="language-julia hljs">using QuadGK, Plots, LaTeXStrings
+
+# Standalone regularized 𝕀₄ profile (eqn 4.5d). The pole at k=β-type roots is
+# cancelled analytically, so 𝕀₄ is a single integral over [0,∞). The integrand
+# factors as amp(k)·[cos(t(k+χ))cos(kx) + sin(t(k+χ))sin(kx)], so one vector-valued
+# quadrature over k serves a whole spatial chunk (χ and the time phase are computed
+# once per node); the grid is split across threads for speed.
+function cg_I4_profile(x_grid, t)
+    U, g, T = 26.7046, 981.0, 72.0
+    ρₗ, ρᵤ  = 1.0, 0.001
+    l_c = U^2 / g
+    α   = T / (ρₗ * U^2 * l_c)
+    ρᵣ  = ρᵤ / ρₗ
+    β   = (1 - ρᵣ) / (1 + ρᵣ)
+    γᵨ  = 1 / (1 + ρᵣ)
+    atol, rtol = 1e-10, 1e-8
+    χ(k) = sqrt(β*k + γᵨ*α*k^3)
+
+    function chunk!(x_chunk)
+        M = length(x_chunk); out = zeros(M)
+        function integrand!(vals, k)
+            k == 0 &amp;&amp; (fill!(vals, 0.0); return vals)
+            c = χ(k)
+            amp = k / ((k + c) * (1 + α*k^2 - ρᵣ))
+            s_ph, c_ph = sincos(t*(k + c))
+            @inbounds @simd for i in 1:M
+                s_kx, c_kx = sincos(k * x_chunk[i])
+                vals[i] = amp * (c_ph*c_kx + s_ph*s_kx)
+            end
+            vals
+        end
+        quadgk!(integrand!, out, 0.0, Inf; atol=atol, rtol=rtol, order=15,
+                norm=v-&gt;maximum(abs, v))
+        out
+    end
+
+    N = length(x_grid); I4 = Vector{Float64}(undef, N)
+    nchunks = min(Threads.nthreads(), N)
+    clen = cld(N, nchunks)
+    Threads.@threads :static for c in 1:nchunks
+        lo = (c-1)*clen + 1; hi = min(c*clen, N)
+        lo &lt;= hi &amp;&amp; copyto!(view(I4, lo:hi), chunk!(view(x_grid, lo:hi)))
+    end
+    return I4
+end
+
+x_grid = collect(range(-15.0, 15.0; length=2001))
+filter!(x -&gt; abs(x) &gt; 1e-12, x_grid)
+t_I4 = 0.37
+I4 = cg_I4_profile(x_grid, t_I4)
+
+plot(x_grid, -I4; color=&quot;purple&quot;, linewidth=3,
+     guidefontsize=16, tickfontsize=14,
+     xlabel=L&quot;x&quot;, ylabel=L&quot;-\mathbb{I}_{4}&quot;,
+     xlims=(-10,10), ylims=(-2,14), size=(800,400))</code></pre><pre><code class="language-matlab hljs">%% Standalone regularized I4 profile at t = 0.37 (Fig 7)
+U = 26.7046; g = 981.0; T = 72.0;
+rho_l = 1.0; rho_u = 0.001;
+l_c   = U^2 / g;
+alpha = T / (rho_l * U^2 * l_c);
+rho_r = rho_u / rho_l;
+beta      = (1 - rho_r) / (1 + rho_r);
+gamma_rho = 1 / (1 + rho_r);
+AbsTol = 1e-10; RelTol = 1e-8;
+chi = @(k) sqrt(beta*k + gamma_rho*alpha*k.^3);
+
+t = 0.37;
+x_grid = linspace(-15, 15, 2001);
+x_grid(abs(x_grid) &lt; 1e-12) = [];
+
+% Regularized I4 integrand (pole cancelled): single integral over [0, Inf).
+% &#39;ArrayValued&#39; integrates the whole x_grid in one adaptive quadrature over k.
+I4_integrand = @(k) (k == 0) * zeros(1, numel(x_grid)) + (k ~= 0) * ...
+    ( k .* cos(t*(k + chi(k)) - k*x_grid) ./ ((k + chi(k)) * (1 + alpha*k^2 - rho_r)) );
+I4 = integral(I4_integrand, 0, Inf, &#39;ArrayValued&#39;, true, ...
+              &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+
+figure;
+plot(x_grid, -I4, &#39;Color&#39;, [0.5 0 0.5], &#39;LineWidth&#39;, 3);
+xlabel(&#39;x&#39;); ylabel(&#39;-I_4&#39;);
+xlim([-10 10]); ylim([-2 14]);</code></pre><figure style="text-align:center;">
+  <img src="../../assets/cg_I4_fig7.png" alt="Fig 7(i)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 7(i).</strong> Transient component <em>-&#x1D540;<sub>4</sub></em> at <em>t</em> = 0.37 (Julia).</figcaption>
+</figure><figure style="text-align:center;">
+  <img src="../../assets/fig7_overlay.png" alt="Fig 7(ii) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 7(ii).</strong> Julia (line) and MATLAB (markers) overlay, demonstrating the two computations are equivalent.</figcaption>
+</figure><p>This is plotted (<span>$t=0.37 profile$</span>) as Fig 7 in the manuscript showing time evolution of <span>$I_4(x, t)$</span> from eqn. 4.5(d) for <span>$\rho_r = 0.001$</span> and <span>$\alpha = 0.1389$</span>. </p><h2 id="Full-IVP-profile-(Fig.-8)"><a class="docs-heading-anchor" href="#Full-IVP-profile-(Fig.-8)">Full IVP profile (Fig. 8)</a><a id="Full-IVP-profile-(Fig.-8)-1"></a><a class="docs-heading-anchor-permalink" href="#Full-IVP-profile-(Fig.-8)" title="Permalink"></a></h2><p>The capillary–gravity IVP has the transient contribution <span>$\eta_{\mathrm{tr}}$</span>. The follwoing code blocks in Julia/MATLAB reproduce the fig. 8 in the manuscript that plots <span>$\eta$</span> and <span>$\eta_{tr}$</span> at <span>$t=367.35$</span></p><pre><code class="language-julia hljs">using QuadGK, Plots, LaTeXStrings
+
+# Full CG IVP profile: combined CPV integrand (eqn 4.5a–d, 3 pole-split quadratures)
+# and G(x) for η_s (eqn 4.5b) are computed per spatial chunk across threads.
+function cg_ivp_profile(x_grid, t)
+    U, g, T = 26.7046, 981.0, 72.0
+    ρₗ, ρᵤ  = 1.0, 0.001
+    l_c = U^2 / g
+    α   = T / (ρₗ * U^2 * l_c)
+    ρᵣ  = ρᵤ / ρₗ
+    β   = (1 - ρᵣ) / (1 + ρᵣ)
+    γᵨ  = 1 / (1 + ρᵣ)
+    F₀  = 0.01 * T / (ρₗ * U^2 * l_c)
+    Δ   = (1 + ρᵣ)^2 - 4α * (1 - ρᵣ)
+    kₗ  = ((1 + ρᵣ) + √Δ) / (2α)
+    kₛ  = ((1 + ρᵣ) - √Δ) / (2α)
+    ε, atol, rtol = 1e-6, 1e-10, 1e-8
+    χ(k) = sqrt(β*k + γᵨ*α*k^3)
+
+    N = length(x_grid)
+    η = Vector{Float64}(undef, N)
+    G = Vector{Float64}(undef, N)  # G(x) for η_s
+
+    nchunks = min(Threads.nthreads(), N); clen = cld(N, nchunks)
+    Threads.@threads :static for ci in 1:nchunks
+        lo = (ci-1)*clen + 1; hi = min(ci*clen, N); lo &gt; hi &amp;&amp; continue
+        xc = view(x_grid, lo:hi); M = length(xc)
+
+        # IVP η: combined integrand 𝕀(k;x,t), split at kₛ±ε and kₗ±ε
+        I1 = zeros(M); I2 = zeros(M); I3 = zeros(M)
+        function ivp!(vals, k)
+            c = χ(k); invp = 1/(α*(k-kₗ)*(k-kₛ)); invd = (1+ρᵣ)/(1+α*k^2-ρᵣ)
+            am = invd*(k+c); ap = invd*(k-c)
+            sm, cm = sincos(t*(k-c)); sp, cp = sincos(t*(k+c))
+            cc = 2*invp - (am*cm + ap*cp)*invp
+            sc =        - (am*sm + ap*sp)*invp
+            @inbounds @simd for i in 1:M
+                s_kx, c_kx = sincos(k*xc[i]); vals[i] = cc*c_kx + sc*s_kx
+            end; vals
+        end
+        quadgk!(ivp!, I1, 0.0, kₛ-ε; atol=atol, rtol=rtol, norm=v-&gt;maximum(abs,v))
+        quadgk!(ivp!, I2, kₛ+ε, kₗ-ε; atol=atol, rtol=rtol, norm=v-&gt;maximum(abs,v))
+        quadgk!(ivp!, I3, kₗ+ε, Inf;   atol=atol, rtol=rtol, order=15, norm=v-&gt;maximum(abs,v))
+        @inbounds @simd for i in 1:M; η[lo+i-1] = -F₀/(2π)*(I1[i]+I2[i]+I3[i]); end
+
+        # Steady G(x): Lamb integrand (kₗ−kₛ in denominator already cancelled)
+        Gc = zeros(M)
+        function gint!(vals, k)
+            coeff = (1/(k+kₛ) - 1/(k+kₗ)) / (kₗ - kₛ)
+            @inbounds @simd for i in 1:M; vals[i] = coeff*cos(k*xc[i]); end; vals
+        end
+        quadgk!(gint!, Gc, 0.0, Inf; atol=atol, rtol=rtol, norm=v-&gt;maximum(abs,v))
+        copyto!(view(G, lo:hi), Gc)
+    end
+
+    η_s = similar(η)
+    @inbounds @simd for i in 1:N
+        xv = x_grid[i]
+        η_s[i] = F₀/(α*(kₗ-kₛ)) * (-sin(kₛ*abs(xv)) + sin(kₗ*abs(xv))) + F₀*G[i]/(π*α)
+    end
+    return η, η_s, η .- η_s
+end
+
+x_grid = collect(range(-15.0, 15.0; length=2001))
+filter!(x -&gt; abs(x) &gt; 1e-12, x_grid)
+t_fig8 = 367.35
+η, η_s, η_tr = cg_ivp_profile(x_grid, t_fig8)
+
+plot(x_grid, η .* 1e3; label=L&quot;\eta&quot;, color=&quot;blue&quot;, ls=:dash, linewidth=3,
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L&quot;x&quot;, ylabel=L&quot;\eta \times 10^{3}&quot;,
+     xlims=(-10,10), ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8],
+     legend=:outerright, size=(800,400))
+plot!(x_grid, η_tr .* 1e3; label=L&quot;\eta_{tr}&quot;, color=&quot;magenta&quot;, ls=:dot, linewidth=3)</code></pre><pre><code class="language-matlab hljs">%% Full CG IVP profile at t = 367.35 (Fig 8)
+U = 26.7046; g = 981.0; T = 72.0;
+rho_l = 1.0; rho_u = 0.001;
+l_c   = U^2 / g;
+alpha = T / (rho_l * U^2 * l_c);
+rho_r = rho_u / rho_l;
+gamma_rho = 1 / (1 + rho_r);
+discriminant = (1 + rho_r)^2 - 4*alpha*(1 - rho_r);
+k_l = ((1 + rho_r) + sqrt(discriminant)) / (2*alpha);
+k_s = ((1 + rho_r) - sqrt(discriminant)) / (2*alpha);
+F0  = 0.01 * T / (rho_l * U^2 * l_c);
+epsilon_pv = 1e-6; AbsTol = 1e-10; RelTol = 1e-8;
+chi = @(k) sqrt((1-rho_r)/(1+rho_r)*k + gamma_rho*alpha*k.^3);
+
+x_grid = linspace(-15, 15, 2001); x_grid(abs(x_grid) &lt; 1e-12) = [];
+t = 367.35;
+
+% Combined integrand 𝕀(k;x,t) — ArrayValued integrates the whole x_grid at once.
+combined = @(k) ...
+    2*cos(k*x_grid) ./ (alpha*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k + chi(k)).*cos(k*(t - x_grid) - t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k - chi(k)).*cos(k*(t - x_grid) + t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s));
+
+I_lo = integral(combined, 0, k_s - epsilon_pv, &#39;ArrayValued&#39;, true, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+I_mi = integral(combined, k_s + epsilon_pv, k_l - epsilon_pv, &#39;ArrayValued&#39;, true, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+I_hi = integral(combined, k_l + epsilon_pv, Inf, &#39;ArrayValued&#39;, true, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+eta_8 = -F0/(2*pi) * (I_lo + I_mi + I_hi);
+
+% Steady η_s (eqn 4.5b) via Lamb G(x) — ArrayValued
+G_int = @(k) (cos(k*x_grid)./(k + k_s) - cos(k*x_grid)./(k + k_l)) / (k_l - k_s);
+G_x   = integral(G_int, 0, Inf, &#39;ArrayValued&#39;, true, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+eta_s_8  = F0/(alpha*(k_l - k_s)) .* (-sin(k_s*abs(x_grid)) + sin(k_l*abs(x_grid))) + F0*G_x/(pi*alpha);
+eta_tr_8 = eta_8 - eta_s_8;
+
+figure; hold on;
+plot(x_grid, eta_8*1e3,    &#39;b--&#39;, &#39;LineWidth&#39;, 3);
+plot(x_grid, eta_tr_8*1e3, &#39;m:&#39;,  &#39;LineWidth&#39;, 3);
+xlabel(&#39;x&#39;); ylabel(&#39;\eta \times 10^3&#39;);
+legend(&#39;\eta&#39;, &#39;\eta_{tr}&#39;); xlim([-10 10]);</code></pre><figure style="text-align:center;">
+  <img src="../../assets/cg_ivp_fig8.png" alt="Fig 8(i)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 8(i).</strong> Capillary–gravity IVP at <em>t</em> = 367.35 (Julia): total displacement <em>&eta;</em> and transient part <em>&eta;<sub>tr</sub></em>.</figcaption>
+</figure><figure style="text-align:center;">
+  <img src="../../assets/fig8_overlay.png" alt="Fig 8(ii) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 8(ii).</strong> Julia (lines) and MATLAB (markers) overlay, demonstrating the two computations are equivalent.</figcaption>
+</figure><h2 id="Comparison-with-nonlinear-simulations-(Fig.-10)"><a class="docs-heading-anchor" href="#Comparison-with-nonlinear-simulations-(Fig.-10)">Comparison with nonlinear simulations (Fig. 10)</a><a id="Comparison-with-nonlinear-simulations-(Fig.-10)-1"></a><a class="docs-heading-anchor-permalink" href="#Comparison-with-nonlinear-simulations-(Fig.-10)" title="Permalink"></a></h2><p>The IVP solution is compared against a nonlinear simulation using Basilisk<sup class="footnote-reference"><a id="citeref-1" href="#footnote-1" class="footnote-ref">[1]</a><span class="footnote-preview" id="fn-1"></span></sup> (Navier–Stokes/VOF) at <span>$t_{\dim} = 25$</span> s. Details of the CFD setup — domain, pressure forcing, boundary conditions, and mesh refinement — are described in the <a href="../basilisk_capillary_gravity/">Basilisk CFD Setup</a> page. The interface profile data extracted from Basilisk are stored as CSV files in <code>notebooks/</code>; the file used here is <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv"><code>notebooks/if_25.csv</code></a>. Data are available for <span>$t_{\dim} \in \{$</span><a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv"><code>1</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv"><code>3</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv"><code>7</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv"><code>15</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv"><code>25</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv"><code>60</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv"><code>145</code></a>, <a href="https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv"><code>300</code></a><span>$\}$</span> s.</p><pre><code class="language-julia hljs">using DelimitedFiles, Plots, LaTeXStrings
+
+# Nondimensional time and length scales (no API)
+U, g = 26.7046, 981.0
+t_c = U / g          # characteristic time [s]
+l_c = U^2 / g        # characteristic length [cm]
+
+t_dim = 25
+t_sim = t_dim / (100 * t_c)   # nondimensional (data in CGS: 1 cm = l_c)
+
+# IVP η using the same cg_ivp_profile driver as Fig. 8 (defined above)
+x_grid = collect(range(-15.0, 15.0; length=2001)); filter!(x -&gt; abs(x) &gt; 1e-12, x_grid)
+η_sim, _, _ = cg_ivp_profile(x_grid, t_sim)
+
+# Basilisk simulation data: column 6 = x [cm], column 7 = y [cm]
+data  = sortslices(readdlm(joinpath(&quot;notebooks&quot;, &quot;if_25.csv&quot;), &#39;,&#39;, Float64; skipstart=1),
+                   dims=1, by=r -&gt; r[6])
+x_bsk = data[:, 6] ./ l_c
+y_bsk = data[:, 7] ./ l_c
+
+plot(x_grid, η_sim .* 1e3; label=L&quot;\eta&quot;, color=&quot;blue&quot;, ls=:dash, linewidth=3,
+     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+     xlabel=L&quot;x&quot;, ylabel=L&quot;\eta \times 10^{3}&quot;,
+     xlims=(-6,10), ylims=(-6, 8.2), yticks=[-4, 0, 4, 8],
+     legend=:outerright, size=(800,400))
+plot!(x_bsk, y_bsk .* 1e3; label=&quot;Simulation&quot;, color=&quot;red&quot;, ls=:dot, linewidth=3)</code></pre><pre><code class="language-matlab hljs">%% IVP vs nonlinear simulation at t_dim = 25 s (Fig 10)
+U = 26.7046; g = 981.0; T = 72.0;
+rho_l = 1.0; rho_u = 0.001;
+l_c   = U^2 / g;
+t_c   = U / g;
+alpha = T / (rho_l * U^2 * l_c);
+rho_r = rho_u / rho_l;
+gamma_rho = 1 / (1 + rho_r);
+discriminant = (1 + rho_r)^2 - 4*alpha*(1 - rho_r);
+k_l = ((1 + rho_r) + sqrt(discriminant)) / (2*alpha);
+k_s = ((1 + rho_r) - sqrt(discriminant)) / (2*alpha);
+F0  = 0.01 * T / (rho_l * U^2 * l_c);
+epsilon_pv = 1e-6; AbsTol = 1e-10; RelTol = 1e-8;
+chi = @(k) sqrt((1-rho_r)/(1+rho_r)*k + gamma_rho*alpha*k.^3);
+
+x_grid = linspace(-15, 15, 2001); x_grid(abs(x_grid) &lt; 1e-12) = [];
+t_dim  = 25;
+t      = t_dim / (100 * t_c);
+
+% IVP η — ArrayValued combined-integrand inversion (same as Fig 8)
+combined = @(k) ...
+    2*cos(k*x_grid) ./ (alpha*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k + chi(k)).*cos(k*(t - x_grid) - t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s)) ...
+    - (1+rho_r)*(k - chi(k)).*cos(k*(t - x_grid) + t*chi(k)) ./ ...
+      ((1 - rho_r + alpha*k^2)*alpha.*(k - k_l).*(k - k_s));
+
+I_lo = integral(combined, 0, k_s - epsilon_pv, &#39;ArrayValued&#39;, true, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+I_mi = integral(combined, k_s + epsilon_pv, k_l - epsilon_pv, &#39;ArrayValued&#39;, true, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+I_hi = integral(combined, k_l + epsilon_pv, Inf, &#39;ArrayValued&#39;, true, &#39;AbsTol&#39;, AbsTol, &#39;RelTol&#39;, RelTol);
+eta_sim = -F0/(2*pi) * (I_lo + I_mi + I_hi);
+
+% Basilisk simulation data
+data  = readmatrix(&#39;notebooks/if_25.csv&#39;);
+data  = sortrows(data, 6);
+x_bsk = data(:,6) / l_c;
+y_bsk = data(:,7) / l_c;
+
+figure; hold on;
+plot(x_grid, eta_sim*1e3, &#39;b--&#39;, &#39;LineWidth&#39;, 3);
+plot(x_bsk,  y_bsk*1e3,  &#39;r:&#39;,  &#39;LineWidth&#39;, 3);
+xlabel(&#39;x&#39;); ylabel(&#39;\eta \times 10^3&#39;);
+legend(&#39;\eta (IVP)&#39;, &#39;Simulation&#39;); xlim([-6 10]);</code></pre><figure style="text-align:center;">
+  <img src="../../assets/cg_sim_fig10.png" alt="Fig 10(i)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 10(i).</strong> IVP vs nonlinear simulation (Basilisk, Navier–Stokes/VOF) at <em>t</em><sub>dim</sub> = 25 s (Julia).</figcaption>
+</figure><figure style="text-align:center;">
+  <img src="../../assets/fig10_overlay.png" alt="Fig 10(ii) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 10(ii).</strong> Julia (lines), MATLAB (markers), and Basilisk simulation overlay, demonstrating the two computations are equivalent.</figcaption>
+</figure><hr/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>Popinet, S., &amp; collaborators. (2013–2026). <em>Basilisk: Free software for solving partial differential equations on adaptive Cartesian meshes</em>. <a href="http://basilisk.fr">http://basilisk.fr</a></li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../pure_gravity/">« Pure Gravity</a><a class="docs-footer-nextpage" href="../basilisk_capillary_gravity/">Basilisk setup for forced Capillary-Gravity waves »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.19.0 on <span class="colophon-date" title="Friday 18 September 2026 13:26">Friday 18 September 2026</span>. Using Julia version 1.13.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
