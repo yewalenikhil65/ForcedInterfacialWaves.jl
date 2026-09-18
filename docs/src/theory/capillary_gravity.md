@@ -24,9 +24,9 @@ where,
 \mathbb{I}_{3,4}(x,t) \equiv -\frac{1+\rho_r}{\alpha}\int_0^\infty dk\,\frac{\left(k\pm\chi(k)\right)\cos\left[t\left(k\mp\chi(k)\right)-kx\right]}{\left(1+\alpha k^2-\rho_r\right)\left(k-k_l\right)\left(k-k_s\right)} \tag{4.5d}
 ```
 
-Summing the steady term (4.5b) and both transient terms (4.5d) into a single combined integrand before quadrature cancels the poles at $k_s,k_l$ analytically, leaving a smooth function to integrate numerically. The combined integrand is then split into three pieces around the (now removable) singularities at $k_s$ and $k_l$ and integrated separately. The CG IVP `WaveSolution` uses this symmetric $\eta_s$ from (4.5b) as `sol.η_steady`; its `sol.η_transient` is the remainder $\eta-\eta_s$.
+Summing the steady term (4.5b) and both transient terms (4.5d) into a single combined integrand before quadrature cancels the poles at $k_s,k_l$ analytically, leaving a smooth function to integrate numerically. The combined integrand is then split into three pieces around the (now removable) singularities at $k_s$ and $k_l$ and integrated separately. The symmetric $\eta_s$ from (4.5b) is used as the steady part; the transient remainder is $\eta-\eta_s$.
 
-The asymmetric classical radiation solution is a separate steady reference, obtained with either `IVP(asym_cancel=true)` for the full time-dependent decomposition or `steady(rayleigh_dissipation=true)` for the time-independent profile. It is the long-time result after the transient contribution supplies the asymmetric cancellation described below.
+The asymmetric classical radiation solution is a separate steady reference, representing the long-time limit of the full IVP solution after the transient contribution has decayed and supplied the asymmetric cancellation described below. It can be obtained either from the full time-dependent decomposition by tracking the asymmetric cancellation, or directly as the time-independent profile via the Rayleigh dissipation approach.
 
 ```math
 \chi(k) \equiv \sqrt{\beta k+\frac{\alpha}{1+\rho_r}k^3},
@@ -44,7 +44,7 @@ We now turn to a formal demonstration of the asymmetric cancellations about $x=0
 \frac{\eta_s(x)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_s|x|)+\sin(k_l|x|)\right] + \frac{k_l+k_s}{\alpha\pi}\int_0^\infty dy\,\frac{y\exp\left(-|x|y\right)}{\left(y^2+k_l^2\right)\left(y^2+k_s^2\right)} \tag{4.7}
 ```
 
-The second, integral term above is Lamb's $G(x)$ function (up to the prefactor); it is evaluated numerically in the code section below via [`cg_Gx_integral`](@ref).
+The second, integral term above is $G(x)$ (up to the prefactor); it is evaluated numerically in the code section below.
 
 After lengthy calculations involving contour integration and stationary-phase approximation (see the [Capillary-gravity asymmetric cancellation proof](../capillary_gravity_asymmetric_cancellation.md)), we may show that
 
@@ -107,7 +107,7 @@ println("I₃ = ", I₃)
 
 η = -F₀ / (2π) * (I₁ + I₂ + I₃)          # full IVP, eqn (4.5a)
 
-# Steady η_s (4.5b) via Lamb's G(x): symmetric far-field + local integral (eqn 4.7)
+# Steady η_s (4.5b) via G(x): symmetric far-field + local integral (eqn 4.7)
 Gₓ = first(quadgk(k -> cos(k*x)/(k + kₛ) - cos(k*x)/(k + kₗ), 0, Inf; atol=atol, rtol=rtol)) / (kₗ - kₛ)
 η_steady    = F₀/(α*(kₗ - kₛ)) * (-sin(kₛ*abs(x)) + sin(kₗ*abs(x))) + F₀*Gₓ/(π*α)
 η_transient = η - η_steady
@@ -188,7 +188,7 @@ I3 = integral(total_integrand, k_l + epsilon_pv, k_max, ...
 
 eta_ivp = -F0 / (2.0 * pi) * (I1 + I2 + I3);
 
-% Steady solution via Lamb's G(x)
+% Steady solution via G(x)
 G_integrand = @(k) cos(k * x) ./ (k + k_s) - cos(k * x) ./ (k + k_l);
 G_x = integral(G_integrand, 0, Inf, 'AbsTol', AbsTol, 'RelTol', RelTol) / ...
     (k_l - k_s);
@@ -340,10 +340,8 @@ The capillary–gravity IVP has the transient contribution $\eta_{\mathrm{tr}}$.
 ```julia
 using QuadGK, Plots, LaTeXStrings
 
-# Full CG IVP profile: replicates compute_cg_ivp_profile + compute_cg_steady_profile
-# using the package's :threaded_vector structure. Each thread processes a spatial
-# chunk: IVP η from the combined CPV integrand (eqn 4.5a–d, 3 pole-split quadratures)
-# and steady G(x) for η_s (eqn 4.5b via Lamb's formula) are computed together per chunk.
+# Full CG IVP profile: combined CPV integrand (eqn 4.5a–d, 3 pole-split quadratures)
+# and G(x) for η_s (eqn 4.5b) are computed per spatial chunk across threads.
 function cg_ivp_profile(x_grid, t)
     U, g, T = 26.7046, 981.0, 72.0
     ρₗ, ρᵤ  = 1.0, 0.001
@@ -361,7 +359,7 @@ function cg_ivp_profile(x_grid, t)
 
     N = length(x_grid)
     η = Vector{Float64}(undef, N)
-    G = Vector{Float64}(undef, N)  # Lamb G(x) for η_s
+    G = Vector{Float64}(undef, N)  # G(x) for η_s
 
     nchunks = min(Threads.nthreads(), N); clen = cld(N, nchunks)
     Threads.@threads :static for ci in 1:nchunks
