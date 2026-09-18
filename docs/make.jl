@@ -29,7 +29,7 @@ makedocs(;
             "Capillary–Gravity"         => "theory/capillary_gravity.md",
         ],
         "Validation"               => [
-            "CFD & Conformal Mapping"  => "validation/cfd_conformal_mapping.md",
+            "Capillary-gravity waves evolution"  => "validation/cfd_conformal_mapping.md",
         ],
     ],
 )
