@@ -8,6 +8,34 @@ Physical parameters (CGS): $N = 1024$, $\varepsilon = 0.9$, $c = 24$ cm/s, $T = 
 
 ---
 
+## Installation
+
+Install the required Julia packages from the REPL before running the code on this page:
+
+```julia-repl
+julia> using Pkg
+julia> Pkg.add(["FFTW", "OrdinaryDiffEq", "OrdinaryDiffEqRosenbrock", "LinearSolve",
+                "NonlinearSolve", "Plots", "LaTeXStrings"])
+```
+
+Or equivalently in Pkg mode (press `]` in the REPL):
+
+```
+pkg> add FFTW OrdinaryDiffEq OrdinaryDiffEqRosenbrock LinearSolve NonlinearSolve Plots LaTeXStrings
+```
+
+| Package | Purpose |
+|:--------|:--------|
+| `FFTW` | Fast Fourier transforms for spectral derivatives and Hilbert transforms |
+| `OrdinaryDiffEq` | ODE solvers (`ODEProblem`, `solve`) |
+| `OrdinaryDiffEqRosenbrock` | Rosenbrock stiff solver (`ROK4a`) used for time integration |
+| `LinearSolve` | Linear solver backend (`KrylovJL`) for the Rosenbrock method |
+| `NonlinearSolve` | Newton–Raphson solver for steady-state energy continuation |
+| `Plots` | Plotting and GIF animation |
+| `LaTeXStrings` | LaTeX axis labels |
+
+---
+
 ## 1. Conformal-Mapping Formulation
 
 We work in the co-moving conformal frame with $\xi \in [-\tfrac{1}{2}, \tfrac{1}{2})$, where the unknowns are the free-surface elevation $Y(\xi, t)$ and the velocity potential on the free surface $\varphi(\xi, t)$. The physical horizontal coordinate is recovered via the Hilbert transform:
