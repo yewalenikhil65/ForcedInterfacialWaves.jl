@@ -1,8 +1,8 @@
 # Validation of CFD (Basilisk) Evolution with Conformal Mapping
 
-This page implements the IVP for gravity–capillary waves in deep water using a conformal mapping approach and compares the results against direct numerical simulations from the Basilisk VOF solver. Every FFT and spectral operation is written explicitly using plain `FFTW.fft`/`FFTW.ifft` calls.
+This page implements a **self-contained**, readable version of the IVP for gravity–capillary waves in deep water using a conformal mapping approach, and compares the results against direct numerical simulations from the Basilisk VOF solver. Every FFT and spectral operation is written explicitly using plain `FFTW.fft`/`FFTW.ifft` calls.
 
-The IVP is evolved in a frame co-moving with the steady wave at speed $c = 24$ cm/s. The computed surface profiles are compared against Basilisk VOF simulation data from `notebooks/basilisk_gc_ivp/interface_data/`.
+The IVP is evolved in a frame co-moving with the steady wave at speed $c = 24$ cm/s. The computed surface profiles are compared against Basilisk VOF simulation data from [`notebooks/basilisk_gc_ivp/interface_data/`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data).
 
 Physical parameters (CGS): $N = 1024$, $\varepsilon = 0.9$, $c = 24$ cm/s, $T = 0.26$ s (final simulation time).
 
@@ -10,40 +10,21 @@ Physical parameters (CGS): $N = 1024$, $\varepsilon = 0.9$, $c = 24$ cm/s, $T = 
 
 ## 1. Conformal-Mapping Formulation
 
-We work in the co-moving conformal frame where the spatial coordinate is $\xi \in [-\tfrac{1}{2}, \tfrac{1}{2})$ and the unknowns are:
-
-- $Y(\xi, t)$: free-surface elevation,
-- $\varphi(\xi, t)$: velocity potential on the free surface.
-
-The physical horizontal coordinate is recovered via the Hilbert transform:
+We work in the co-moving conformal frame with $\xi \in [-\tfrac{1}{2}, \tfrac{1}{2})$, where the unknowns are the free-surface elevation $Y(\xi, t)$ and the velocity potential on the free surface $\varphi(\xi, t)$. The physical horizontal coordinate is recovered via the Hilbert transform:
 
 ```math
 X_\xi = 1 - \mathcal{H}[Y_\xi], \qquad X_{\xi\xi} = -\mathcal{H}[Y_{\xi\xi}],
 ```
 
-and the Jacobian of the conformal map is
-
-```math
-J = X_\xi^2 + Y_\xi^2.
-```
-
-The stream function on the surface satisfies $\psi_\xi = Y_\xi$ (kinematic identity in the conformal plane), and $\varphi_\xi = -\mathcal{H}[\psi_\xi]$ by the Cauchy–Riemann relation.
+and the Jacobian of the conformal map is $J = X_\xi^2 + Y_\xi^2$. The stream function satisfies $\psi_\xi = Y_\xi$ (kinematic identity), and $\varphi_\xi = -\mathcal{H}[\psi_\xi]$ by the Cauchy–Riemann relation.
 
 ### Evolution Equations
 
-Define the normal velocity
-
-```math
-V = \frac{Y_\xi - \mathcal{H}[\varphi_\xi]}{J}.
-```
-
-**Kinematic equation:**
+Defining the normal velocity $V = (Y_\xi - \mathcal{H}[\varphi_\xi])/J$, the kinematic and dynamic equations are:
 
 ```math
 \frac{\partial Y}{\partial t} = X_\xi \, V - Y_\xi \, \mathcal{H}[V]
 ```
-
-**Dynamic (Bernoulli) equation:**
 
 ```math
 \frac{\partial \varphi}{\partial t} = \frac{\psi_\xi^2 - \varphi_\xi^2}{2J} - \frac{Y}{F^2} + \frac{B}{F^2} \frac{X_\xi Y_{\xi\xi} - Y_\xi X_{\xi\xi}}{J^{3/2}} + \frac{X_\xi \varphi_\xi}{J} - \varphi_\xi \, \mathcal{H}[V]
@@ -107,7 +88,7 @@ println("Grid: N=$N")
 
 ## 3. Steady Base State Initialization (Pure Gravity, $B = 0$)
 
-The IVP initial condition is the steady-state wave profile, computed via **energy continuation** from a small linear seed up to target steepness $\varepsilon = 0.9$. During this phase $B = 0$ exactly (pure gravity), so the curvature and second-derivative terms in the Bernoulli equation contribute nothing to the residual. The continuation solves the nonlinear system at each $\varepsilon$ step using Newton–Raphson, with the previous solution as the initial guess.
+The IVP initial condition is the steady-state wave profile, computed via **energy continuation** from a small linear seed up to target steepness $\varepsilon = 0.9$. During this phase $B = 0$ exactly (pure gravity), so curvature and second-derivative terms in the Bernoulli equation contribute nothing to the residual. The continuation solves the nonlinear system at each $\varepsilon$ step using Newton–Raphson, with the previous solution as the initial guess.
 
 The energy functional (kinetic + potential) is
 
@@ -115,7 +96,7 @@ The energy functional (kinetic + potential) is
 E = \frac{F^2}{2}\int \varphi\,(-\psi_\xi)\,d\xi + \frac{1}{2}\int Y^2 X_\xi\,d\xi,
 ```
 
-and $\varepsilon$ is defined via $E = \varepsilon \cdot E_{hw}$, where $E_{hw} = 0.00184$ is a reference energy. The continuation ramps $\varepsilon$ from $10^{-7}$ up to $0.9$, producing the Froude number and surface profile consistent with `params.h` exported for Basilisk:
+and $\varepsilon$ is defined via $E = \varepsilon \cdot E_{hw}$, where $E_{hw} = 0.00184$ is a reference energy. The continuation ramps $\varepsilon$ from $10^{-7}$ up to $0.9$, producing the Froude number and surface profile used to populate [`params.h`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/params.h) for Basilisk:
 
 ```c
 /* params.h — parameters for initialisation as simulation */
@@ -131,7 +112,7 @@ and $\varepsilon$ is defined via $E = \varepsilon \cdot E_{hw}$, where $E_{hw} =
 #define RESOLUTION   1024
 ```
 
-The steady surface profile $Y(\xi)$ and $F_{\text{steady}}$ from this continuation are used to construct `FreeSurface.dat` and `velocity_interpolated_below.dat`, which Basilisk reads for initialization.
+The steady surface profile $Y(\xi)$ and $F_{\text{steady}}$ from this continuation are used to construct `FreeSurface.dat` and `velocity_interpolated_below.dat`, which [`run_gc_ivp.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c) reads for initialization.
 
 ```julia
 const Ehw = 0.00184
@@ -288,14 +269,13 @@ println("Solver: $(sol.retcode), $(length(sol.u)) snapshots")
 
 ## 7. Basilisk CFD Simulation
 
-### Prerequisites
+The following commands require [Basilisk](http://basilisk.fr/) to be installed. All source files are in [`notebooks/basilisk_gc_ivp/`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp).
 
-Before running Basilisk, the following two files must be present in `notebooks/basilisk_gc_ivp/` — generated from the conformal mapping steady-state solution above:
+**Prerequisites:** `FreeSurface.dat` and `velocity_interpolated_below.dat` must be present in `notebooks/basilisk_gc_ivp/` before running — these are generated from the conformal mapping steady-state solution above.
 
-- `FreeSurface.dat` — initial free-surface profile $(x,\,y)$ in physical (CGS) coordinates
-- `velocity_interpolated_below.dat` — velocity field interpolated just below the interface
+### [`run_gc_ivp.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c)
 
-### `run_gc_ivp.c`
+Reads `FreeSurface.dat` and `velocity_interpolated_below.dat` for initialization, then writes Basilisk dumps to `dumpfile/dump-*` and interface facets directly to [`interface_data/interface-*.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data).
 
 ```bash
 # Compile and run the Basilisk IVP solver (serial)
@@ -303,9 +283,9 @@ qcc -O2 -o run_gc_ivp run_gc_ivp.c -lm
 ./run_gc_ivp
 ```
 
-Reads `FreeSurface.dat` and `velocity_interpolated_below.dat` for initialization, then writes Basilisk dumps to `dumpfile/dump-*` and interface facets to `interface_data/interface-*.dat`.
+### [`extract.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/extract.c)
 
-### `extract.c`
+Converts `dumpfile/dump-*` snapshots to VTU format, generating `vtufiles/series.pvd` for visualization in ParaView.
 
 ```bash
 # Post-process: Basilisk dumps → VTU files
@@ -313,15 +293,16 @@ qcc -O2 -o extract extract.c -lm
 ./extract
 ```
 
-Converts `dumpfile/dump-*` snapshots to VTU format, generating `vtufiles/series.pvd`.
+### [`vtu_to_interface_dat.py`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/vtu_to_interface_dat.py)
 
-### `vtu_to_interface_dat.py`
+Extracts the interface contour $(x,\,y)$ from each VTU snapshot and writes it to `interface_data/interface-*.dat`. Requires [ParaView](https://www.paraview.org/download/) with `pvpython` support. This step is optional if `run_gc_ivp.c` has already written the interface facets directly.
 
 ```bash
 # Post-process: VTU → interface geometry DAT files
 # Replace <path_to_pvpython> with the pvpython executable from your ParaView installation
-# e.g. /usr/bin/pvpython  or  /opt/paraview/bin/pvpython  (Linux)
-#      /Applications/ParaView-X.Y.Z.app/Contents/bin/pvpython  (macOS)
+# e.g.  /usr/bin/pvpython                                        (Linux)
+#       /opt/paraview/bin/pvpython                               (Linux, custom install)
+#       /Applications/ParaView-X.Y.Z.app/Contents/bin/pvpython  (macOS)
 
 <path_to_pvpython> vtu_to_interface_dat.py \
        vtufiles/series.pvd \
@@ -329,13 +310,13 @@ Converts `dumpfile/dump-*` snapshots to VTU format, generating `vtufiles/series.
        --overwrite
 ```
 
-Extracts the interface contour $(x,\,y)$ from each VTU snapshot and writes it to `interface_data/interface-*.dat`. Requires [ParaView](https://www.paraview.org/download/) with `pvpython` support. This step is optional if `run_gc_ivp.c` has already written the interface facets directly.
+The resulting [`interface_data/interface-*.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data) files contain the PLIC facet endpoints used for comparison below.
 
 ---
 
-## 8. Loading Basilisk Interface Data and Comparison
+## 8. Comparison: Conformal IVP vs Basilisk
 
-The native Basilisk `output_facets()` files are read directly from `interface_data/interface-<index>.dat`. Each non-blank line is a PLIC facet endpoint $(x, y)$; blank lines separate facets. They are plotted as adaptive-grid scatter points without profile resampling.
+The native Basilisk `output_facets()` files are read from `interface_data/interface-<index>.dat`. Each non-blank line is a PLIC facet endpoint $(x, y)$; blank lines separate facets. They are plotted as adaptive-grid scatter points without profile resampling.
 
 ```julia
 basilisk_interface_dir = joinpath(@__DIR__, "basilisk_gc_ivp", "interface_data")
@@ -364,7 +345,7 @@ end
 println("Loaded $(length(basilisk_endpoints)) direct Basilisk facet snapshots")
 ```
 
-The animation below overlays the conformal IVP solution (blue) with the native Basilisk PLIC facet endpoints (red), matched by snapshot index and physical time:
+The animation overlays the conformal IVP solution (blue) with the native Basilisk PLIC facet endpoints (red), matched by snapshot index and physical time:
 
 ```julia
 function surface_lab(u, t_s)
