@@ -126,7 +126,7 @@ E = \frac{F^2}{2}\int \varphi\,(-\psi_\xi)\,d\xi + \frac{1}{2}\int Y^2 X_\xi\,d\
 
 and $\varepsilon$ is defined via $E = \varepsilon \cdot E_{hw}$, where $E_{hw} = 0.00184$ is the energy of the steepest Stokes wave[^2]. The continuation ramps $\varepsilon$ from $10^{-7}$ up to $0.9$, producing the Froude number and surface profile used to populate [`params.h`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/params.h) for Basilisk.
 
-The steady surface profile $Y(\xi)$ and $F_{\text{steady}}$ from this continuation are used to construct `FreeSurface.dat` and `velocity_interpolated_below.dat`, which [`run_gc_ivp.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c) reads for initialization.
+The steady surface profile $Y(\xi)$ and $F_{\text{steady}}$ from this continuation are used to construct [`FreeSurface.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/FreeSurface.dat) (the dimensional free-surface interface profile $(x, y)$) and [`velocity_interpolated_below.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/velocity_interpolated_below.dat) (the dimensional velocity field sampled just below the interface), which [`run_gc_ivp.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c) reads for initialization.
 
 ```julia
 const Ehw = 0.00184
@@ -285,11 +285,11 @@ println("Solver: $(sol.retcode), $(length(sol.u)) snapshots")
 
 The following commands require [Basilisk](http://basilisk.fr/) to be installed. All source files are in [`notebooks/basilisk_gc_ivp/`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp).
 
-**Prerequisites:** `FreeSurface.dat` and `velocity_interpolated_below.dat` must be present in `notebooks/basilisk_gc_ivp/` before running — these are generated from the conformal mapping steady-state solution above.
+**Prerequisites:** [`FreeSurface.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/FreeSurface.dat) (dimensional free-surface interface profile) and [`velocity_interpolated_below.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/velocity_interpolated_below.dat) (dimensional velocity field just below the interface) must be present in `notebooks/basilisk_gc_ivp/` before running — these are generated from the conformal mapping steady-state solution above.
 
 ### [`run_gc_ivp.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c)
 
-Reads `FreeSurface.dat` and `velocity_interpolated_below.dat` for initialization, then writes Basilisk dumps to `dumpfile/dump-*` and interface facets directly to [`interface_data/interface-*.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data).
+Reads [`FreeSurface.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/FreeSurface.dat) and [`velocity_interpolated_below.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/velocity_interpolated_below.dat) for initialization, then writes Basilisk dumps to `dumpfile/dump-*` and interface facets directly to [`interface_data/interface-*.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data).
 
 ```bash
 # Compile and run the Basilisk IVP solver (serial)
