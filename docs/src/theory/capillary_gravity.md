@@ -476,7 +476,7 @@ legend('\eta', '\eta_{tr}'); xlim([-10 10]);
 
 ## Comparison with nonlinear simulations (Fig. 10)
 
-The IVP solution is compared against a nonlinear simulation (Basilisk, Navier–Stokes/VOF) at $t_{\dim} = 25$ s. Simulation data are stored in `notebooks/if_25.csv`; valid time indices are $t_{\dim} \in \{1, 3, 7, 15, 25, 60, 145, 300\}$ s.
+The IVP solution is compared against a nonlinear simulation using Basilisk[^1] (Navier–Stokes/VOF) at $t_{\dim} = 25$ s. The interface profile data extracted from Basilisk are stored as CSV files in `notebooks/`; the file used here is [`notebooks/if_25.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv). Data are available for $t_{\dim} \in \{$[`1`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv), [`3`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv), [`7`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv), [`15`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv), [`25`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv), [`60`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv), [`145`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv), [`300`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv)$\}$ s.
 
 ```julia
 using DelimitedFiles, Plots, LaTeXStrings
@@ -566,3 +566,9 @@ legend('\eta (IVP)', 'Simulation'); xlim([-6 10]);
   <figcaption style="text-align:center;"><strong>Fig. 10(ii).</strong> Julia (lines), MATLAB (markers), and Basilisk simulation overlay, demonstrating the two computations are equivalent.</figcaption>
 </figure>
 ```
+
+---
+
+## References
+
+[^1]: Popinet, S., & collaborators. (2013–2026). *Basilisk: Free software for solving partial differential equations on adaptive Cartesian meshes*. [http://basilisk.fr](http://basilisk.fr)
