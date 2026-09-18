@@ -124,21 +124,7 @@ The energy functional (kinetic + potential) is
 E = \frac{F^2}{2}\int \varphi\,(-\psi_\xi)\,d\xi + \frac{1}{2}\int Y^2 X_\xi\,d\xi,
 ```
 
-and $\varepsilon$ is defined via $E = \varepsilon \cdot E_{hw}$, where $E_{hw} = 0.00184$ is a reference energy. The continuation ramps $\varepsilon$ from $10^{-7}$ up to $0.9$, producing the Froude number and surface profile used to populate [`params.h`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/params.h) for Basilisk:
-
-```c
-/* params.h — parameters for initialisation as simulation */
-/* GravityProblem(1024; ε_max=0.9)       */
-#define WAVELENGTH   3.1940891871679   /* cm */
-#define AK_STEEP     0.38080929592657  /* kH/2 */
-#define PHASE_SPEED  24                /* cm/s */
-#define BOND_NUMBER  0.0071939830772929
-#define FROUDE       0.42874909735042
-#define G_ACCEL      981               /* cm/s² */
-#define RHO_W        1                 /* g/cm³ */
-#define SIGMA_VAL    72                /* dyn/cm */
-#define RESOLUTION   1024
-```
+and $\varepsilon$ is defined via $E = \varepsilon \cdot E_{hw}$, where $E_{hw} = 0.00184$ is a reference energy. The continuation ramps $\varepsilon$ from $10^{-7}$ up to $0.9$, producing the Froude number and surface profile used to populate [`params.h`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/params.h) for Basilisk.
 
 The steady surface profile $Y(\xi)$ and $F_{\text{steady}}$ from this continuation are used to construct `FreeSurface.dat` and `velocity_interpolated_below.dat`, which [`run_gc_ivp.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/basilisk_gc_ivp/run_gc_ivp.c) reads for initialization.
 
