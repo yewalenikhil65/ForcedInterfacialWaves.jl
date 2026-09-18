@@ -383,3 +383,13 @@ end
 
 gif(anim, "gc_ivp_comparison.gif"; fps=5)
 ```
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/gc_ivp_comparison.gif" alt="Conformal IVP vs Basilisk animation" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;">
+    Animation of the conformal mapping IVP solution (blue) overlaid with native Basilisk
+    PLIC facet endpoints (red), at matching snapshot times over $T = 0.26$ s.
+  </figcaption>
+</figure>
+```
