@@ -26,13 +26,11 @@ pkg> add FFTW OrdinaryDiffEq OrdinaryDiffEqRosenbrock LinearSolve NonlinearSolve
 
 | Package | Purpose |
 |:--------|:--------|
-| `FFTW` | Fast Fourier transforms for spectral derivatives and Hilbert transforms |
+| `FFTW` | Fast Fourier transforms for spectral derivatives  |
 | `OrdinaryDiffEq` | ODE solvers (`ODEProblem`, `solve`) |
 | `OrdinaryDiffEqRosenbrock` | Rosenbrock stiff solver (`ROK4a`) used for time integration |
 | `LinearSolve` | Linear solver backend (`KrylovJL`) for the Rosenbrock method |
-| `NonlinearSolve` | Newton–Raphson solver for steady-state energy continuation |
-| `Plots` | Plotting and GIF animation |
-| `LaTeXStrings` | LaTeX axis labels |
+| `NonlinearSolve` | Root-finding algorithms for the steady-state energy continuation |
 
 ---
 
