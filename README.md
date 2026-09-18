@@ -11,7 +11,7 @@ between two inviscid, incompressible fluids in relative uniform motion, followin
 - **Capillary–gravity** (`α > 0`) — a combined-integrand technique that cancels the two
   removable poles at `k_s`, `k_l` before quadrature (manuscript Figure 10).
 
-This package is **not registered** in the Julia General registry; install it directly from
+This package is **not yet registered** in the Julia General registry; install it directly from
 GitHub (see below).
 
 ## Installation
