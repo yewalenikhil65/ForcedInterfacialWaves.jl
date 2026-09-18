@@ -27,9 +27,10 @@ makedocs(;
             "Steady-State"               => "theory/steady_state.md",
             "Pure Gravity"              => "theory/pure_gravity.md",
             "Capillary–Gravity"         => "theory/capillary_gravity.md",
+            "Basilisk CFD Setup"        => "theory/basilisk_capillary_gravity.md",
         ],
         "Validation"               => [
-            "Capillary-gravity waves evolution"  => "validation/cfd_conformal_mapping.md",
+            "Nonlinear-regime : Capillary-gravity waves evolution"  => "validation/cfd_conformal_mapping.md",
         ],
     ],
 )
