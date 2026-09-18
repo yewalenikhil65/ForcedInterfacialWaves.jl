@@ -1,6 +1,6 @@
 # Interfacial Waves from Pressure Forcing
 
-*Theory, analytical decomposition, and numerical validation of the initial value problem (IVP) for pressure-forced interfacial waves between two fluids in relative uniform motion.*
+*Theory and numerical validation of the initial value problem (IVP) for pressure-forced interfacial waves between two fluids in relative uniform motion.*
 
 
 ## Dependencies
