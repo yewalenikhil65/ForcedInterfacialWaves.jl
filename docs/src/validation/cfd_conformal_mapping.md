@@ -1,4 +1,4 @@
-# Validation of CFD (Basilisk) Evolution with Conformal Mapping
+# Evolution of capillary-gravity waves with CFD (Basilisk) and unsteady Conformal Mapping
 
 This page implements a **self-contained**, readable version of the IVP for gravity–capillary waves in deep water using a conformal mapping approach, and compares the results against direct numerical simulations from the Basilisk VOF solver. Every FFT and spectral operation is written explicitly using plain `FFTW.fft`/`FFTW.ifft` calls.
 
@@ -338,7 +338,7 @@ Extracts the interface contour $(x,\,y)$ from each VTU snapshot and writes it to
        --overwrite
 ```
 
-The resulting [`interface_data/interface-*.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data) files contain the PLIC facet endpoints used for comparison below.
+The resulting [`interface_data/interface-*.dat`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data) files contain the PLIC (Piecewise Linear Interface Construction) facet endpoints used for comparison below.
 
 ---
 
