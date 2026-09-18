@@ -1,6 +1,6 @@
-# ForcedInterfacialWaves.jl
+# Interfacial Waves from Pressure Forcing
 
-*Julia/MATLAB implementation of the initial value problem (IVP) for pressure-forced interfacial waves in a two-fluid system.*
+*Theory, analytical decomposition, and numerical validation of the initial value problem (IVP) for pressure-forced interfacial waves between two fluids in relative uniform motion.*
 
 
 ## Dependencies

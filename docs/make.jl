@@ -2,7 +2,7 @@ using Documenter
 using ForcedInterfacialWaves
 
 makedocs(;
-    sitename = "ForcedInterfacialWaves.jl",
+    sitename = "Interfacial Waves from Pressure Forcing",
     modules  = [ForcedInterfacialWaves],
     remotes  = nothing,
     doctest  = true,
@@ -27,10 +27,10 @@ makedocs(;
             "Steady-State"               => "theory/steady_state.md",
             "Pure Gravity"              => "theory/pure_gravity.md",
             "Capillary–Gravity"         => "theory/capillary_gravity.md",
-            "Basilisk CFD Setup"        => "theory/basilisk_capillary_gravity.md",
+            "Basilisk setup for forced Capillary-Gravity waves"        => "theory/basilisk_capillary_gravity.md",
         ],
         "Validation"               => [
-            "Nonlinear-regime : Capillary-gravity waves evolution"  => "validation/cfd_conformal_mapping.md",
+            "Nonlinear-regime : Capillary-Gravity waves evolution"  => "validation/cfd_conformal_mapping.md",
         ],
     ],
 )
