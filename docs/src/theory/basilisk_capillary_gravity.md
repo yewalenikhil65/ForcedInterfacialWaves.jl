@@ -186,16 +186,7 @@ event adapt (i++)
 }
 ```
 
-At every time step, the mesh is adapted using wavelet-based refinement on four fields simultaneously:
-
-| Field | Threshold |
-|:------|:----------|
-| Volume fraction $f$ | $10^{-3}$ |
-| Horizontal velocity $u_x$ | $10^{-3}$ |
-| Vertical velocity $u_y$ | $10^{-3}$ |
-| Interface curvature $\kappa$ | $10^{-6}$ |
-
-The maximum refinement level is **13** (minimum **5**), corresponding to an effective maximum resolution of $2^{13} = 8192$ cells per side. Curvature-based refinement is suppressed for $|x| > 30\ \mathrm{cm}$ (the buffer regions near the left and right boundaries), preventing unnecessary refinement far from the active interface region. Cells where the curvature is undefined (`nodata`) are also set to zero before adaptation.
+At every time step, the mesh is adapted using wavelet-based refinement on the volume fraction $f$ (threshold $10^{-3}$), both velocity components $u_x$, $u_y$ (threshold $10^{-3}$), and the interface curvature $\kappa$ (threshold $10^{-6}$). The maximum refinement level is **13** (minimum **5**), corresponding to an effective maximum resolution of $2^{13} = 8192$ cells per side. Curvature-based refinement is suppressed for $|x| > 30\ \mathrm{cm}$ (the buffer regions near the left and right boundaries), preventing unnecessary refinement far from the active interface region. Cells where the curvature is undefined (`nodata`) are also set to zero before adaptation.
 
 ---
 
@@ -218,7 +209,7 @@ event dump_i1 (t = 0; t += 0.01; t <= 5.02)
 }
 ```
 
-The complete simulation state is written to `./data/snapshot-<t>` every $0.01\ \mathrm{s}$, from $t = 0$ to $t = 5.02\ \mathrm{s}$. Each dump file contains the full field data (velocity, pressure, volume fraction, and mesh) and can be restarted or post-processed independently. The `pid[]` scalar records the MPI process ID for each cell, which is useful for visualizing the domain decomposition in parallel runs. The interface profiles at selected times are extracted from these dump files and stored as the CSV files linked in the [Capillary–Gravity](capillary_gravity.md#comparison-with-nonlinear-simulations-fig-10) section.
+The complete simulation state is written to `./data/snapshot-<t>` every $0.01\ \mathrm{s}$, from $t = 0$ to $t = 5.02\ \mathrm{s}$. Each dump file contains the full field data (velocity, pressure, volume fraction, and mesh) and can be restarted or post-processed independently. The `pid[]` scalar records the MPI process ID for each cell, useful for visualizing the domain decomposition in parallel runs. The interface profiles at selected times are extracted from these dump files and stored as [`if_1.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv), [`if_3.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv), [`if_7.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv), [`if_15.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv), [`if_25.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv), [`if_60.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv), [`if_145.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv), and [`if_300.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv), used in the [Capillary–Gravity](capillary_gravity.md#comparison-with-nonlinear-simulations-fig-10) comparison.
 
 ---
 
