@@ -1,6 +1,6 @@
 # Evolution of capillary-gravity waves with CFD (Basilisk) and unsteady Conformal Mapping
 
-This page implements a **self-contained**, readable version of the IVP for gravity–capillary waves in deep water using a conformal mapping approach, and compares the results against direct numerical simulations from the Basilisk VOF solver. Every FFT and spectral operation is written explicitly using plain `FFTW.fft`/`FFTW.ifft` calls.
+This page implements a **self-contained**, readable version of the IVP for gravity–capillary waves in deep water using a conformal mapping approach, and compares the results against direct numerical simulations from the Basilisk VOF solver.[^1] Every FFT and spectral operation is written explicitly using plain `FFTW.fft`/`FFTW.ifft` calls.
 
 The IVP is evolved in a frame co-moving with the steady wave at speed $c = 24$ cm/s. The computed surface profiles are compared against Basilisk VOF simulation data from [`notebooks/basilisk_gc_ivp/interface_data/`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks/basilisk_gc_ivp/interface_data).
 
@@ -36,7 +36,7 @@ pkg> add FFTW OrdinaryDiffEq OrdinaryDiffEqRosenbrock LinearSolve NonlinearSolve
 
 ---
 
-## 1. Conformal-Mapping Formulation
+## 1. Conformal-Mapping Formulation [^2]
 
 We work in the co-moving conformal frame with $\xi \in [-\tfrac{1}{2}, \tfrac{1}{2})$, where the unknowns are the free-surface elevation $Y(\xi, t)$ and the velocity potential on the free surface $\varphi(\xi, t)$. The physical horizontal coordinate is recovered via the Hilbert transform:
 
@@ -411,6 +411,14 @@ end
 
 gif(anim, "gc_ivp_comparison.gif"; fps=5)
 ```
+
+---
+
+## References
+
+[^1]: Popinet, S., & collaborators. (2013–2026). *Basilisk: Free software for solving partial differential equations on adaptive Cartesian meshes*. [http://basilisk.fr](http://basilisk.fr)
+
+[^2]: Shelton, J., Milewski, P., & Trinh, P. H. (2021). On the structure of steady parasitic gravity-capillary waves in the small surface tension limit. *Journal of Fluid Mechanics*, **922**, A16. [https://doi.org/10.1017/jfm.2021.507](https://doi.org/10.1017/jfm.2021.507)
 
 ```@raw html
 <figure style="text-align:center;">
