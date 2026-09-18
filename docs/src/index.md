@@ -32,6 +32,8 @@ Pages = [
     "theory/steady_state.md",
     "theory/pure_gravity.md",
     "theory/capillary_gravity.md",
+    "theory/basilisk_capillary_gravity.md",
+    "validation/cfd_conformal_mapping.md",
 ]
 Depth = 2
 ```
