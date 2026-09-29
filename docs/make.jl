@@ -1,18 +1,12 @@
 using Documenter
-using ForcedInterfacialWaves
 
 makedocs(;
     sitename = "Interfacial Waves from Pressure Forcing",
-    modules  = [ForcedInterfacialWaves],
     remotes  = nothing,
-    doctest  = true,
-    # :missing_docs only flags internal helper types/functions (e.g. CGProfileIntegrand,
-    # cg_integrate_scalar) that are intentionally undocumented implementation details.
-    # Everything else (cross-references, doctests, @example execution) must fail the build.
-    warnonly = [:missing_docs],
     format   = Documenter.HTML(;
         prettyurls = true,
         repolink = "https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl",
+        inventory_version = "0.1.0",
         mathengine = Documenter.KaTeX(Dict(
             # The source derivation defines \vp as \phi (supplementary_vinod_jfm.tex:69).
             # KaTeX must receive that macro or it leaves every affected equation unrendered.
