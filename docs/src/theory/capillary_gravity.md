@@ -65,73 +65,88 @@ The integral expressions for $\eta(x,t)$ [eqn. (4.5a) of the manuscript], $\eta_
 ```julia
 using QuadGK
 
-# ─── Nondimensional parameters (α > 0) ───
-U, g, T = 26.7046, 981.0, 72.0
-ρₗ, ρᵤ  = 1.0, 0.001
-l_c = U^2 / g
-α   = T / (ρₗ * U^2 * l_c)
-ρᵣ  = ρᵤ / ρₗ
-β   = (1 - ρᵣ) / (1 + ρᵣ)
-γᵨ  = 1 / (1 + ρᵣ)
-F₀  = 0.01 * T / (ρₗ * U^2 * l_c)
-
-# Gravity (kₛ) and capillary (kₗ) roots
-Δ  = (1 + ρᵣ)^2 - 4α * (1 - ρᵣ)
-kₗ = ((1 + ρᵣ) + √Δ) / (2α)
-kₛ = ((1 + ρᵣ) - √Δ) / (2α)
-
-ε, atol, rtol = 1e-6, 1e-10, 1e-8
-x, t = 3.0, 110.0
-
-# Two-fluid dispersion χ(k)
-χ(k) = sqrt(β*k + γᵨ*α*k^3)
-
-# Combined integrand 𝕀(k;x,t): steady (4.5b) + 𝕀₃ + 𝕀₄ (4.5d).
-# Summing before quadrature cancels the poles at kₛ, kₗ.
-function 𝕀(k, x, t)
-    invₚ = 1 / (α * (k - kₗ) * (k - kₛ))          # pole factor
-    inv_d = (1 + ρᵣ) / (1 + α*k^2 - ρᵣ)           # dispersion factor
-    c = χ(k); ph = k*(t - x); tc = t*c
-    2cos(k*x)*invₚ - inv_d*(k + c)*cos(ph - tc)*invₚ - inv_d*(k - c)*cos(ph + tc)*invₚ
+"""Typed nondimensional parameters for the two-fluid capillary–gravity IVP."""
+struct CapillaryGravityParams
+    α::Float64; ρᵣ::Float64; β::Float64; γρ::Float64
+    kₗ::Float64; kₛ::Float64; F₀::Float64
+    εCPV::Float64; atol::Float64; rtol::Float64
 end
 
-println("𝕀(k=2; x=3, t=110) = ", 𝕀(2.0, x, t))
+function makeCGParams()
+    U, g, T = 26.7046, 981.0, 72.0
+    ρₗ, ρᵤ = 1.0, 0.001
+    ℓc = U^2 / g
+    α = T / (ρₗ * U^2 * ℓc)
+    ρᵣ = ρᵤ / ρₗ
+    β = (1.0 - ρᵣ) / (1.0 + ρᵣ)
+    Δ = (1.0 + ρᵣ)^2 - 4.0 * α * (1.0 - ρᵣ)
+    kₗ = ((1.0 + ρᵣ) + sqrt(Δ)) / (2.0 * α)
+    kₛ = ((1.0 + ρᵣ) - sqrt(Δ)) / (2.0 * α)
+    F₀ = 0.01 * T / (ρₗ * U^2 * ℓc)
+    return CapillaryGravityParams(α, ρᵣ, β, 1.0/(1.0 + ρᵣ),
+                                  kₗ, kₛ, F₀, 1e-6, 1e-10, 1e-8)
+end
 
-# CPV split around the two removable poles kₛ, kₗ
-I₁ = first(quadgk(k -> 𝕀(k, x, t), 0, kₛ - ε; atol=atol, rtol=rtol))
-I₂ = first(quadgk(k -> 𝕀(k, x, t), kₛ + ε, kₗ - ε; atol=atol, rtol=rtol))
-I₃ = first(quadgk(k -> 𝕀(k, x, t), kₗ + ε, Inf; atol=atol, rtol=rtol, order=15))
+# Dispersion relation χ(k) = √(βk + γρ αk³).
+@inline χ(k::Float64, p::CapillaryGravityParams) =
+    sqrt(p.β * k + p.γρ * p.α * k^3)
+
+# Combined integrand in eqn. (4.5a); the kₛ and kₗ pole terms cancel in the sum.
+function combinedIntegrand(k::Float64, x::Float64, t::Float64, p::CapillaryGravityParams)
+    χk = χ(k, p)
+    pole = 1.0 / (p.α * (k - p.kₗ) * (k - p.kₛ))
+    dispersion = (1.0 + p.ρᵣ) / (1.0 + p.α * k^2 - p.ρᵣ)
+    phase = k * (t - x)
+    return pole * (2.0 * cos(k * x) -
+           dispersion * (k + χk) * cos(phase - t * χk) -
+           dispersion * (k - χk) * cos(phase + t * χk))
+end
+
+# CPV quadrature split about kₛ and kₗ.
+function cpvParts(x::Float64, t::Float64, p::CapillaryGravityParams)
+    f = k -> combinedIntegrand(k, x, t, p)
+    I₁, _ = quadgk(f, 0.0, p.kₛ - p.εCPV; atol=p.atol, rtol=p.rtol)
+    I₂, _ = quadgk(f, p.kₛ + p.εCPV, p.kₗ - p.εCPV; atol=p.atol, rtol=p.rtol)
+    I₃, _ = quadgk(f, p.kₗ + p.εCPV, Inf; atol=p.atol, rtol=p.rtol, order=15)
+    return I₁, I₂, I₃
+end
+
+# Eqn. (4.7): local steady integral G(x).
+function Gₓ(x::Float64, p::CapillaryGravityParams)
+    f = k -> (cos(k*x)/(k + p.kₛ) - cos(k*x)/(k + p.kₗ)) / (p.kₗ - p.kₛ)
+    return first(quadgk(f, 0.0, Inf; atol=p.atol, rtol=p.rtol))
+end
+
+p = makeCGParams()
+x, t = 3.0, 110.0
+I₁, I₂, I₃ = cpvParts(x, t, p)
+η = -p.F₀ * (I₁ + I₂ + I₃) / (2π)
+G = Gₓ(x, p)
+ηₛ = p.F₀/(p.α*(p.kₗ-p.kₛ)) * (-sin(p.kₛ*abs(x)) + sin(p.kₗ*abs(x))) + p.F₀*G/(π*p.α)
+ηₜᵣ = η - ηₛ
+ηclassical = p.F₀ * (-2sin(p.kₛ*x)/(p.α*(p.kₗ-p.kₛ)) + G/(π*p.α))
+
+println("𝕀(k=2; x=3, t=110) = ", combinedIntegrand(2.0, x, t, p))
 println("I₁ = ", I₁)
 println("I₂ = ", I₂)
 println("I₃ = ", I₃)
-
-η = -F₀ / (2π) * (I₁ + I₂ + I₃)          # full IVP, eqn (4.5a)
-
-# Steady η_s (4.5b) via G(x): symmetric far-field + local integral (eqn 4.7)
-Gₓ = first(quadgk(k -> cos(k*x)/(k + kₛ) - cos(k*x)/(k + kₗ), 0, Inf; atol=atol, rtol=rtol)) / (kₗ - kₛ)
-η_steady    = F₀/(α*(kₗ - kₛ)) * (-sin(kₛ*abs(x)) + sin(kₗ*abs(x))) + F₀*Gₓ/(π*α)
-η_transient = η - η_steady
-
-println("η_ivp          = ", η)
-println("η_s (4.5b)     = ", η_steady)
-println("η_transient    = ", η_transient)
-
-# Asymmetric classical radiation steady (long-time reference), x > 0
-η_classical = F₀ * (-2/(α*(kₗ - kₛ)) * sin(kₛ*x) + Gₓ/(π*α))
-println("η_classical    = ", η_classical)
-println("G(3) = ", Gₓ)
+println("η = ", η)
+println("ηₛ = ", ηₛ)
+println("ηₜᵣ = ", ηₜᵣ)
+println("ηclassical = ", ηclassical)
+println("Gₓ = ", G)
 ```
 
 ```text
 𝕀(k=2; x=3, t=110) = -2.4925901110201236
 I₁ = -10.469830630677315
 I₂ = -3.3709095739317627
-I₃ = 5.152909149338946
-η_ivp          = 0.001920386718354745
-η_s (4.5b)     = -0.0005772670229863901
-η_transient    = 0.002497653741341135
-η_classical    = 0.0018388025677065956
-G(3) = 0.011715104659267
+I₃ = 5.152909149338945
+η = 0.001920386718354745
+ηₛ = -0.0005772670229863894
+ηₜᵣ = 0.0024976537413411346
+ηclassical = 0.001838802567706596
+Gₓ = 0.011715104659267239
 ```
 
 ```matlab
@@ -214,15 +229,15 @@ fprintf('G(3) = %.16g\n', G_x);
 ```
 
 ```text
-I(k=2; x=3, t=110) = -2.492590111020124
-I1 = -10.46983063067731
-I2 = -3.370909573932243
-I3 = 5.152903874765406
-eta_ivp          = 0.001920387884263914
-eta_s (4.5b)     = -0.0005772670409069884
-eta_transient    = 0.002497654925170902
-eta_classical    = 0.001838802549785997
-G(3) = 0.011715099029345
+𝕀(k=2; x=3, t=110) = -2.492590111020124
+I₁ = -10.46983063067731
+I₂ = -3.370909573932243
+I₃ = 5.152903874765406
+η = 0.001920387884263914
+ηₛ = -0.0005772670409069884
+ηₜᵣ = 0.002497654925170902
+ηclassical = 0.001838802549785997
+Gₓ = 0.011715099029345
 ```
 
 The full spatial profile — IVP solution, its steady part, and the transient remainder — reproduces Figure 10 of the manuscript.
@@ -231,66 +246,61 @@ The full spatial profile — IVP solution, its steady part, and the transient re
 
 Figure 7 of the manuscript shows the transient component $-\mathbb{I}_4(x,t)$ at an early time $t = 0.37$, confirming the decay of $\mathbb{I}_4$ as $t\to\infty$.
 
+*The following Julia profile calculation reuses `CapillaryGravityParams`, `makeCGParams`, and `χ` from the preceding pointwise-validation block. When running this profile calculation independently, include that preceding Julia block first.*
+
 ```julia
-using QuadGK, Plots, LaTeXStrings
+# Copy-pasting this code in Julia-REPL, reproduces panels of Fig 6 of the manuscript, depending on the value of non-dimensional time `t`
+# (and having run the previous code-block)
 
-# Standalone regularized 𝕀₄ profile (eqn 4.5d). The pole at k=β-type roots is
-# cancelled analytically, so 𝕀₄ is a single integral over [0,∞). The integrand
-# factors as amp(k)·[cos(t(k+χ))cos(kx) + sin(t(k+χ))sin(kx)], so one vector-valued
-# quadrature over k serves a whole spatial chunk (χ and the time phase are computed
-# once per node); the grid is split across threads for speed.
-function cg_I4_profile(x_grid, t)
-    U, g, T = 26.7046, 981.0, 72.0
-    ρₗ, ρᵤ  = 1.0, 0.001
-    l_c = U^2 / g
-    α   = T / (ρₗ * U^2 * l_c)
-    ρᵣ  = ρᵤ / ρₗ
-    β   = (1 - ρᵣ) / (1 + ρᵣ)
-    γᵨ  = 1 / (1 + ρᵣ)
-    atol, rtol = 1e-10, 1e-8
-    χ(k) = sqrt(β*k + γᵨ*α*k^3)
 
-    function chunk!(x_chunk)
-        M = length(x_chunk); out = zeros(M)
-        function integrand!(vals, k)
-            k == 0 && (fill!(vals, 0.0); return vals)
-            c = χ(k)
-            amp = k / ((k + c) * (1 + α*k^2 - ρᵣ))
-            s_ph, c_ph = sincos(t*(k + c))
-            @inbounds @simd for i in 1:M
-                s_kx, c_kx = sincos(k * x_chunk[i])
-                vals[i] = amp * (c_ph*c_kx + s_ph*s_kx)
+using Plots, LaTeXStrings
+
+function I₄Profile(xgrid::Vector{Float64}, t::Float64, p::CapillaryGravityParams)
+    I₄ = Vector{Float64}(undef, length(xgrid))
+    nchunks = min(Threads.nthreads(), length(xgrid))
+    chunkLength = cld(length(xgrid), nchunks)
+    Threads.@threads :static for chunk in 1:nchunks
+        first = (chunk - 1) * chunkLength + 1
+        last = min(chunk * chunkLength, length(xgrid))
+        first > last && continue
+        xchunk = @view xgrid[first:last]
+        values = zeros(Float64, length(xchunk))
+        integrand! = function (out, k)
+            k == 0.0 && (fill!(out, 0.0); return out)
+            χk = χ(k, p)
+            amplitude = k / ((k + χk) * (1.0 + p.α*k^2 - p.ρᵣ))
+            sinPhase, cosPhase = sincos(t * (k + χk))
+            @inbounds @simd for i in eachindex(xchunk, out)
+                sinKx, cosKx = sincos(k*xchunk[i])
+                out[i] = amplitude * (cosPhase*cosKx + sinPhase*sinKx)
             end
-            vals
+            out
         end
-        quadgk!(integrand!, out, 0.0, Inf; atol=atol, rtol=rtol, order=15,
-                norm=v->maximum(abs, v))
-        out
+        quadgk!(integrand!, values, 0.0, Inf; atol=p.atol, rtol=p.rtol,
+                order=15, norm=values -> maximum(abs, values))
+        copyto!(@view(I₄[first:last]), values)
     end
-
-    N = length(x_grid); I4 = Vector{Float64}(undef, N)
-    nchunks = min(Threads.nthreads(), N)
-    clen = cld(N, nchunks)
-    Threads.@threads :static for c in 1:nchunks
-        lo = (c-1)*clen + 1; hi = min(c*clen, N)
-        lo <= hi && copyto!(view(I4, lo:hi), chunk!(view(x_grid, lo:hi)))
-    end
-    return I4
+    return I₄
 end
 
-x_grid = collect(range(-15.0, 15.0; length=2001))
-filter!(x -> abs(x) > 1e-12, x_grid)
-t_I4 = 0.37
-I4 = cg_I4_profile(x_grid, t_I4)
+p = makeCGParams()
+t = 0.37
+xgrid = collect(range(-15.0, 15.0; length=2001))
+filter!(x -> abs(x) > 1e-12, xgrid)
+I₄ = I₄Profile(xgrid, t, p)
 
-plot(x_grid, -I4; color="purple", linewidth=3,
-     guidefontsize=16, tickfontsize=14,
+default(fontfamily="Computer Modern", linewidth=2.5, framestyle=:box,
+        grid=false, guidefontsize=18, tickfontsize=16, legendfontsize=16)
+plot(xgrid, -I₄; color="purple", label=L"\mathrm{Julia}",
      xlabel=L"x", ylabel=L"-\mathbb{I}_{4}",
-     xlims=(-10,10), ylims=(-2,14), size=(800,400))
+     xlims=(-10,10), ylims=(-2,14), yticks=[0,3,6,9,12])
 ```
 
 ```matlab
-%% Standalone regularized I4 profile at t = 0.37 (Fig 7)
+%% Copy-pasting this code in MATLAB session, reproduces panels of Fig 6 of the manuscript, depending on the value of non-dimensional time `t`
+
+
+%% Standalone regularized I4 profile at t = 0.37 
 U = 26.7046; g = 981.0; T = 72.0;
 rho_l = 1.0; rho_u = 0.001;
 l_c   = U^2 / g;
@@ -320,42 +330,41 @@ xlim([-10 10]); ylim([-2 14]);
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/cg_I4_fig7.png" alt="Fig 7(i)" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 7(i).</strong> Transient component <em>-&#x1D540;<sub>4</sub></em> at <em>t</em> = 0.37 (Julia).</figcaption>
+  <img src="../../assets/cg_I4_fig7.png" alt="Fig 6" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 6</strong> of the manuscript(only $t=0.37 $ reported here)</figcaption>
 </figure>
 ```
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/fig7_overlay.png" alt="Fig 7(ii) overlay" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 7(ii).</strong> Julia (line) and MATLAB (markers) overlay, demonstrating the two computations are equivalent.</figcaption>
+  <img src="../../assets/fig7_overlay.png" alt="Fig 6 overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 6</strong> of the manuscript(only $t=0.37 $ reported here).Comparison of Julia(lines) with MATLAB(markers).</figcaption>
 </figure>
 ```
-This is plotted ($t=0.37 profile$) as Fig 7 in the manuscript showing time evolution of $I_4(x, t)$ from eqn. 4.5(d) for $\rho_r = 0.001$ and $\alpha = 0.1389$. 
+This is plotted ($t=0.37 $) profile as Fig 6 in the manuscript showing time evolution of $I_4(x, t)$ from eqn. 4.5(d) for $\rho_r = 0.001$ and $\alpha = 0.1389$. 
 
-## Full IVP profile (Fig. 8)
+## Full IVP profile (Fig. 7)
 
-The capillary–gravity IVP has the transient contribution $\eta_{\mathrm{tr}}$. The follwoing code blocks in Julia/MATLAB reproduce the fig. 8 in the manuscript that plots $\eta$ and $\eta_{tr}$ at $t=367.35$
+The capillary–gravity IVP has the transient contribution $\eta_{\mathrm{tr}}$. The follwoing code blocks in Julia/MATLAB reproduce the fig. 7 in the manuscript that plots $\eta$ and $\eta_{tr}$ at $t=367.35$
+
+*The following Julia profile calculation reuses `CapillaryGravityParams`, `makeCGParams`, and `χ` from the preceding pointwise-validation block. When running this profile calculation independently, include that preceding Julia block first.*
 
 ```julia
+# Copy-pasting this code in Julia-REPL, reproduces panels of Fig 7 of the manuscript, depending on the value of non-dimensional time `t`
+# (and having run the previous code-block)
+
 using QuadGK, Plots, LaTeXStrings
+
+default(fontfamily="Computer Modern", linewidth=2.5, framestyle=:box,
+        grid=false, guidefontsize=18, tickfontsize=16, legendfontsize=16)
 
 # Full CG IVP profile: combined CPV integrand (eqn 4.5a–d, 3 pole-split quadratures)
 # and G(x) for η_s (eqn 4.5b) are computed per spatial chunk across threads.
-function cg_ivp_profile(x_grid, t)
-    U, g, T = 26.7046, 981.0, 72.0
-    ρₗ, ρᵤ  = 1.0, 0.001
-    l_c = U^2 / g
-    α   = T / (ρₗ * U^2 * l_c)
-    ρᵣ  = ρᵤ / ρₗ
-    β   = (1 - ρᵣ) / (1 + ρᵣ)
-    γᵨ  = 1 / (1 + ρᵣ)
-    F₀  = 0.01 * T / (ρₗ * U^2 * l_c)
-    Δ   = (1 + ρᵣ)^2 - 4α * (1 - ρᵣ)
-    kₗ  = ((1 + ρᵣ) + √Δ) / (2α)
-    kₛ  = ((1 + ρᵣ) - √Δ) / (2α)
-    ε, atol, rtol = 1e-6, 1e-10, 1e-8
-    χ(k) = sqrt(β*k + γᵨ*α*k^3)
+function cgIVPProfile(xgrid::Vector{Float64}, t::Float64, p::CapillaryGravityParams)
+    α, ρᵣ, F₀ = p.α, p.ρᵣ, p.F₀
+    kₗ, kₛ, ε = p.kₗ, p.kₛ, p.εCPV
+    atol, rtol = p.atol, p.rtol
+    x_grid = xgrid
 
     N = length(x_grid)
     η = Vector{Float64}(undef, N)
@@ -369,7 +378,7 @@ function cg_ivp_profile(x_grid, t)
         # IVP η: combined integrand 𝕀(k;x,t), split at kₛ±ε and kₗ±ε
         I1 = zeros(M); I2 = zeros(M); I3 = zeros(M)
         function ivp!(vals, k)
-            c = χ(k); invp = 1/(α*(k-kₗ)*(k-kₛ)); invd = (1+ρᵣ)/(1+α*k^2-ρᵣ)
+            c = χ(k, p); invp = 1/(α*(k-kₗ)*(k-kₛ)); invd = (1+ρᵣ)/(1+α*k^2-ρᵣ)
             am = invd*(k+c); ap = invd*(k-c)
             sm, cm = sincos(t*(k-c)); sp, cp = sincos(t*(k+c))
             cc = 2*invp - (am*cm + ap*cp)*invp
@@ -403,18 +412,20 @@ end
 
 x_grid = collect(range(-15.0, 15.0; length=2001))
 filter!(x -> abs(x) > 1e-12, x_grid)
-t_fig8 = 367.35
-η, η_s, η_tr = cg_ivp_profile(x_grid, t_fig8)
+t = 367.35
+p = makeCGParams()
+η, η_s, η_tr = cgIVPProfile(x_grid, t, p)
 
-plot(x_grid, η .* 1e3; label=L"\eta", color="blue", ls=:dash, linewidth=3,
-     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+plot(x_grid, η .* 1e3; label=L"\eta", color="blue", ls=:dash,
      xlabel=L"x", ylabel=L"\eta \times 10^{3}",
-     xlims=(-10,10), ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8],
-     legend=:outerright, size=(800,400))
-plot!(x_grid, η_tr .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot, linewidth=3)
+     xlims=(-10,10), ylims=(-4.8, 8.2), yticks=[-4, 0, 4, 8], legend=:outerright)
+plot!(x_grid, η_tr .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
 ```
 
 ```matlab
+%% Copy-pasting this code in MATLAB session, reproduces panels of Fig 7 of the manuscript, depending on the value of non-dimensional time `t`
+
+
 %% Full CG IVP profile at t = 367.35 (Fig 8)
 U = 26.7046; g = 981.0; T = 72.0;
 rho_l = 1.0; rho_u = 0.001;
@@ -460,23 +471,32 @@ legend('\eta', '\eta_{tr}'); xlim([-10 10]);
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/cg_ivp_fig8.png" alt="Fig 8(i)" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 8(i).</strong> Capillary–gravity IVP at <em>t</em> = 367.35 (Julia): total displacement <em>&eta;</em> and transient part <em>&eta;<sub>tr</sub></em>.</figcaption>
+  <img src="../../assets/cg_ivp_fig8.png" alt="Fig 7" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 7(g)</strong> of the manuscript.</figcaption>
 </figure>
 ```
 
 ```@raw html
 <figure style="text-align:center;">
   <img src="../../assets/fig8_overlay.png" alt="Fig 8(ii) overlay" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 8(ii).</strong> Julia (lines) and MATLAB (markers) overlay, demonstrating the two computations are equivalent.</figcaption>
+  <figcaption style="text-align:center;"><strong>Fig. 7(g)</strong> of the manuscript. Comparison of Julia (lines) and MATLAB (markers).</figcaption>
 </figure>
 ```
 
-## Comparison with nonlinear simulations (Fig. 10)
+## Comparison with nonlinear simulations (Fig. 9)
 
-The IVP solution is compared against a nonlinear simulation using Basilisk[^1] (Navier–Stokes/VOF) at $t_{\dim} = 25$ s. Details of the CFD setup — domain, pressure forcing, boundary conditions, and mesh refinement — are described in the [Basilisk CFD Setup](basilisk_capillary_gravity.md) page. The interface profile data extracted from Basilisk are stored as CSV files in `notebooks/`; the file used here is [`notebooks/if_25.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv). Data are available for $t_{\dim} \in \{$[`1`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv), [`3`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv), [`7`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv), [`15`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv), [`25`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv), [`60`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv), [`145`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv), [`300`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv)$\}$ s.
+The IVP solution is compared against a nonlinear simulation using Basilisk[^1] (Navier–Stokes/VOF) at different time-instances. Details of the CFD setup — domain, pressure forcing, boundary conditions, and mesh refinement — are described in the [Basilisk CFD Setup](basilisk_capillary_gravity.md) page.
+
+The interface profiles  are stored as CSV files in the folder [notebooks](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/notebooks)  at dimensional time ($0.01, 0.03, 0.07, 0.15, 0.25, 0.60, 1.45, 3.0$) in seconds and are extracted from the Basilisk dump files. They are saved as  [`if_1.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv), [`if_3.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv), [`if_7.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv), [`if_15.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv), [`if_25.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv), [`if_60.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv), [`if_145.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv), and [`if_300.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv) respectively, to compare with IVP theory.
+
+
+*The following Julia comparison calculation reuses `CapillaryGravityParams`, `makeCGParams`, `χ`, and `cgIVPProfile` from the preceding pointwise and Fig. 7 profile code-blocks. When running it independently, include those preceding Julia blocks first.*
 
 ```julia
+## Simulation(Basilisk) data is in folder `notebooks` of the github repo. Kindly adjust the path in `joinpath("notebooks", "if_$num.csv")` accordingly
+## Copy-pasting this code in Julia-REPL, reproduces panels of Fig 9 of the manuscript, depending on the value of dimensional time `t_dim`
+# (and having run the previous code-blocks)
+
 using DelimitedFiles, Plots, LaTeXStrings
 
 # Nondimensional time and length scales (no API)
@@ -484,12 +504,13 @@ U, g = 26.7046, 981.0
 t_c = U / g          # characteristic time [s]
 l_c = U^2 / g        # characteristic length [cm]
 
-t_dim = 25
-t_sim = t_dim / (100 * t_c)   # nondimensional (data in CGS: 1 cm = l_c)
+t_dim = 0.25
+t_sim = t_dim / (t_c)   # nondimensional (data in CGS: 1 cm = l_c)
 
-# IVP η using the same cg_ivp_profile driver as Fig. 8 (defined above)
+# IVP η using the shared cgIVPProfile driver from Fig. 8.
 x_grid = collect(range(-15.0, 15.0; length=2001)); filter!(x -> abs(x) > 1e-12, x_grid)
-η_sim, _, _ = cg_ivp_profile(x_grid, t_sim)
+p = makeCGParams()
+η_sim, _, _ = cgIVPProfile(x_grid, t_sim, p)
 
 # Basilisk simulation data: column 6 = x [cm], column 7 = y [cm]
 data  = sortslices(readdlm(joinpath("notebooks", "if_25.csv"), ',', Float64; skipstart=1),
@@ -497,16 +518,19 @@ data  = sortslices(readdlm(joinpath("notebooks", "if_25.csv"), ',', Float64; ski
 x_bsk = data[:, 6] ./ l_c
 y_bsk = data[:, 7] ./ l_c
 
-plot(x_grid, η_sim .* 1e3; label=L"\eta", color="blue", ls=:dash, linewidth=3,
-     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+plot(x_grid, η_sim .* 1e3; label=L"\eta", color="blue", ls=:dash,
      xlabel=L"x", ylabel=L"\eta \times 10^{3}",
      xlims=(-6,10), ylims=(-6, 8.2), yticks=[-4, 0, 4, 8],
-     legend=:outerright, size=(800,400))
-plot!(x_bsk, y_bsk .* 1e3; label="Simulation", color="red", ls=:dot, linewidth=3)
+     legend=:topright)
+plot!(x_bsk, y_bsk .* 1e3; label="Simulation", color="red", ls=:dot)
 ```
 
 ```matlab
-%% IVP vs nonlinear simulation at t_dim = 25 s (Fig 10)
+%% Simulation(Basilisk) data is in folder `notebooks` of the github repo. Kindly adjust the path in `readmatrix('notebooks/if_$num.csv');` accordingly. 
+%% Copy-pasting this code in MATLAB session, reproduces panels of Fig 9 of the manuscript, depending on the value of dimensional time `t_dim`
+
+
+%% IVP vs nonlinear simulation at t_dim = 0.25 s (Fig 10)
 U = 26.7046; g = 981.0; T = 72.0;
 rho_l = 1.0; rho_u = 0.001;
 l_c   = U^2 / g;
@@ -522,8 +546,8 @@ epsilon_pv = 1e-6; AbsTol = 1e-10; RelTol = 1e-8;
 chi = @(k) sqrt((1-rho_r)/(1+rho_r)*k + gamma_rho*alpha*k.^3);
 
 x_grid = linspace(-15, 15, 2001); x_grid(abs(x_grid) < 1e-12) = [];
-t_dim  = 25;
-t      = t_dim / (100 * t_c);
+t_dim  = 0.25;
+t      = t_dim / ( t_c);
 
 % IVP η — ArrayValued combined-integrand inversion (same as Fig 8)
 combined = @(k) ...
@@ -539,7 +563,7 @@ I_hi = integral(combined, k_l + epsilon_pv, Inf, 'ArrayValued', true, 'AbsTol', 
 eta_sim = -F0/(2*pi) * (I_lo + I_mi + I_hi);
 
 % Basilisk simulation data
-data  = readmatrix('notebooks/if_25.csv');
+data  = readmatrix('notebooks/if_25.csv');   % adjust file and folder paths as per user.. this is for t=0.25 sec
 data  = sortrows(data, 6);
 x_bsk = data(:,6) / l_c;
 y_bsk = data(:,7) / l_c;
@@ -553,15 +577,15 @@ legend('\eta (IVP)', 'Simulation'); xlim([-6 10]);
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/cg_sim_fig10.png" alt="Fig 10(i)" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 10(i).</strong> IVP vs nonlinear simulation (Basilisk, Navier–Stokes/VOF) at <em>t</em><sub>dim</sub> = 25 s (Julia).</figcaption>
+  <img src="../../assets/cg_sim_fig10.png" alt="Fig 9(e)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 9(e)</strong> of the manuscript.</figcaption>
 </figure>
 ```
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/fig10_overlay.png" alt="Fig 10(ii) overlay" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 10(ii).</strong> Julia (lines), MATLAB (markers), and Basilisk simulation overlay, demonstrating the two computations are equivalent.</figcaption>
+  <img src="../../assets/fig10_overlay.png" alt="Fig 9(e) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 9(e)</strong> of the manuscript. Comparison of Julia(solid blue lines) and MATLAB code(markers) with Basilisk simulation(red dotted line).</figcaption>
 </figure>
 ```
 
