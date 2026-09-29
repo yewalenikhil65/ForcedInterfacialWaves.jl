@@ -18,7 +18,7 @@ self-contained Julia/MATLAB code blocks embedded directly in the theory pages â€
 installable Julia package here. For a guided, runnable walkthrough of the equivalent
 computations, see the notebooks described below.
 
-## Building the documentation
+## Building the documentation (contributors only)
 
 Requires Julia â‰¥ 1.9.
 
