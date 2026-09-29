@@ -41,9 +41,18 @@ k_{l,s} = \frac{1+\rho_r}{2\alpha}\left[1\pm\sqrt{1-\frac{4\alpha\beta}{1+\rho_r
 
 The integral expression for $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ above is solved numerically (in Julia and MATLAB) using the following codes. The Julia code writes out equation (3.11) term by term — exactly as the MATLAB reference does — so each line maps directly onto the mathematics: the far-field is the closed-form sine combination, and the local part is the exponentially-decaying integral evaluated with adaptive quadrature (`quadgk`).
 
+
 ```julia
+# Copy-pasting this code in Julia REPL , reproduces Fig 4(a) of the manuscript
+
 using QuadGK          # adaptive Gauss–Kronrod quadrature (∫₀^∞ …)
 using Plots, LaTeXStrings
+
+plot_font = "Computer Modern"
+default(fontfamily=plot_font, linewidth=3,
+        framestyle=:box, label=nothing, color="blue", grid=false,
+        fg_legend=false, background_color_legend=false,
+        guidefontsize=16, tickfontsize=14, legendfontsize=14)
 
 # ─── Nondimensional parameters (see the Overview page) ───
 U, g, T = 26.7046, 981.0, 72.0
@@ -75,14 +84,15 @@ x = filter(xi -> abs(xi) > 1e-12, collect(x))
 η_ff  = η_farfield.(x)
 η_loc = η_local.(x)
 
-plot(x, η_loc .* 1e3; label="local", color="red",
-     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+plot(x, η_loc .* 1e3; label="local", color="red", lw=3,
      xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-10,10),
-     legend=:outerright, size=(800,400))
-plot!(x, η_ff .* 1e3; label="far-field", color="blue")
+     legend=:outerright)
+plot!(x, η_ff .* 1e3; label="far-field", color="blue", lw=3)
 ```
 
 ```matlab
+%% Copy-pasting this code in MATLAB session , reproduces Fig 4(a) of the manuscript
+
 %% Steady-state decomposition (no Rayleigh dissipation) — eqn. (3.11)
 U = 26.7046; g = 981.0; T = 72.0;
 rho_l = 1.0; rho_u = 0.001;
@@ -116,15 +126,15 @@ legend('local','far-field'); xlim([-10 10]);
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/steady_no_rayleigh.png" alt="Fig 5a(i)" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 5a(i).</strong> Steady-state far-field and local components without Rayleigh dissipation (Julia).</figcaption>
+  <img src="../../assets/steady_no_rayleigh.png" alt="Fig 4(a)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 4(a).</strong> of the manuscript.</figcaption>
 </figure>
 ```
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/fig5a_overlay.png" alt="Fig 5a(ii) overlay" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 5a(ii).</strong> Julia (lines) and MATLAB (markers at peaks/troughs) overlay — without Rayleigh dissipation.</figcaption>
+  <img src="../../assets/fig5a_overlay.png" alt="Fig 4a overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 4(a).</strong> of the manuscript. Comparison of Julia (lines) and MATLAB (markers) above mentioned codes.</figcaption>
 </figure>
 ```
 The steady-state response $\eta(x)$ using the Rayleigh dissipation approach is obtained as:
@@ -147,7 +157,10 @@ form of equation (3.12): short waves are selected upstream ($x<0$) and long wave
 linked page), so we reuse `η_local` from the previous block.
 
 ```julia
-# ─── Equation (3.12):  Rayleigh-dissipation far-field (asymmetric) ───
+# Copy-pasting this code in Julia REPL , reproduces Fig 4(b) of the manuscript
+
+
+# ─── ayleigh-dissipation far-field (asymmetric) ───
 # Upstream (x<0): long-wavelength kₗ;  Downstream (x>0): short-wavelength kₛ.
 # (At x = 0 both branches give sin(0) = 0, so no separate case is needed.)
 η_farfield_rayleigh(x) = -2F₀ / (α * (kₗ - kₛ)) * sin((x < 0 ? kₗ : kₛ) * x)
@@ -155,21 +168,23 @@ linked page), so we reuse `η_local` from the previous block.
 η_ff_r  = η_farfield_rayleigh.(x)
 η_loc_r = η_local.(x)          # identical local term as in eqn. (3.11)
 
-plot(x, η_loc_r .* 1e3; label="local", color="red",
-     guidefontsize=16, tickfontsize=14, legendfontsize=14,
+plot(x, η_loc_r .* 1e3; label="local", color="red", lw=3,
      xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-10,10),
-     legend=:outerright, size=(800,400))
-plot!(x, η_ff_r .* 1e3; label="far-field", color="blue")
+     legend=:outerright)
+plot!(x, η_ff_r .* 1e3; label="far-field", color="blue", lw=3)
 ```
 
 ```matlab
-%% Steady-state with Rayleigh dissipation (eqn. 3.12)
+%% Copy-pasting this code in MATLAB session , reproduces Fig 4(b) of the manuscript
+
+
+%% Steady-state with Rayleigh dissipation 
 % Far-field: asymmetric sinusoidal terms
 eta_far_r = zeros(size(x));
 eta_far_r(x < 0) = -2*F0/(alpha*(k_l - k_s)) .* sin(k_l*x(x < 0));
 eta_far_r(x > 0) = -2*F0/(alpha*(k_l - k_s)) .* sin(k_s*x(x > 0));
 
-% Local: identical local term as the non-Rayleigh case (eqn. 3.11)
+% Local: identical local term as the non-Rayleigh case 
 eta_local_r = eta_local;
 
 figure; hold on;
@@ -181,14 +196,14 @@ legend('local','far-field'); xlim([-10 10]);
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/steady_rayleigh.png" alt="Fig 5b(i)" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 5b(i).</strong> Steady-state far-field and local components with Rayleigh dissipation (Julia). The asymmetric far-field response selects short waves upstream (<em>x</em>&lt;0) and long waves downstream (<em>x</em>&gt;0).</figcaption>
+  <img src="../../assets/steady_rayleigh.png" alt="Fig 4(b)" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 4(b)</strong> of the manuscript.</figcaption>
 </figure>
 ```
 
 ```@raw html
 <figure style="text-align:center;">
-  <img src="../../assets/fig5b_overlay.png" alt="Fig 5b(ii) overlay" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 5b(ii).</strong> Julia (lines) and MATLAB (markers at peaks/troughs) overlay — Rayleigh dissipation.</figcaption>
+  <img src="../../assets/fig5b_overlay.png" alt="Fig 4(b) overlay" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;"><strong>Fig. 4(b)</strong> of the manuscript.  Comparison of Julia (lines) and MATLAB (markers) above mentioned codes.</figcaption>
 </figure>
 ```

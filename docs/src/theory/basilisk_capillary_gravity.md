@@ -1,6 +1,8 @@
 # Basilisk CFD: Capillary-Gravity Waves from Pressure Forcing
 
-This page describes the Basilisk[^1] simulation used to generate the nonlinear CFD reference data compared against the IVP theory in the [Capillary–Gravity](capillary_gravity.md) section (Fig. 10 of the manuscript). The simulation solves the two-phase incompressible Navier–Stokes equations with surface tension for a localized Lorentzian pressure forcing applied at the interface between two fluids in uniform horizontal motion. The simulation is dimensional in CGS units. The full source file is [`notebooks/capillary_gravity_forced.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/capillary_gravity_forced.c).
+This page describes the Basilisk[^1] (corresponding source code can be found [here](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/tree/main/basilisk)) simulation used to generate the nonlinear CFD reference data compared against the IVP theory in the [Capillary–Gravity](capillary_gravity.md) section (Fig. 10 of the manuscript). The simulation solves the two-phase incompressible Navier–Stokes equations with surface tension for a localized Lorentzian pressure forcing applied at the interface between two fluids in uniform horizontal motion. The simulation is dimensional in CGS units. The full source file is [`notebooks/capillary_gravity_forced.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/capillary_gravity_forced.c).
+
+Note that Basilisk uses `y` as vertical coordinate in its programmatic notation, whereas  the manuscript (see [Kadari et al. (2026)](https://arxiv.org/abs/2605.12254)) adopts `z` as the notation for vertical coordinate.
 
 ---
 
@@ -69,7 +71,7 @@ f[top]    = neumann(0.);
 f[bottom] = neumann(0.);
 ```
 
-A uniform horizontal base velocity $U = 26.7046\ \mathrm{cm/s}$ is imposed as a Dirichlet condition on the tangential velocity component at all four boundaries. The normal velocity is zero everywhere. The pressure is fixed to zero at the right boundary; zero-normal-gradient (Neumann) conditions are applied at all other boundaries. The volume fraction $f$ satisfies Neumann conditions at all boundaries to prevent artificial flux at the domain edges.
+A uniform horizontal base velocity $U = 26.7046\ \mathrm{cm/s}$ is imposed as a Dirichlet condition at all four boundaries. The pressure is fixed to zero at the right boundary; zero-normal-gradient (Neumann) conditions are applied at all other boundaries. We impose Neumann conditions on the volume fraction $f$ at all boundaries.
 
 ---
 
@@ -125,10 +127,10 @@ event acceleration (i++)
 A Lorentzian pressure distribution is applied at the interface at every time step:
 
 ```math
-p_e(x) = \frac{F_0}{\pi}\frac{b}{b^2 + x^2}, \qquad F_0 = 0.01\,T.
+\tilde{p}_e(\tilde{x}, t > 0) = \frac{\tilde{F}_0}{\pi}\frac{\tilde{b}}{\tilde{b}^2 + \tilde{x}^2}, \qquad \tilde{F}_0 = 0.01\,T.
 ```
 
-The half-width $b = \Delta$ equals the local grid-cell size. In the limit $b \to 0$ this approaches a Dirac delta forcing. The forcing is implemented as an additional acceleration on the vertical face-velocity component, weighted by the VOF gradient $(f[] - f[0,-1])/\Delta$ which is non-zero only at the interface — confining the forcing to the two-fluid interface.
+The half-width $\tilde{b} = \Delta$ equals the local grid-cell size. In the limit $\tilde{b} \to 0$ this approaches a Dirac delta forcing. The forcing is implemented as an additional acceleration on the vertical face-velocity component, weighted by the VOF gradient $(f[] - f[0,-1])/\Delta$ which is non-zero only at the interface — confining the forcing to the two-fluid interface.
 
 ---
 
@@ -209,7 +211,7 @@ event dump_i1 (t = 0; t += 0.01; t <= 5.02)
 }
 ```
 
-The complete simulation state is written to `./data/snapshot-<t>` every $0.01\ \mathrm{s}$, from $t = 0$ to $t = 5.02\ \mathrm{s}$. Each dump file contains the full field data (velocity, pressure, volume fraction, and mesh) and can be restarted or post-processed independently. The `pid[]` scalar records the MPI process ID for each cell, useful for visualizing the domain decomposition in parallel runs. The interface profiles at selected times are extracted from these dump files and stored as [`if_1.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv), [`if_3.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv), [`if_7.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv), [`if_15.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv), [`if_25.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv), [`if_60.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv), [`if_145.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv), and [`if_300.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv), used in the [Capillary–Gravity](capillary_gravity.md#comparison-with-nonlinear-simulations-fig-10) comparison.
+The complete simulation state is written to `./data/snapshot-<t>` every $0.01\ \mathrm{s}$, from $t = 0$ to $t = 5.02\ \mathrm{s}$. Each dump file contains the full field data (velocity, volume fraction, and mesh) and can be restarted or post-processed independently. The interface profiles at selected times ($0.01, 0.03, 0.07, 0.15, 0.25, 0.60, 1.45, 3.0$) in seconds are extracted from these dump files and stored as [`if_1.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_1.csv), [`if_3.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_3.csv), [`if_7.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_7.csv), [`if_15.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_15.csv), [`if_25.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_25.csv), [`if_60.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_60.csv), [`if_145.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_145.csv), and [`if_300.csv`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/if_300.csv) respectively, used to compare with IVP theory.
 
 ---
 
@@ -217,15 +219,27 @@ The complete simulation state is written to `./data/snapshot-<t>` every $0.01\ \
 
 ```bash
 # Compile (serial)
-qcc -O2 -o capillary_gravity_forced capillary_gravity_forced.c -lm
 mkdir -p data
-./capillary_gravity_forced
+qcc capillary_gravity_forced.c -lm -O2
+./a.out
 
 # Compile and run in parallel (MPI)
-qcc -O2 -D_MPI=1 -o capillary_gravity_forced capillary_gravity_forced.c -lm
-mpirun -np <N> ./capillary_gravity_forced
+mkdir -p data
+qcc -grid=quadtree -D_MPI=1 -source capillary_gravity_forced.c
+mpicc -Wall -O2 -std=c99 capillary_gravity_forced.c -o parallel -lm
+mpiexec -np 4 ./parallel    # if running locally on PC/workstation
 ```
 
+Postprocessing the interface from this Basilisk simulation(dotted red) at each time-step, and comparing with the capillary-gravity linearised IVP theory(dashed blue) in the manuscript, we obtain as follows: 
+
+```@raw html
+<figure style="text-align:center;">
+  <img src="../../assets/basilisk.gif" alt="" style="max-width:80%; height:auto;">
+  <figcaption style="text-align:center;">
+    Figure 9 in the manuscript.
+  </figcaption>
+</figure>
+```
 ---
 
 ## References
