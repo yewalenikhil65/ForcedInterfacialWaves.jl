@@ -18,35 +18,6 @@ self-contained Julia/MATLAB code blocks embedded directly in the theory pages �
 installable Julia package here. For a guided, runnable walkthrough of the equivalent
 computations, see the notebooks described below.
 
-## Building the documentation (contributors only)
-
-Requires Julia ≥ 1.9.
-
-```bash
-julia --project=docs -e 'using Pkg; Pkg.instantiate()'   # one-time setup
-julia --project=docs docs/make.jl                        # build into docs/build/
-```
-
-To preview with live-reload while editing:
-
-```bash
-julia --project=docs docs/serve.jl
-```
-
-Full docs: <https://yewalenikhil65.github.io/ForcedInterfacialWaves.jl/>
-
-## Notebooks
-
-[`notebooks/`](notebooks/) contains Jupyter notebooks and supporting data reproducing the
-gravity–capillary wave comparisons presented in the paper:
-
-- [`gc_comoving_ivp_readable.ipynb`](notebooks/gc_comoving_ivp_readable.ipynb) — solves the
-  gravity–capillary co-moving IVP and compares it against a Basilisk VOF simulation
-  (`basilisk_gc_ivp/`).
-
-See [`notebooks/README.md`](notebooks/README.md) for details, data provenance, and
-instructions to regenerate the Basilisk interface data.
-
 ## Citation
 
 If you use this material, please cite:
@@ -72,3 +43,21 @@ If you use this material, please cite:
 - Nikhil Yewale
 - Prof. Y.S. Mayya
 - Prof. Ratul Dasgupta
+
+  
+## Building the documentation (contributors only)
+
+Requires Julia ≥ 1.9.
+
+```bash
+julia --project=docs -e 'using Pkg; Pkg.instantiate()'   # one-time setup
+julia --project=docs docs/make.jl                        # build into docs/build/
+```
+
+To preview with live-reload while editing:
+
+```bash
+julia --project=docs docs/serve.jl
+```
+
+Full docs: <https://yewalenikhil65.github.io/ForcedInterfacialWaves.jl/>
