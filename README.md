@@ -1,5 +1,7 @@
 # ForcedInterfacialWaves
 
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://yewalenikhil65.github.io/ForcedInterfacialWaves.jl/)
+
 Theory, derivations, and numerical validation for the initial value problem (IVP) of
 pressure-forced interfacial waves between two inviscid, incompressible fluids in relative
 uniform motion, following [Kadari et al. (2026)](https://arxiv.org/abs/2605.12254). Two
