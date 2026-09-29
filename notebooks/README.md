@@ -3,15 +3,12 @@
 This directory contains Jupyter notebooks and supporting data for
 reproducing the gravity–capillary wave comparisons presented in the paper.
 
----
-
 ## Contents
 
 ```
 notebooks/
 ├── README.md                              ← this file
-├── forced_interfacial_waves_usage.ipynb   ← ForcedInterfacialWaves.jl usage guide
-├── if_*.csv                               ← interfacial wave data for forced_interfacial_waves_usage.ipynb
+├── if_*.csv                               ← Basilisk interface profile data (used by Fig. 9 and docs)
 ├── gc_comoving_ivp_readable.ipynb         ← conformal IVP vs. Basilisk VOF comparison
 └── basilisk_gc_ivp/                       ← Basilisk simulation bundle
     ├── run_gc_ivp.c                       ← Basilisk IVP solver (Step 4)
@@ -22,23 +19,13 @@ notebooks/
         └── interface-0.dat ... interface-26.dat   ← Basilisk output_facets() snapshots
 ```
 
----
-
-## 1. `forced_interfacial_waves_usage.ipynb`
-
-A guided Julia usage template for the `ForcedInterfacialWaves.jl` package.
-It follows the paper's mathematical organisation and demonstrates:
-
-- The steady-state Fourier representation of pressure-forced interfacial waves.
-- The pure-gravity (α = 0) IVP with the analytical T₀–T₄ decomposition.
-- The capillary–gravity (α > 0) IVP with numerical quadrature.
-
-The `if_*.csv` files in this directory provide precomputed interfacial
-wave profiles used by `forced_interfacial_waves_usage.ipynb`.
+The `if_*.csv` files in this directory contain Basilisk simulation interface
+profiles used by the Fig. 9 comparison in the documentation and by the
+`gc_comoving_ivp_readable.ipynb` notebook.
 
 ---
 
-## 2. `gc_comoving_ivp_readable.ipynb`
+## 1. `gc_comoving_ivp_readable.ipynb`
 
 A self-contained, readable notebook that:
 
@@ -76,7 +63,7 @@ NonlinearSolve, Plots, LaTeXStrings, Printf, DelimitedFiles
 
 ---
 
-## 3. `basilisk_gc_ivp/` — Basilisk simulation bundle
+## 2. `basilisk_gc_ivp/` — Basilisk simulation bundle
 
 This directory contains everything needed to run (or re-run) the Basilisk
 VOF simulation that produces the interface data compared in the notebook.
