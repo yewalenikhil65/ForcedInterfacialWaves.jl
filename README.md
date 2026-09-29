@@ -8,9 +8,9 @@ uniform motion, following [Kadari et al. (2026)](https://arxiv.org/abs/2605.1225
 regimes are covered:
 
 - **Pure gravity** (`α = 0`) — analytical `T₀`–`T₄` decomposition, cross-checked against a
-  direct numerical Cauchy principal value (CPV) evaluation (manuscript Figure 6).
+  direct numerical Cauchy principal value (CPV) evaluation (manuscript Figure 5).
 - **Capillary–gravity** (`α > 0`) — a combined-integrand technique that cancels the two
-  removable poles at `k_s`, `k_l` before quadrature (manuscript Figures 7–10), validated
+  removable poles at `k_s`, `k_l` before quadrature (manuscript Figures 6–9), validated
   against nonlinear Basilisk (Navier–Stokes/VOF) simulations.
 
 The site is built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl) from
@@ -69,7 +69,7 @@ ForcedInterfacialWaves.jl/
 │       │   │                                  #   pure_gravity_transient_asymptotic_proof.md
 │       │   ├── capillary_gravity.md           # → capillary_gravity_asymmetric_cancellation.md,
 │       │   │                                  #   capillary_gravity_rayleigh_dissipation.md, lamb_gx_equivalence.md
-│       │   └── basilisk_capillary_gravity.md  # Basilisk CFD setup for Fig. 10
+│       │   └── basilisk_capillary_gravity.md  # Basilisk CFD setup for Fig. 9
 │       ├── validation/
 │       │   └── cfd_conformal_mapping.md       # nonlinear-regime CFD vs. conformal-mapping IVP
 │       ├── steady_proof.md                          # hidden: contour-integration proof
