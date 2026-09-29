@@ -188,87 +188,173 @@ Substituting (2.16) into (2.12) and performing a partial-fraction decomposition 
 where, we define
 
 ```math
-\mathbb{I}_{9}(x)=\int_{0}^{\infty} dk\;\frac{\exp (ikx)}{k-(k_{s}+i\nu)} \tag{2.18a}
+\mathbb{I}_{9}(x)=\int_{0}^{\infty} dk\;\frac{\exp (ikx)}{k-(k_{s}+i\nu)} \tag{2.18}
 ```
 
 ```math
-\mathbb{I}_{10}(x)=\int_{0}^{\infty} dk\;\frac{\exp (ikx)}{k-(k_{l}-i\nu)} \tag{2.18b}
+\mathbb{I}_{10}(x)=\int_{0}^{\infty} dk\;\frac{\exp (ikx)}{k-(k_{l}-i\nu)} \tag{2.19}
 ```
 
 The integrals $\mathbb{I}_9(x)$ and $\mathbb{I}_{10}(x)$ are singular at $k=k_{s}+i\nu$ and $k=k_{l}-i\nu$. Hence they may be solved by Cauchy residue theorem. Cauchy residue theorem is defined as the integral over the closed contour is equal to $2 \pi i$ times sum of residues of the poles which are enclosed in that closed contour. The residue of a function $f(z)$ at a simple pole $z_0$ is defined as $\operatorname{Res}\left[f(z), z_0\right]=\displaystyle \lim_{z \to z_0}(z-z_0)f(z)$. The corresponding contours are shown in Figure 1(a) and (b). Consider the integral $\mathbb{I}_9^c(x)$ along the closed contour shown in Figure 1(a) for $x>0$:
 
 ```math
-\mathbb{I}_9^c(x) = \oint dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))}, \qquad x>0 \tag{2.19}
+\mathbb{I}_9^c(x) = \oint dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))}, \qquad x>0 \tag{2.20}
 ```
 
 $\mathbb{I}_9^c(x)$ will be sum of residues of poles which are enclosed in the closed contour. Further, upon breaking this integral along the individual segments of the contour, one may write as
 
 ```math
-\mathbb{I}_9^c(x) = 2 \pi i \exp \left(ik_s x\right) =	\int_{\Gamma_1} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))} + \int_{\Gamma_2} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))} + \int_{\Gamma_3} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))} \tag{2.20}
+\mathbb{I}_9^c(x) = 2 \pi i \exp \left(ik_s x\right) =	\int_{\Gamma_1} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))} + \int_{\Gamma_2} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))} + \int_{\Gamma_3} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))} \tag{2.21}
 ```
 
 The integral on the semi circle $\Gamma_3$ tends to zero as $R \to \infty$ for $x>0$, as argued below,
 
 ```math
-\lim_{R \rightarrow \infty}\left[\int_{\Gamma_3} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))}\right]=\lim_{R \rightarrow \infty} \left[\int_{0}^{\pi} d\theta \, iR \exp(i \theta) \frac{\exp\left(ixR \cos(\theta)\right)\exp\left(-xR \sin(\theta)\right)}{(R \exp(i \theta) - (k_s + i \nu))} \right] \tag{2.21}
+\lim_{R \rightarrow \infty}\left[\int_{\Gamma_3} dz \,  \frac{\exp\left(izx\right)}{(z - (k_s + i\nu))}\right]=\lim_{R \rightarrow \infty} \left[\int_{0}^{\pi} d\theta \, iR \exp(i \theta) \frac{\exp\left(ixR \cos(\theta)\right)\exp\left(-xR \sin(\theta)\right)}{(R \exp(i \theta) - (k_s + i \nu))} \right] \tag{2.22}
 ```
 
 The value of the integrand above is governed by the factor $\exp(-xR\sin\theta)$ which tends to zero as $R \to \infty$ for $x>0$ by Jordan's lemma, since $\sin(\theta)$ is always positive in the first and second quadrants. In view of this (2.20) reduces to,
 
 ```math
-\lim_{R \to \infty}\left[\int_{-R}^{0} dk\;\frac{ \exp(ikx)}{k-(k_{s}+i\nu)}+\int_{0}^{R} dk\;\frac{\exp(ikx)}{k-(k_{s}+i\nu)}\right] =2\pi i\exp(ik_s x) \, , \qquad x>0 \tag{2.22}
+\lim_{R \to \infty}\left[\int_{-R}^{0} dk\;\frac{ \exp(ikx)}{k-(k_{s}+i\nu)}+\int_{0}^{R} dk\;\frac{\exp(ikx)}{k-(k_{s}+i\nu)}\right] =2\pi i\exp(ik_s x) \, , \qquad x>0 \tag{2.23}
 ```
 
 Upon completing the limiting process and evaluating the terms, one obtains,
 
 ```math
-\mathbb{I}_9(x) =	\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-(k_{s}+i\nu)}=2\pi i\exp(ik_s x)+\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+(k_{s}+i\nu)} \, , \qquad x>0 \tag{2.23}
+\mathbb{I}_9(x) =	\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-(k_{s}+i\nu)}=2\pi i\exp(ik_s x)+\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+(k_{s}+i\nu)} \, , \qquad x>0 \tag{2.24}
 ```
 
 Since $\nu$ is assumed to be infinitesimally small, we may write the above (2.23) as
 
 ```math
-\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{s}}=2\pi i\exp(ik_s x)+\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{s}} \, , \qquad x>0 \tag{2.24}
+\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{s}}=2\pi i\exp(ik_s x)+\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{s}} \, , \qquad x>0 \tag{2.25}
 ```
 
 Similarly for $x<0$ one performs similar steps of contour integration using Figure 1(b) (note that here $(k_s+i \nu)$ pole is lying outside of the closed contour and residue of $(k_l-i \nu)$ pole becomes zero) and one obtains,
 
 ```math
-\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{s}}=\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{s}}\, , \qquad x<0 \tag{2.25}
+\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{s}}=\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{s}}\, , \qquad x<0 \tag{2.26}
 ```
 
 The integral $\mathbb{I}_{10}(x)$ in (2.18b) has identical mathematical structure as $\mathbb{I}_9(x)$ with $(k_s + i \nu)$ pole is replaced with $(k_l - i \nu)$ pole, accordingly one may write
 
 ```math
-\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{l}}=\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{l}}\, , \qquad x>0 \tag{2.26}
+\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{l}}=\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{l}}\, , \qquad x>0 \tag{2.27}
 ```
 
 and
 
 ```math
-\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{l}}=-2\pi i\exp(ik_l x)+\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{l}}\, , \qquad x<0 \tag{2.27}
+\int_{0}^{\infty} dk\;\frac{\exp(ikx)}{k-k_{l}}=-2\pi i\exp(ik_l x)+\int_{0}^{\infty} dk\;\frac{\exp(-ikx)}{k+k_{l}}\, , \qquad x<0 \tag{2.28}
 ```
 
 Upon plugging (2.24), (2.25), (2.26), (2.27) in (2.17) and keeping $\nu = 0$ in (2.17) then discarding its imaginary terms, yield
 
 ```math
-\frac{\eta(x)}{F_0}	=-\frac{2}{\alpha({k_{l}-k_{s}})}\sin{(k_{s}x)}+\frac{G(x)}{\pi \alpha}\, , \qquad x>0 \tag{2.28}
+\frac{\eta(x)}{F_0}	=-\frac{2}{\alpha({k_{l}-k_{s}})}\sin{(k_{s}x)}+\frac{G(x)}{\pi \alpha}\, , \qquad x>0 \tag{2.29}
 ```
 
 and
 
 ```math
-\frac{\eta(x)}{F_0}=-\frac{2}{\alpha({k_{l}-k_{s}})}\sin{(k_{l}x)}+\frac{G(x)}{\pi \alpha}\, , \qquad x<0 \tag{2.29}
+\frac{\eta(x)}{F_0}=-\frac{2}{\alpha({k_{l}-k_{s}})}\sin{(k_{l}x)}+\frac{G(x)}{\pi \alpha}\, , \qquad x<0 \tag{2.30}
 ```
 
 where,
 
 ```math
-G(x)=\frac{1}{k_{l}-k_{s}}\left[\int_{0}^{\infty} \frac{\cos (kx)}{k+k_{s}}dk-\int_{0}^{\infty} \frac{\cos (kx)}{k+k_{l}}dk\right] \tag{2.30}
+G(x)=\frac{1}{k_{l}-k_{s}}\left[\int_{0}^{\infty} \frac{\cos (kx)}{k+k_{s}}dk-\int_{0}^{\infty} \frac{\cos (kx)}{k+k_{l}}dk\right] \tag{2.31}
 ```
 
-**Figure 1:** Contours for evaluating $\mathbb{I}_9(x)$ in equation (2.18a) (left, $x>0$) and $\mathbb{I}_{10}(x)$ in equation (2.18b) (right, $x<0$). The quadrants for semi circles ($\Gamma_3$) are so chosen that the value of the integral vanishes as $R\rightarrow\infty$.
+| ![](assets/uc_ssl.png) | ![](assets/lc_ssl.png) |
+|:---:|:---:|
+| (a) $x>0$ | (b) $x<0$ |
 
-![](assets/uc_ssl-1.png)
+**Figure 4** (fig:2sa): Contours for evaluating $\mathbb{I}_9(x)$ in equation (2.18a) and $\mathbb{I}_{10}(x)$ in equation (2.18b). The quadrants for semi circles ($\Gamma_3$) are so chosen that the value of the integral vanishes as $R\rightarrow\infty$.
 
-![](assets/lc_ssl-1.png)
+## Equivalence between the local contribution in the present steady solution and Lamb's local function $G(x)$
+
+Lamb's local function $G(x)$ is given in equation (2.31). This function may be shown to be exactly the same as the exponential decay term in the time-independent solution of the present Initial Value Problem (IVP) given in our results. This equivalence may be demonstrated by applying the Cauchy residue theorem to $G(x)$. Let us start this procedure by combining the two cosine integrals in $G(x)$ to obtain a single integral:
+
+```math
+G(x) = \int_{0}^{\infty} dk\, \frac{\cos(kx)}{(k+k_s)(k+k_l)} \tag{2.32}
+```
+
+Writing cosine in exponential form:
+
+```math
+G(x) = \frac{1}{2} \left[ \mathbb{I}_{11}(x) + \mathbb{I}_{12}(x) \right] \tag{2.33}
+```
+
+where we define:
+
+```math
+\mathbb{I}_{11}(x) = \int_{0}^{\infty} dk\, \frac{\exp(ikx)}{(k+k_s)(k+k_l)} \tag{2.34}
+```
+
+```math
+\mathbb{I}_{12}(x) = \int_{0}^{\infty} dk\, \frac{\exp(-ikx)}{(k+k_s)(k+k_l)} \tag{2.35}
+```
+
+The integrals $\mathbb{I}_{11}(x)$ and $\mathbb{I}_{12}(x)$ may be evaluated using contour integration by the Cauchy residue theorem. The corresponding contours are shown in Figure 5. Note that no poles are enclosed within the closed contours.
+
+| ![](assets/lamb_gx_uc.png) | ![](assets/lamb_gx_lc.png) |
+|:---:|:---:|
+| (a) $x>0$ | (b) $x<0$ |
+
+**Figure 5** (fig:sagx1): Contours for evaluating $\mathbb{I}_{11}(x)$ in equation (2.34). The same contours in the reverse order ($x$ replaced with $-x$) will be valid for $\mathbb{I}_{12}(x)$ as well. The quadrants for quarter circles ($\Gamma_2$) are so chosen that the value of the integral vanishes as $R\rightarrow\infty$. Integral along the paths $\Gamma_3$ coinciding with the imaginary axes are regular and bounded as $R\rightarrow\infty$.
+
+Consider the integral $\mathbb{I}_{11}^c(x)$ along the closed contour shown in Figure 5(a) for $x>0$:
+
+```math
+\mathbb{I}_{11}^c(x) = \oint dz\, \frac{\exp(izx)}{(z+k_s)(z+k_l)} \tag{2.36}
+```
+
+$\mathbb{I}_{11}^c(x)$ will be zero since the closed contour does not enclose any poles. Breaking this integral along the individual contour segments:
+
+```math
+\mathbb{I}_{11}^c(x) = 0 = \int_{\Gamma_1} dz\, \frac{\exp(izx)}{(z+k_s)(z+k_l)} + \int_{\Gamma_2} dz\, \frac{\exp(izx)}{(z+k_s)(z+k_l)} + \int_{\Gamma_3} dz\, \frac{\exp(izx)}{(z+k_s)(z+k_l)} \tag{2.37}
+```
+
+The integral on the large quarter circle $\Gamma_2$ tends to zero as $R \to \infty$ for $x>0$. This is demonstrated as follows:
+
+```math
+\lim_{R\rightarrow\infty}\left[\oint d\theta\, iR\exp(i\theta)\, \frac{\exp(ixR\cos\theta)\exp(-xR\sin\theta)}{(R\exp(i\theta)+k_s)(R\exp(i\theta)+k_l)}\right] \tag{2.38}
+```
+
+The integrand decays as $\exp(-xR\sin\theta)$, which tends to zero as $R \to \infty$ for $x>0$ by Jordan's lemma, since $\sin(\theta)$ is always positive in the first quadrant. Thus equation (2.36) reduces to:
+
+```math
+\lim_{R\rightarrow\infty}\left[\int_{0}^{R} dk\, \frac{\exp(ikx)}{(k+k_s)(k+k_l)} - i\int_{0}^{R} dy\, \frac{\exp(-yx)}{(iy+k_s)(iy+k_l)}\right] = 0 \tag{2.39}
+```
+
+Completing the limiting process, we obtain:
+
+```math
+\mathbb{I}_{11}(x) = \int_{0}^{\infty} dk\, \frac{\exp(ikx)}{(k+k_s)(k+k_l)} = i\int_{0}^{\infty} dy\, \frac{\exp(-yx)}{(iy+k_s)(iy+k_l)}, \quad x>0 \tag{2.40}
+```
+
+Similarly, for $x<0$, performing contour integration using Figure 5(b):
+
+```math
+\mathbb{I}_{11}(x) = \int_{0}^{\infty} dk\, \frac{\exp(ikx)}{(k+k_s)(k+k_l)} = -i\int_{0}^{\infty} dy\, \frac{\exp(yx)}{(iy-k_s)(iy-k_l)}, \quad x<0 \tag{2.41}
+```
+
+The integral $\mathbb{I}_{12}(x)$ has the same structure as $\mathbb{I}_{11}(x)$ with $x$ replaced by $-x$:
+
+```math
+\mathbb{I}_{12}(x) = \int_{0}^{\infty} dk\, \frac{\exp(-ikx)}{(k+k_s)(k+k_l)} = -i\int_{0}^{\infty} dy\, \frac{\exp(-yx)}{(iy-k_s)(iy-k_l)}, \quad x>0 \tag{2.42}
+```
+
+```math
+\mathbb{I}_{12}(x) = \int_{0}^{\infty} dk\, \frac{\exp(-ikx)}{(k+k_s)(k+k_l)} = i\int_{0}^{\infty} dy\, \frac{\exp(yx)}{(iy+k_s)(iy+k_l)}, \quad x<0 \tag{2.43}
+```
+
+Substituting equations (2.40), (2.41), (2.42), and (2.43) into equation (2.33) and separating the real and imaginary parts (which vanish), we obtain:
+
+```math
+G(x) = (k_l+k_s)\int_{0}^{\infty} dy\, \frac{y\exp(-y|x|)}{(y^2+k_s^2)(y^2+k_l^2)}, \quad -\infty<x<\infty \tag{2.44}
+```
+
+Equation (2.44), derived from Lamb's local function in equation (2.31), is exactly the same as the local (exponential decay, eqn 4.6 of the manuscript) contribution in the steady solution. 

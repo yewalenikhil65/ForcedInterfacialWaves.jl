@@ -1,27 +1,5 @@
-# Julia
-*.jl.cov
-*.jl.*.cov
-*.jl.mem
-/docs/build/
+docs/build/
+docs/Manifest.toml
+*.DS_Store
 Manifest.toml
-
-# Generated output (figures, comparison data)
-/output/
-/julia_data.csv
-/matlab_data.csv
-
-# OS
-.DS_Store
-
-# Editor
-.vscode/
-*.swp
-
-# Agent tooling
-.kiro/
-
-# Local-only scratch notes (contains private notes/tokens — never push)
-/implementationNotes.md
-
-# Stale build output (duplicate of src/)
-/build/
+basilisk/
