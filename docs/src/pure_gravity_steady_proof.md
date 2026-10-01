@@ -2,7 +2,7 @@
 
 ## Evaluation of time-independent term $\eta_{s}(x)$
 
-Let us focus on the time-independent part $\eta_s(x)$ (see eqn. 4.2a in manuscript). This can be rewritten as:
+Let us focus on the time-independent part $\eta_s(x)$ (see eqn. 3.2a in manuscript). This can be rewritten as:
 
 ```math
 \frac{\eta_{s}(x)}{F_0} =  \frac{1}{2\pi (1+\rho_r)}\left\{\mathbb{I}_5(x)+\mathbb{I}_6(x)\right\},\tag{P.1}
@@ -23,24 +23,25 @@ where, we define,
 
 ---
 
-The integrals $\mathbb{I}_5(x)$ and $\mathbb{I}_6(x)$ are singular at $k=\beta$, lying along the line of integration, as shown in Figure 2.
+The integrals $\mathbb{I}_5(x)$ and $\mathbb{I}_6(x)$ are singular at $k=\beta$, lying along the line of integration, as shown in Figure 3.
 Hence we interpret them to exist in a Principal Value (PV) sense.
-They may be evaluated by contour integration using the PV method, with the contours shown in Figure 2.
+They may be evaluated by contour integration using the PV method, with the contours shown in Figure 3.
 
-The PV of an integral $I=\int_{0}^{\infty} f(x)\,dx$, where $f(x)$ possesses a simple first-order pole at $x=x_0$ ($x_0 \in \mathbb{R}^{+}$), is defined as
+The PV of an integral $I=\int_{0}^{\infty} dx\; f(x)$, where $f(x)$ possesses a simple first-order pole at $x=x_0$ ($x_0 \in \mathbb{R}^{+}$), is defined as
 
 ```math
-I=\operatorname{PV}\int_{0}^{\infty} f(x)\,dx
+I=\operatorname{PV}\int_{0}^{\infty} dx\; f(x)
 =\displaystyle \lim_{\epsilon \to 0}
 \left[
-\int_{0}^{x_0-\epsilon} f(x)\,dx
+\int_{0}^{x_0-\epsilon} dx\; f(x)
 +
-\int_{x_0+\epsilon}^{\infty} f(x)\,dx
-\right],\tag{P.4}
+\int_{x_0+\epsilon}^{\infty} dx\; f(x)
+\right],
+\tag{P.4}
 ```
 if such a limit exists.
 
-Consider the integral $\mathbb{I}_5^c(x)$ along the closed contour shown in Figure 2(a) for $x>0$,
+Consider the integral $\mathbb{I}_5^c(x)$ along the closed contour shown in Figure 3(a) for $x>0$,
 
 ```math
 \mathbb{I}_5^c(x) = \oint dz \,  \frac{\exp\left(izx\right)}{(z - \beta)}, \qquad x>0.\tag{P.5}
@@ -52,22 +53,22 @@ Integral $\mathbb{I}_5^c(x)$ will be zero as the closed contour does not enclose
 \begin{aligned}
 \mathbb{I}_5^c(x)=0
 ={}&
-\int_{\Gamma_1}
-\frac{e^{izx}}{z-\beta}\,dz
+\int_{\Gamma_1} dz\;
+\frac{\exp\left(izx\right)}{z-\beta}
 +
-\int_{\Gamma_2}
-\frac{e^{izx}}{z-\beta}\,dz
+\int_{\Gamma_2} dz\;
+\frac{\exp\left(izx\right)}{z-\beta}
 \\
 &+
-\int_{\Gamma_3}
-\frac{e^{izx}}{z-\beta}\,dz
+\int_{\Gamma_3} dz\;
+\frac{\exp\left(izx\right)}{z-\beta}
 +
-\int_{\Gamma_4}
-\frac{e^{izx}}{z-\beta}\,dz
+\int_{\Gamma_4} dz\;
+\frac{\exp\left(izx\right)}{z-\beta}
 \\
 &+
-\int_{\Gamma_5}
-\frac{e^{izx}}{z-\beta}\,dz .
+\int_{\Gamma_5} dz\;
+\frac{\exp\left(izx\right)}{z-\beta}.
 \end{aligned}
 \tag{P.6}
 ```
@@ -104,7 +105,7 @@ Upon completing the limiting process and identifying the first two terms with th
 	+i \int_{0}^{\infty} dy\,  \frac{\exp \left(-yx\right)}{(iy-\beta)} \, , \qquad x>0.\tag{P.9}
 ```
 
-Similarly, for $x<0$ one performs similar steps of contour integration using the contour in Figure 2(b) and obtains,
+Similarly, for $x<0$ one performs similar steps of contour integration using the contour in Figure 3(b) and obtains,
 
 ```math
 \operatorname{PV}\! \left[\mathbb{I}_5(x)\right] =  -i \pi \exp \left(i\beta x\right)
@@ -128,7 +129,7 @@ and
 Upon plugging eqns. (P.9)–(P.12) into eqn. (P.1) and separating the real and imaginary parts (the latter vanishes), one obtains symmetric expressions for $x>0$ and $x<0$. Since this is expected — the integral expression for $\eta_s(x)$ contains a symmetrical term namely $\cos(kx)$ — taking this symmetry into account one may write down the final expression as,
 
 ```math
-\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right)+\int_0^\infty \frac{y\,e^{-|x|y}}{\beta^2+y^2}\,dy\right], \qquad 0<\beta<1, \qquad -\infty<x<\infty .
+\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right)+\int_0^\infty dy\; \frac{y\,e^{-|x|y}}{\beta^2+y^2}\right], \qquad 0<\beta<1, \qquad -\infty<x<\infty .
 \tag{P.13}
 ```
 
