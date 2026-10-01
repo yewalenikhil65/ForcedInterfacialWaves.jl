@@ -1,7 +1,7 @@
 # Proof: Steady-state solution for finite capillarity ($\alpha > 0$, without Rayleigh dissipation)
 
 ## Evaluation of time-independent term $\eta_{s}(x)$
-The time-independent part of eqn. $3.8$ in the manuscript is given by:
+The time-independent part of eqn. $2.8$ in the manuscript is given by:
 
 ```math
 	\dfrac{\eta_s(x)}{F_0} = -\frac{1}{2\pi} \int_{-\infty}^{\infty}dk\;  \left\{\dfrac{ \exp(ikx) }{\alpha |k|^2-(1+\rho_r)|k| + (1-\rho_r)}\right\},
@@ -52,7 +52,7 @@ Consequently, the integral in equation (3.4.2) is singular and requires a princi
 
 Considering these aspects, equations (3.4.2) may be rewritten as follows.
 
-<!--For $\alpha>0$, the time-independent term $\eta_s(x)$ is given by:-->
+For $\alpha>0$, the time-independent term $\eta_s(x)$ is given by:
 
 ```math
 \dfrac{\eta_{s}(x)}{F_0} = -\frac{1}{2 \pi} \left[\mathbb{I}_1(x) + \mathbb{I}_2(x)\right],
@@ -74,11 +74,11 @@ where,
 
 ---
 
-The integrals $\mathbb{I}_1(x)$ and $\mathbb{I}_2(x)$ are singular at $k=k_l$ and $k=k_s$, lying along the line of integration as shown in Figure 3.
+The integrals $\mathbb{I}_1(x)$ and $\mathbb{I}_2(x)$ are singular at $k=k_l$ and $k=k_s$, lying along the line of integration as shown in Figure 1.
 The integrals are interpreted in a PV sense
-and evaluated using the contour integration method using the contours shown in Figure 3.
+and evaluated using the contour integration method using the contours shown in Figure 1.
 
-Consider the integral $\mathbb{I}_1^c(x)$ along the closed contour shown in Figure 3(a) for $x>0$,
+Consider the integral $\mathbb{I}_1^c(x)$ along the closed contour shown in Figure 1(a) for $x>0$,
 
 ```math
 \mathbb{I}_1^c(x) = \frac{1}{\alpha}\oint dz \,  \frac{\exp\left(izx\right)}{(z - k_l)(z - k_s)}, \qquad x>0.
@@ -91,29 +91,29 @@ Integral $\mathbb{I}_1^c(x)$ will be zero as the closed contour does not enclose
 \begin{aligned}
 \mathbb{I}_1^c(x)=0
 ={}&
-\frac{1}{\alpha}\int_{\Gamma_1}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz
+\frac{1}{\alpha}\int_{\Gamma_1} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)}
 +
-\frac{1}{\alpha}\int_{\Gamma_2}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz
+\frac{1}{\alpha}\int_{\Gamma_2} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)}
 \\
 &+
-\frac{1}{\alpha}\int_{\Gamma_3}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz
+\frac{1}{\alpha}\int_{\Gamma_3} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)}
 +
-\frac{1}{\alpha}\int_{\Gamma_4}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz
+\frac{1}{\alpha}\int_{\Gamma_4} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)}
 \\
 &+
-\frac{1}{\alpha}\int_{\Gamma_5}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz
+\frac{1}{\alpha}\int_{\Gamma_5} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)}
 +
-\frac{1}{\alpha}\int_{\Gamma_6}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz
+\frac{1}{\alpha}\int_{\Gamma_6} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)}
 \\
 &+
-\frac{1}{\alpha}\int_{\Gamma_7}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz .
+\frac{1}{\alpha}\int_{\Gamma_7} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)} .
 \end{aligned}
 \tag{3.4.11}
 ```
@@ -125,26 +125,25 @@ The integral on the large quarter circle $\Gamma_6$ tends to zero as $R \to \inf
 \lim_{R\to\infty}
 \left[
 \frac{1}{\alpha}
-\int_{\Gamma_6}
-\frac{e^{izx}}{(z-k_l)(z-k_s)}\,dz
+\int_{\Gamma_6} dz\;
+\frac{\exp\left(izx\right)}{(z-k_l)(z-k_s)}
 \right]
 ={}&
 \lim_{R\to\infty}
 \Bigg[
 \frac{1}{\alpha}
-\int_0^{\pi/2}
-iR e^{i\theta}
+\int_0^{\pi/2} d\theta\;
+iR \exp\left(i\theta\right)
 \\
 &\qquad\times
 \frac{
-e^{ixR\cos\theta}\,
-e^{-xR\sin\theta}
+\exp\left(ixR\cos\theta\right)\,
+\exp\left(-xR\sin\theta\right)
 }{
-\left(Re^{i\theta}-k_l\right)
-\left(Re^{i\theta}-k_s\right)
+\left(R\exp\left(i\theta\right)-k_l\right)
+\left(R\exp\left(i\theta\right)-k_s\right)
 }
-\,d\theta
-\Bigg],
+\Bigg].
 \end{aligned}
 \tag{3.4.12}
 ```
@@ -157,54 +156,51 @@ the value of the integrand above is governed by the factor $\exp(-xR\sin\theta)$
 \frac{1}{\alpha}
 \lim_{\substack{\epsilon\to0\\R\to\infty}}
 \Bigg[
-\int_0^{k_s-\epsilon}
-\frac{e^{ikx}}{(k-k_l)(k-k_s)}\,dk
+\int_0^{k_s-\epsilon} dk\;
+\frac{\exp\left(ikx\right)}{(k-k_l)(k-k_s)}
 \\
 &\qquad+
-\int_{k_s+\epsilon}^{k_l-\epsilon}
-\frac{e^{ikx}}{(k-k_l)(k-k_s)}\,dk
+\int_{k_s+\epsilon}^{k_l-\epsilon} dk\;
+\frac{\exp\left(ikx\right)}{(k-k_l)(k-k_s)}
 +
-\int_{k_l+\epsilon}^{R}
-\frac{e^{ikx}}{(k-k_l)(k-k_s)}\,dk
+\int_{k_l+\epsilon}^{R} dk\;
+\frac{\exp\left(ikx\right)}{(k-k_l)(k-k_s)}
 \Bigg]
 \\[0.5em]
 &+
 \frac{1}{\alpha}
 \lim_{\epsilon\to0}
-\int_{\pi}^{0}
+\int_{\pi}^{0} d\theta_s\;
 \frac{
-e^{i[k_s+\epsilon e^{i\theta_s}]x}
-\,i\epsilon e^{i\theta_s}
+\exp\left(i[k_s+\epsilon\exp\left(i\theta_s\right)]x\right)
+\,i\epsilon\exp\left(i\theta_s\right)
 }{
-(k_s+\epsilon e^{i\theta_s}-k_l)
-(k_s+\epsilon e^{i\theta_s}-k_s)
+(k_s+\epsilon\exp\left(i\theta_s\right)-k_l)
+(k_s+\epsilon\exp\left(i\theta_s\right)-k_s)
 }
-\,d\theta_s
 \\[0.5em]
 &+
 \frac{1}{\alpha}
 \lim_{\epsilon\to0}
-\int_{\pi}^{0}
+\int_{\pi}^{0} d\theta_l\;
 \frac{
-e^{i[k_l+\epsilon e^{i\theta_l}]x}
-\,i\epsilon e^{i\theta_l}
+\exp\left(i[k_l+\epsilon\exp\left(i\theta_l\right)]x\right)
+\,i\epsilon\exp\left(i\theta_l\right)
 }{
-(k_l+\epsilon e^{i\theta_l}-k_l)
-(k_l+\epsilon e^{i\theta_l}-k_s)
+(k_l+\epsilon\exp\left(i\theta_l\right)-k_l)
+(k_l+\epsilon\exp\left(i\theta_l\right)-k_s)
 }
-\,d\theta_l
 \\[0.5em]
 &+
 \frac{1}{\alpha}
-\int_{\infty}^{0}
-e^{i\pi/2}
+\int_{\infty}^{0} dy\;
+\exp\left(i\pi/2\right)
 \frac{
-e^{i[e^{i\pi/2}y]x}
+\exp\left(i[\exp\left(i\pi/2\right)y]x\right)
 }{
-(e^{i\pi/2}y-k_l)
-(e^{i\pi/2}y-k_s)
-}
-\,dy .
+(\exp\left(i\pi/2\right)y-k_l)
+(\exp\left(i\pi/2\right)y-k_s)
+}.
 \end{aligned}
 \tag{3.4.13}
 ```
@@ -212,28 +208,56 @@ e^{i[e^{i\pi/2}y]x}
 Upon completing the limiting process and identifying the first three terms with the PV of $\mathbb{I}_1(x)$ and evaluating the remaining terms, one obtains,
 
 ```math
-\operatorname{PV}\!\left[\mathbb{I}_1(x)\right] = \frac{1}{\alpha(k_l-k_s)}\left[-i\pi e^{ik_sx}+i\pi e^{ik_lx}\right] + \frac{i}{\alpha}\int_0^\infty \frac{e^{-yx}}{(iy-k_l)(iy-k_s)}\,dy, \qquad x>0 .
+\operatorname{PV}\!\left[\mathbb{I}_1(x)\right]
+=
+\frac{1}{\alpha(k_l-k_s)}
+\left[-i\pi\exp\left(ik_sx\right)+i\pi\exp\left(ik_lx\right)\right]
++
+\frac{i}{\alpha}\int_0^\infty dy\;
+\frac{\exp\left(-yx\right)}{(iy-k_l)(iy-k_s)},
+\qquad x>0 .
 \tag{3.4.14}
 ```
 
-Similarly for $x<0$ one performs similar steps of contour integration using the contour in Figure 3(b) and obtains,
+Similarly for $x<0$ one performs similar steps of contour integration using the contour in Figure 1(b) and obtains,
 
 ```math
-\operatorname{PV}\!\left[\mathbb{I}_1(x)\right] = \frac{1}{\alpha(k_l-k_s)}\left[i\pi e^{ik_sx}-i\pi e^{ik_lx}\right] - \frac{i}{\alpha}\int_0^\infty \frac{e^{yx}}{(iy+k_l)(iy+k_s)}\,dy, \qquad x<0 .
+\operatorname{PV}\!\left[\mathbb{I}_1(x)\right]
+=
+\frac{1}{\alpha(k_l-k_s)}
+\left[i\pi\exp\left(ik_sx\right)-i\pi\exp\left(ik_lx\right)\right]
+-
+\frac{i}{\alpha}\int_0^\infty dy\;
+\frac{\exp\left(yx\right)}{(iy+k_l)(iy+k_s)},
+\qquad x<0 .
 \tag{3.4.15}
 ```
 
 The integral $\mathbb{I}_2(x)$ in eqn. (3.4.9) is the same as $\mathbb{I}_1(x)$ with $x$ replaced with $-x$, accordingly one may write
 
 ```math
-\operatorname{PV}\!\left[\mathbb{I}_2(x)\right] = \frac{1}{\alpha(k_l-k_s)}\left[i\pi e^{-ik_sx}-i\pi e^{-ik_lx}\right] - \frac{i}{\alpha}\int_0^\infty \frac{e^{-yx}}{(iy+k_l)(iy+k_s)}\,dy, \qquad x>0 .
+\operatorname{PV}\!\left[\mathbb{I}_2(x)\right]
+=
+\frac{1}{\alpha(k_l-k_s)}
+\left[i\pi\exp\left(-ik_sx\right)-i\pi\exp\left(-ik_lx\right)\right]
+-
+\frac{i}{\alpha}\int_0^\infty dy\;
+\frac{\exp\left(-yx\right)}{(iy+k_l)(iy+k_s)},
+\qquad x>0 .
 \tag{3.4.16}
 ```
 
 and
 
 ```math
-\operatorname{PV}\!\left[\mathbb{I}_2(x)\right] = \frac{1}{\alpha(k_l-k_s)}\left[-i\pi e^{-ik_sx}+i\pi e^{-ik_lx}\right] + \frac{i}{\alpha}\int_0^\infty \frac{e^{yx}}{(iy-k_l)(iy-k_s)}\,dy, \qquad x<0 .
+\operatorname{PV}\!\left[\mathbb{I}_2(x)\right]
+=
+\frac{1}{\alpha(k_l-k_s)}
+\left[-i\pi\exp\left(-ik_sx\right)+i\pi\exp\left(-ik_lx\right)\right]
++
+\frac{i}{\alpha}\int_0^\infty dy\;
+\frac{\exp\left(yx\right)}{(iy-k_l)(iy-k_s)},
+\qquad x<0 .
 \tag{3.4.17}
 ```
 
@@ -245,4 +269,3 @@ Upon plugging eqns. (3.4.14) and (3.4.16) (for $x>0$) and eqns. (3.4.15) and (3.
 ```
 
 It may be noted while the first two terms shows a far-field steady wavy pattern both upstream and downstream, the third term is a localised contribution which decays to zero rapidly as $|x| \to \infty$ and possesses a finite value at $x=0$: $\left(\frac{k_l+k_s}{2 \pi \alpha (k_l-k_s)}\right) \log \left(\frac{k_l}{k_s}\right)$. It may be remarked that eqn. (3.4.18) is a symmetrical solution implying the existence of both the gravity and capillary waves, symmetrically both in the upstream and downstream directions. Since it contradicts the observation that in steady state, gravity wave exists only in the downstream direction and capillary wave exists in the upstream direction, one suspects that this asymmetry will be introduced from the time-dependent part of the solution. Accordingly we perform analysis of the long time asymptotics of $\eta_{tr}(x,t)$.
-
