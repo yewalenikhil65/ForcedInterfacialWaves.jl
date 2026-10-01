@@ -2,7 +2,7 @@
 
 ## Upstream-downstream asymmetry as $t\rightarrow\infty$
 
-The time-dependent response $\eta_{\mathrm{tr}}(x,t)$ is given in eqns. (4.5c) and (4.5d) of the manuscript. We may observe that $\mathbb{I}_4(x,t)$ is a decaying non-singular term which can be integrated numerically. This term tends to zero as $t\to\infty$ in the form $\mathbb{I}_4\approx 1/\sqrt{t}$, thereby implying that it will not contribute to the steady state (see fig.7 of the manuscript). On the other hand, $\mathbb{I}_3(x,t)$ is a singular integral which requires to be solved by the PV method and may contain a term contributing to the steady state as $t\to\infty$.
+The time-dependent response $\eta_{\mathrm{tr}}(x,t)$ is given in eqns. (3.6c) and (3.6d) of the manuscript. We may observe that $\mathbb{I}_4(x,t)$ is a decaying non-singular term which can be integrated numerically. This term tends to zero as $t\to\infty$ in the form $\mathbb{I}_4\approx 1/\sqrt{t}$, thereby implying that it will not contribute to the steady state (see fig.6 of the manuscript). On the other hand, $\mathbb{I}_3(x,t)$ is a singular integral which requires to be solved by the PV method and may contain a term contributing to the steady state as $t\to\infty$.
 
 Let us define,
 
@@ -18,7 +18,7 @@ z(k)=\alpha k^2+1-\rho_r.
 \tag{C.2}
 ```
 
-Substituting $g(k)$ and $z(k)$ into $\mathbb{I}_3$ (eqn. (4.5d) of the manuscript) and writing the cosine function in terms of exponential functions yields,
+Substituting $g(k)$ and $z(k)$ into $\mathbb{I}_3$ (eqn. (3.6d) of the manuscript) and writing the cosine function in terms of exponential functions yields,
 
 ```math
 \mathbb{I}_3(x,t) = -\frac{1+\rho_r}{2\alpha}\int_0^\infty dk\; \frac{\left(k+\chi(k)\right)}{z(k)(k-k_l)(k-k_s)}\Big\{\exp\left[i\left(tg(k)-kx\right)\right]+\exp\left[-i\left(tg(k)-kx\right)\right]\Big\}.
@@ -292,14 +292,14 @@ Substituting eqns. (C.25) and (C.30) into eqn. (C.4) gives
 \tag{C.31}
 ```
 
-The limit $t\rightarrow\infty$ of $\eta_{\mathrm{tr}}(x,t)$, given by eqn. (4.5c), is
+The limit $t\rightarrow\infty$ of $\eta_{\mathrm{tr}}(x,t)$, given by eqn. (3.6c), is
 
 ```math
 \lim_{t\rightarrow\infty}\left[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0}\right] = -\frac{1}{2\pi}\lim_{t\rightarrow\infty}\left[\mathbb{I}_3(x,t)\right] -\frac{1}{2\pi}\lim_{t\rightarrow\infty}\left[\mathbb{I}_4(x,t)\right].
 \tag{C.32}
 ```
 
-The integral $\mathbb{I}_4(x,t)$ is a decaying integral (Shown in fig.7 of the manuscript), as
+The integral $\mathbb{I}_4(x,t)$ is a decaying integral (Shown in fig.6 of the manuscript), as
 
 ```math
 \lim_{t\rightarrow\infty}\left[\mathbb{I}_4(x,t)\right] =0.
@@ -313,7 +313,7 @@ Substituting eqn. (C.31) into eqn. (C.32) yields
 \tag{C.34}
 ```
 
-Upon adding eqn. (C.34) to the time-independent solution, eqn. (4.6) of the manuscript, the final expression for the steady-state interfacial displacement $\eta(x)$ is
+Upon adding eqn. (C.34) to the time-independent solution, eqn. (3.7) of the manuscript, the final expression for the steady-state interfacial displacement $\eta(x)$ is
 
 ```math
 \frac{\eta(x)}{F_0} = \frac{\eta_s(x)}{F_0} + \lim_{t\rightarrow\infty}\left[\frac{\eta_{\mathrm{tr}}(x,t)}{F_0}\right].
@@ -342,4 +342,3 @@ and
 ```
 
 This is consistent with the observation of a gravity wave (long wavelength) for $x>0$ and a capillary wave (short wavelength) for $x<0$.
-
