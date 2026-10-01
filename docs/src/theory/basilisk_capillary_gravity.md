@@ -1,6 +1,6 @@
 # Basilisk CFD: Capillary-Gravity Waves from Pressure Forcing
 
-This page describes the Basilisk[^1] (the specific build used for all simulations in this work is available as a [downloadable archive](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/releases)) simulation used to generate the nonlinear CFD reference data compared against the IVP theory in the [Capillary–Gravity](capillary_gravity.md) section (Fig. 10 of the manuscript). The simulation solves the two-phase incompressible Navier–Stokes equations with surface tension for a localized Lorentzian pressure forcing applied at the interface between two fluids in uniform horizontal motion. The simulation is dimensional in CGS units. The full source file is [`notebooks/capillary_gravity_forced.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/capillary_gravity_forced.c).
+This page describes the Basilisk[^1] (the specific build used for all simulations in this work is available as a [downloadable archive](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/releases)) simulation used to generate the nonlinear CFD reference data compared against the IVP theory in the [Capillary–Gravity](capillary_gravity.md) section (Fig. 9 of the manuscript). The simulation solves the two-phase incompressible Navier–Stokes equations with surface tension for a localized Lorentzian pressure forcing applied at the interface between two fluids in uniform horizontal motion. The simulation is dimensional in CGS units. The full source file is [`notebooks/capillary_gravity_forced.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/capillary_gravity_forced.c).
 
 Note that Basilisk uses `y` as vertical coordinate in its programmatic notation, whereas  the manuscript (see [Kadari et al. (2026)](https://arxiv.org/abs/2605.12254)) adopts `z` as the notation for vertical coordinate.
 
@@ -113,7 +113,7 @@ event acceleration (i++)
 
   foreach_face(y) {
 
-    double b_ = Delta;
+    double b_ = L/8192.0;   // fixed forcing width = finest Delta for level 13
 
     pressure_phi[] =
       (prefac_*T_*b_)/(pi*(sq(b_) + sq(x)));
@@ -130,7 +130,7 @@ A Lorentzian pressure distribution is applied at the interface at every time ste
 \tilde{p}_e(\tilde{x}, t > 0) = \frac{\tilde{F}_0}{\pi}\frac{\tilde{b}}{\tilde{b}^2 + \tilde{x}^2}, \qquad \tilde{F}_0 = 0.01\,T.
 ```
 
-The half-width $\tilde{b} = \Delta$ equals the local grid-cell size. In the limit $\tilde{b} \to 0$ this approaches a Dirac delta forcing. The forcing is implemented as an additional acceleration on the vertical face-velocity component, weighted by the VOF gradient $(f[] - f[0,-1])/\Delta$ which is non-zero only at the interface — confining the forcing to the two-fluid interface.
+The half-width ($\tilde{b} = L/8192.0$) equals the local grid-cell size. In the limit $\tilde{b} \to 0$ this approaches a Dirac delta forcing. The forcing is implemented as an additional acceleration on the vertical face-velocity component, weighted by the VOF gradient $(f[] - f[0,-1])/\Delta$ which is non-zero only at the interface — confining the forcing to the two-fluid interface.
 
 ---
 
@@ -226,7 +226,7 @@ qcc capillary_gravity_forced.c -lm -O2
 # Compile and run in parallel (MPI)
 mkdir -p data
 qcc -grid=quadtree -D_MPI=1 -source capillary_gravity_forced.c
-mpicc -Wall -O2 -std=c99 capillary_gravity_forced.c -o parallel -lm
+mpicc -Wall -O2 -std=c99 _capillary_gravity_forced.c -o parallel -lm
 mpiexec -np 4 ./parallel    # if running locally on PC/workstation
 ```
 
