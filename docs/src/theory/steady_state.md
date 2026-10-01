@@ -1,17 +1,17 @@
-# Steady-State Decomposition (Manuscript §3.4)
+# Steady-State Decomposition (Manuscript §2.3)
 
 This page derives the steady-state interfacial response from the general Fourier integral solution, establishing the far-field sinusoidal waves and localised deformation that form the basis for both the pure-gravity and capillary-gravity treatments that follow.
 
 ## Formal solution
 
-A localised pressure $\tilde{p}_e = \tilde{F}_0\delta(\tilde{x})$ force is applied at the interface between two inviscid, incompressible, fluids of infinite depth, both streams moving at uniform speed $U$ rightwards. In the absence of this forcing, the interface is flat and remains at $\tilde{z}=0$. After non-dimensionalisation, the interfacial displacement resulting from the forcing i.e. $\eta(x,t)$ is obtained by evaluating the following time-dependent Fourier integrals (eqns. $3.7$ and $3.8$ in the manuscript)
+A localised pressure $\tilde{p}_e = \tilde{F}_0\delta(\tilde{x})$ force is applied at the interface between two inviscid, incompressible, fluids of infinite depth, both streams moving at uniform speed $U$ rightwards. In the absence of this forcing, the interface is flat and remains at $\tilde{z}=0$. After non-dimensionalisation, the interfacial displacement resulting from the forcing i.e. $\eta(x,t)$ is obtained by evaluating the following time-dependent Fourier integrals (eqns. $2.7$ and $2.8$ in the manuscript)
 
 ```math
-\dfrac{\sqrt{2\pi}\;\bar{\eta}(k,t)}{F_0} = \left(\dfrac{1}{-\alpha|k|^2 + \left(1+\rho_r\right)|k| - \left(1-\rho_r\right)}\right) - \dfrac{1}{\alpha |k|^2 + \left(1 - \rho_r\right)} \left(\dfrac{k}{2}\right) \Bigg( \dfrac{\exp\left[-it\lambda_2(k)\right]}{\lambda_2(k)} + \dfrac{\exp\left[-it\lambda_1(k)\right]}{\lambda_1(k)} \Bigg) \tag{3.7}
+\dfrac{\sqrt{2\pi}\;\bar{\eta}(k,t)}{F_0} = \left(\dfrac{1}{-\alpha|k|^2 + \left(1+\rho_r\right)|k| - \left(1-\rho_r\right)}\right) - \dfrac{1}{\alpha |k|^2 + \left(1 - \rho_r\right)} \left(\dfrac{k}{2}\right) \Bigg( \dfrac{\exp\left[-it\lambda_2(k)\right]}{\lambda_2(k)} + \dfrac{\exp\left[-it\lambda_1(k)\right]}{\lambda_1(k)} \Bigg) \tag{2.7}
 ```
 The inverse Fourier integral, leads to the (non-dimensional) interface displacement as a function of time:
 ```math
-\eta(x,t) = \dfrac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}dk\;\exp\left(ikx\right)\bar{\eta}(k,t) \tag{3.8}
+\eta(x,t) = \dfrac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}dk\;\exp\left(ikx\right)\bar{\eta}(k,t) \tag{2.8}
 ```
 where $\lambda_{1,2}(k) \equiv k\mp\sqrt{\dfrac{\alpha|k|^3}{1+\rho_r}\;+\;\beta|k|}$ and
 
@@ -23,9 +23,9 @@ where $\lambda_{1,2}(k) \equiv k\mp\sqrt{\dfrac{\alpha|k|^3}{1+\rho_r}\;+\;\beta
 
 ## Steady-state decomposition
 
-In this section, the manuscript shows that neglecting the time-dependent terms in eqns. (3.7) and (3.8) and $\textit{without}$ using any Rayleigh dissipation, the steady-state response turns out to be (we exclude all the Dirac delta function terms in eqn. $3.9$ in the manuscript) the following. For proof of this, see [Steady-state proof](../steady_proof.md).
+In this section, the manuscript shows that neglecting the time-dependent terms in eqns. (2.7) and (2.8) and $\textit{without}$ using any Rayleigh dissipation, the steady-state response turns out to be (we exclude all the Dirac delta function terms in eqn. $2.9$ in the manuscript) the following. For proof of this, see [Steady-state proof](../steady_proof.md).
 ```math
-\dfrac{\eta_{s}(x)}{F_0} =\dfrac{ \eta^{\text{far-field}}_{s}(x)}{F_0} + \dfrac{\eta^{\text{local}}_{s}(x)}{F_0} \tag{3.11}
+\dfrac{\eta_{s}(x)}{F_0} =\dfrac{ \eta^{\text{far-field}}_{s}(x)}{F_0} + \dfrac{\eta^{\text{local}}_{s}(x)}{F_0} \tag{2.11}
 ```
 where ,
 ```math
@@ -39,7 +39,7 @@ where ,
 k_{l,s} = \frac{1+\rho_r}{2\alpha}\left[1\pm\sqrt{1-\frac{4\alpha\beta}{1+\rho_r}}\right].
 ```
 
-The integral expression for $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ above is solved numerically (in Julia and MATLAB) using the following codes. The Julia code writes out equation (3.11) term by term — exactly as the MATLAB reference does — so each line maps directly onto the mathematics: the far-field is the closed-form sine combination, and the local part is the exponentially-decaying integral evaluated with adaptive quadrature (`quadgk`).
+The integral expression for $\frac{\eta^{\text{local}}_{s}(x)}{F_0}$ above is solved numerically (in Julia and MATLAB) using the following codes. The Julia code writes out equation (2.11) term by term — exactly as the MATLAB reference does — so each line maps directly onto the mathematics: the far-field is the closed-form sine combination, and the local part is the exponentially-decaying integral evaluated with adaptive quadrature (`quadgk`).
 
 
 ```julia
@@ -67,7 +67,7 @@ F₀  = 0.01 * T / (ρₗ * U^2 * l_c)
 kₗ = ((1 + ρᵣ) + √Δ) / (2α)      # long-wavelength (capillary) root
 kₛ = ((1 + ρᵣ) - √Δ) / (2α)      # short-wavelength (gravity) root
 
-# ─── Equation (3.11):  ηₛ(x)/F₀ = far-field + local ───
+# ─── Equation (2.11):  ηₛ(x)/F₀ = far-field + local ───
 
 # Far-field: closed-form sine combination
 η_farfield(x) = F₀ / (α * (kₗ - kₛ)) * (-sin(kₛ * abs(x)) + sin(kₗ * abs(x)))
@@ -93,7 +93,7 @@ plot!(x, η_ff .* 1e3; label="far-field", color="blue", lw=3)
 ```matlab
 %% Copy-pasting this code in MATLAB session , reproduces Fig 4(a) of the manuscript
 
-%% Steady-state decomposition (no Rayleigh dissipation) — eqn. (3.11)
+%% Steady-state decomposition (no Rayleigh dissipation) — eqn. (2.11)
 U = 26.7046; g = 981.0; T = 72.0;
 rho_l = 1.0; rho_u = 0.001;
 l_c   = U^2 / g;
@@ -146,15 +146,15 @@ The steady-state response $\eta(x)$ using the Rayleigh dissipation approach is o
     \sin(k_{s}x), & x>0
 \end{cases} + \dfrac{G(x)}{\pi\alpha}, \\
 \text{with}\quad G(x) &\equiv \dfrac{1}{k_{l}-k_{s}}\int_{0}^{\infty}\;dk\;\left(\dfrac{\cos(kx)}{k+k_{s}}-\dfrac{\cos(kx)}{k+k_{l}}\right).
-\end{aligned} \tag{3.12}
+\end{aligned} \tag{2.12}
 ```
 
-It is shown [here](../capillary_gravity_rayleigh_dissipation.md) that $\dfrac{G(x)}{\pi\alpha}$ in eqn. 3.12  is identical to $\dfrac{\eta_s^{\text{local}}(x)}{F_0}$ in eqn. 3.11; the latter expression being preferable compared to $G(x)$ in 3.12 due to the apparence of its local nature via the explicit exponential decay term. Fig. 5b confirms that the steady-state response from the Rayleigh dissipation approach is qualitatively different from that of fig. 5a. Notably, the response employing Rayleigh dissipation is asymmetric about $x=0$ (fig. 5b), consistent with observations. In the next sections, we show that similar results will be arrived at through the IVP approach.
+It is shown [here](../capillary_gravity_rayleigh_dissipation.md) that $\dfrac{G(x)}{\pi\alpha}$ in eqn. 2.12  is identical to $\dfrac{\eta_s^{\text{local}}(x)}{F_0}$ in eqn. 2.11; the latter expression being preferable compared to $G(x)$ in 2.12 due to the apparence of its local nature via the explicit exponential decay term. Fig. 4b confirms that the steady-state response from the Rayleigh dissipation approach is qualitatively different from that of fig. 4a. Notably, the response employing Rayleigh dissipation is asymmetric about $x=0$ (fig. 4b), consistent with observations. In the next sections, we show that similar results will be arrived at through the IVP approach.
 
 The only change from the code above is the far-field term, which now follows the asymmetric
-form of equation (3.12): short waves are selected upstream ($x<0$) and long waves downstream
+form of equation (2.12): short waves are selected upstream ($x<0$) and long waves downstream
 ($x>0$). The local term is unchanged (its equivalence to $G(x)/\pi\alpha$ is proved in the
-linked page), so we reuse `η_local` from the previous block.
+linked page), so we reuse `η_local` from the previous block in both Julia and Matlab codes.
 
 ```julia
 # Copy-pasting this code in Julia REPL , reproduces Fig 4(b) of the manuscript
@@ -166,7 +166,7 @@ linked page), so we reuse `η_local` from the previous block.
 η_farfield_rayleigh(x) = -2F₀ / (α * (kₗ - kₛ)) * sin((x < 0 ? kₗ : kₛ) * x)
 
 η_ff_r  = η_farfield_rayleigh.(x)
-η_loc_r = η_local.(x)          # identical local term as in eqn. (3.11)
+η_loc_r = η_local.(x)          # identical local term as in eqn. (2.11)
 
 plot(x, η_loc_r .* 1e3; label="local", color="red", lw=3,
      xlabel=L"x", ylabel=L"\eta \times 10^{3}", xlims=(-10,10),
