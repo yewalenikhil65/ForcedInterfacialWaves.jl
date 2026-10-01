@@ -1,32 +1,28 @@
-# Capillary–Gravity (Manuscript §4.2)
+# Capillary–Gravity (Manuscript §3.2)
 
 With surface tension present ($\alpha > 0$), both gravity and capillary restoring forces act on the interface. The dispersion relation gains a cubic term, producing two distinct real poles $k_s$ (gravity root) and $k_l$ (capillary root). The key numerical technique is combining all integrand contributions so that the singularities cancel *before* quadrature.
 
 ## Formulation
 
-We now turn to the case of $\alpha>0$. As $\rho_r<1$, we have both capillary and gravitational forces. For this case, eqn. (3.8) of the manuscript can be rewritten as (Note that the integrals in eqn.(3.8) are folded onto the positive k-axis to get rid of the $|k|$ terms),
+We now turn to the case of $\alpha>0$. As $\rho_r<1$, we have both capillary and gravitational forces. For this case, eqn. (2.8) of the manuscript can be rewritten as (Note that the integrals in eqn.(2.8) are folded onto the positive k-axis to get rid of the $|k|$ terms),
 
 ```math
-\eta(x,t) = \eta_s(x)+\eta_{\mathrm{tr}}(x,t) \tag{4.5a}
+\eta(x,t) = \eta_s(x)+\eta_{\mathrm{tr}}(x,t), \tag{3.6a}
 ```
 
 where,
 
 ```math
-\frac{\eta_s(x)}{F_0} \equiv -\frac{1}{\pi}\int_0^\infty dk\;\frac{\cos(kx)}{\alpha (k-k_l)(k-k_s)} \tag{4.5b}
+\frac{\eta_s(x)}{F_0} \equiv -\frac{1}{\pi}\int_0^\infty dk\;\frac{\cos(kx)}{\alpha (k-k_l)(k-k_s)}, \tag{3.6b}
 ```
 
 ```math
-\frac{\eta_{\mathrm{tr}}(x,t)}{F_0} \equiv -\frac{1}{2\pi}\left[\mathbb{I}_3(x,t)+\mathbb{I}_4(x,t)\right] \tag{4.5c}
+\frac{\eta_{\mathrm{tr}}(x,t)}{F_0} \equiv -\frac{1}{2\pi}\left[\mathbb{I}_3(x,t)+\mathbb{I}_4(x,t)\right], \tag{3.6c}
 ```
 
 ```math
-\mathbb{I}_{3,4}(x,t) \equiv -\frac{1+\rho_r}{\alpha}\int_0^\infty dk\,\frac{\left(k\pm\chi(k)\right)\cos\left[t\left(k\mp\chi(k)\right)-kx\right]}{\left(1+\alpha k^2-\rho_r\right)\left(k-k_l\right)\left(k-k_s\right)} \tag{4.5d}
+\mathbb{I}_{3,4}(x,t) \equiv -\frac{1+\rho_r}{\alpha}\int_0^\infty dk\,\frac{\left(k\pm\chi(k)\right)\cos\left[t\left(k\mp\chi(k)\right)-kx\right]}{\left(1+\alpha k^2-\rho_r\right)\left(k-k_l\right)\left(k-k_s\right)}, \tag{3.6d}
 ```
-
-Summing the steady term (4.5b) and both transient terms (4.5d) into a single combined integrand before quadrature cancels the poles at $k_s,k_l$ analytically, leaving a smooth function to integrate numerically. The combined integrand is then split into three pieces around the (now removable) singularities at $k_s$ and $k_l$ and integrated separately. The symmetric $\eta_s$ from (4.5b) is used as the steady part; the transient remainder is $\eta-\eta_s$.
-
-The asymmetric classical radiation solution is a separate steady reference, representing the long-time limit of the full IVP solution after the transient contribution has decayed and supplied the asymmetric cancellation described below. It can be obtained either from the full time-dependent decomposition by tracking the asymmetric cancellation, or directly as the time-independent profile via the Rayleigh dissipation approach.
 
 ```math
 \chi(k) \equiv \sqrt{\beta k+\frac{\alpha}{1+\rho_r}k^3},
@@ -36,12 +32,16 @@ The asymmetric classical radiation solution is a separate steady reference, repr
 k_{l,s} = \frac{1+\rho_r}{2\alpha}\left[1\pm\sqrt{1-\frac{4\alpha\beta}{1+\rho_r}}\right].
 ```
 
-Similar to the previous section ($\alpha=0$ case), the interface shape due to the time-independent response $\eta_s(x)$, given by eqn. (4.5b), is also symmetric about $x=0$, (see the [Steady-state proof](../steady_proof.md)). Note that eqn. (4.5b) is identical to eqn. (3.9) of the manuscript after excluding all terms arising from the Dirac delta function. This symmetric response is shown by the black solid curve in panel (a) of Figure 8 of the manuscript.
+Summing the nominal steady term (3.6b) and both transient terms (3.6d) into a single combined integrand before quadrature cancels the singularities, leaving a smooth function to integrate numerically. The combined integrand is then split into three pieces around the (now removable) singularities at $k_s$ and $k_l$ and integrated separately. The symmetric $\eta_s$ from (3.6b) is used as the steady part; the transient remainder is $\eta-\eta_s$.
 
-We now turn to a formal demonstration of the asymmetric cancellations about $x=0$ as $t\rightarrow\infty$. The expression for $\eta_s(x)$ in eqn. (4.5b), after application of principal-value techniques, may be written as (see the [Steady-state proof](../steady_proof.md)):
+The asymmetric classical radiation solution is a separate steady reference, representing the long-time limit of the full IVP solution after the transient contribution has decayed and supplied the asymmetric cancellation described below. It can be obtained either from the full time-dependent decomposition by tracking the asymmetric cancellation, or directly as the time-independent profile via the Rayleigh dissipation approach.
+
+Similar to the previous section ($\alpha=0$ case), the interface shape due to the time-independent response $\eta_s(x)$, given by eqn. (3.6b), is also symmetric about $x=0$, (see the [Steady-state proof](../steady_proof.md)). Note that eqn. (3.6b) is identical to eqn. (2.9) of the manuscript after excluding all terms arising from the Dirac delta function. This symmetric response is shown by the black solid curve in panel (a) of Figure 7 of the manuscript.
+
+We now turn to a formal demonstration of the asymmetric cancellations about $x=0$ as $t\rightarrow\infty$. The expression for $\eta_s(x)$ in eqn. (3.6b), after application of principal-value techniques, may be written as (see the [Steady-state proof](../steady_proof.md)):
 
 ```math
-\frac{\eta_s(x)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_s|x|)+\sin(k_l|x|)\right] + \frac{k_l+k_s}{\alpha\pi}\int_0^\infty dy\,\frac{y\exp\left(-|x|y\right)}{\left(y^2+k_l^2\right)\left(y^2+k_s^2\right)} \tag{4.7}
+\frac{\eta_s(x)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_s|x|)+\sin(k_l|x|)\right] + \frac{k_l+k_s}{\alpha\pi}\int_0^\infty dy\,\frac{y\exp\left(-|x|y\right)}{\left(y^2+k_l^2\right)\left(y^2+k_s^2\right)} \tag{3.7}
 ```
 
 The second, integral term above is $G(x)$ (up to the prefactor); it is evaluated numerically in the code section below.
@@ -49,18 +49,18 @@ The second, integral term above is $G(x)$ (up to the prefactor); it is evaluated
 After lengthy calculations involving contour integration and stationary-phase approximation (see the [Capillary-gravity asymmetric cancellation proof](../capillary_gravity_asymmetric_cancellation.md)), we may show that
 
 ```math
-\frac{\eta_{\mathrm{tr}}(x,t\rightarrow\infty)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_sx)-\sin(k_lx)\right], \quad x\in(-\infty,\infty). \tag{4.8}
+\frac{\eta_{\mathrm{tr}}(x,t\rightarrow\infty)}{F_0} = \frac{1}{\alpha(k_l-k_s)}\left[-\sin(k_sx)-\sin(k_lx)\right], \quad x\in(-\infty,\infty). \tag{3.8}
 ```
 
-This contribution to the steady state essentially stems from the term $\mathbb{I}_3(x,t)$ in eqn. (4.5d), whereas the term $\mathbb{I}_4(x,t)$ in the same equation tends to zero as $t\rightarrow\infty$. Figure 7 of the manuscript confirms this decay for large time, $t\gg1$.
+This contribution to the steady state essentially stems from the term $\mathbb{I}_3(x,t)$ in eqn. (3.6d), whereas the term $\mathbb{I}_4(x,t)$ in the same equation tends to zero as $t\rightarrow\infty$. Figure 6 of the manuscript confirms this decay for large time, $t\gg1$.
 
-The sum of eqns. (4.7) and (4.8) yields the final form of the steady-state interface at all $x$. The asymmetric cancellation in $\eta(x,t\rightarrow\infty)=\eta_s(x)+\eta_{\mathrm{tr}}(x,t\rightarrow\infty)$, upstream ($x<0$) and downstream ($x>0$) of the forcing, may readily be observed by comparing these expressions. We reiterate that the short waves for $x<0$ and the long waves for $x>0$ seen at steady state result from this cancellation.
+The sum of eqns. (3.7) and (3.8) yields the final form of the steady-state interface at all $x$. The asymmetric cancellation in $\eta(x,t\rightarrow\infty)=\eta_s(x)+\eta_{\mathrm{tr}}(x,t\rightarrow\infty)$, upstream ($x<0$) and downstream ($x>0$) of the forcing, may readily be observed by comparing these expressions. We reiterate that the short waves for $x<0$ and the long waves for $x>0$ seen at steady state result from this cancellation.
 
-Unlike the $\alpha=0$ case, it was not possible to obtain closed-form expressions in terms of real integrals for the $\eta_{\mathrm{tr}}(x,t)$ terms in eqn. (4.5d). Hence, we have evaluated these integrals directly numerically in the principal-value sense around the pole(s).
+Unlike the $\alpha=0$ case, it was not possible to obtain closed-form expressions in terms of real integrals for the $\eta_{\mathrm{tr}}(x,t)$ terms in eqn. (3.6d). Hence, we have evaluated these integrals directly numerically in the principal-value sense around the pole(s).
 
 ## Numerical evaluation
 
-The integral expressions for $\eta(x,t)$ [eqn. (4.5a) of the manuscript], $\eta_s(x)$ [eqn. (4.5b)], and $\eta_{\mathrm{tr}}(x,t)$ [eqn. (4.5c)] are evaluated numerically using both Julia and MATLAB with the codes provided below, at $x=3$ and $t=110$. The integrals are computed using a numerical Cauchy principal value (CPV) procedure, in which a small neighborhood of width $\epsilon=10^{-6}$ around each pole, $k=k_s$ and $k=k_l$, is excluded from the numerical integration to avoid direct evaluation at the singularities.
+The integral expressions for $\eta(x,t)$ [eqn. (3.6a) of the manuscript], $\eta_s(x)$ [eqn. (3.6b)], and $\eta_{\mathrm{tr}}(x,t)$ [eqn. (3.6c)] are evaluated numerically using both Julia and MATLAB with the codes provided below, at $x=3$ and $t=110$. The integrals are computed using a numerical Cauchy principal value (CPV) procedure, in which a small neighborhood of width $\epsilon=10^{-6}$ around each pole, $k=k_s$ and $k=k_l$, is excluded from the numerical integration to avoid direct evaluation at the singularities.
 
 ```julia
 using QuadGK
@@ -91,7 +91,7 @@ end
 @inline χ(k::Float64, p::CapillaryGravityParams) =
     sqrt(p.β * k + p.γρ * p.α * k^3)
 
-# Combined integrand in eqn. (4.5a); the kₛ and kₗ pole terms cancel in the sum.
+# Combined integrand in eqn. (3.6a); the kₛ and kₗ pole terms cancel in the sum.
 function combinedIntegrand(k::Float64, x::Float64, t::Float64, p::CapillaryGravityParams)
     χk = χ(k, p)
     pole = 1.0 / (p.α * (k - p.kₗ) * (k - p.kₛ))
@@ -111,7 +111,7 @@ function cpvParts(x::Float64, t::Float64, p::CapillaryGravityParams)
     return I₁, I₂, I₃
 end
 
-# Eqn. (4.7): local steady integral G(x).
+# Eqn. (3.7): local steady integral G(x).
 function Gₓ(x::Float64, p::CapillaryGravityParams)
     f = k -> (cos(k*x)/(k + p.kₛ) - cos(k*x)/(k + p.kₗ)) / (p.kₗ - p.kₛ)
     return first(quadgk(f, 0.0, Inf; atol=p.atol, rtol=p.rtol))
@@ -222,7 +222,7 @@ fprintf('I1 = %.16g\n', I1);
 fprintf('I2 = %.16g\n', I2);
 fprintf('I3 = %.16g\n', I3);
 fprintf('eta_ivp          = %.16g\n', eta_ivp);
-fprintf('eta_s (4.5b)     = %.16g\n', eta_s);
+fprintf('eta_s (3.6b)     = %.16g\n', eta_s);
 fprintf('eta_transient    = %.16g\n', eta_transient);
 fprintf('eta_classical    = %.16g\n', eta_classical);
 fprintf('G(3) = %.16g\n', G_x);
@@ -240,11 +240,11 @@ I₃ = 5.152903874765406
 Gₓ = 0.011715099029345
 ```
 
-The full spatial profile — IVP solution, its steady part, and the transient remainder — reproduces Figure 10 of the manuscript.
+The full spatial profile — IVP solution, its steady part, and the transient remainder — reproduces Figure 7 of the manuscript.
 
-## $\mathbb{I}_4$ transient (Fig. 7)
+## $\mathbb{I}_4$ transient (Fig. 6)
 
-Figure 7 of the manuscript shows the transient component $-\mathbb{I}_4(x,t)$ at an early time $t = 0.37$, confirming the decay of $\mathbb{I}_4$ as $t\to\infty$.
+Figure 6 of the manuscript shows the transient component $-\mathbb{I}_4(x,t)$ at an early time $t = 0.37$, confirming the decay of $\mathbb{I}_4$ as $t\to\infty$.
 
 *The following Julia profile calculation reuses `CapillaryGravityParams`, `makeCGParams`, and `χ` from the preceding pointwise-validation block. When running this profile calculation independently, include that preceding Julia block first.*
 
@@ -341,7 +341,7 @@ xlim([-10 10]); ylim([-2 14]);
   <figcaption style="text-align:center;"><strong>Fig. 6</strong> of the manuscript(only $t=0.37 $ reported here).Comparison of Julia(lines) with MATLAB(markers).</figcaption>
 </figure>
 ```
-This is plotted ($t=0.37 $) profile as Fig 6 in the manuscript showing time evolution of $I_4(x, t)$ from eqn. 4.5(d) for $\rho_r = 0.001$ and $\alpha = 0.1389$. 
+This is plotted ($t=0.37 $) profile as Fig 6 in the manuscript showing time evolution of $-I_4(x, t)$ from eqn. 3.6(d) for $\rho_r = 0.001$ and $\alpha = 0.1389$. 
 
 ## Full IVP profile (Fig. 7)
 
@@ -358,8 +358,8 @@ using QuadGK, Plots, LaTeXStrings
 default(fontfamily="Computer Modern", linewidth=2.5, framestyle=:box,
         grid=false, guidefontsize=18, tickfontsize=16, legendfontsize=16)
 
-# Full CG IVP profile: combined CPV integrand (eqn 4.5a–d, 3 pole-split quadratures)
-# and G(x) for η_s (eqn 4.5b) are computed per spatial chunk across threads.
+# Full CG IVP profile: combined CPV integrand (eqn 3.6a–d, 3 pole-split quadratures)
+# and G(x) for η_s (eqn 3.6b) are computed per spatial chunk across threads.
 function cgIVPProfile(xgrid::Vector{Float64}, t::Float64, p::CapillaryGravityParams)
     α, ρᵣ, F₀ = p.α, p.ρᵣ, p.F₀
     kₗ, kₛ, ε = p.kₗ, p.kₛ, p.εCPV
@@ -426,7 +426,7 @@ plot!(x_grid, η_tr .* 1e3; label=L"\eta_{tr}", color="magenta", ls=:dot)
 %% Copy-pasting this code in MATLAB session, reproduces panels of Fig 7 of the manuscript, depending on the value of non-dimensional time `t`
 
 
-%% Full CG IVP profile at t = 367.35 (Fig 8)
+%% Full CG IVP profile at t = 367.35 (Fig 7)
 U = 26.7046; g = 981.0; T = 72.0;
 rho_l = 1.0; rho_u = 0.001;
 l_c   = U^2 / g;
@@ -456,7 +456,7 @@ I_mi = integral(combined, k_s + epsilon_pv, k_l - epsilon_pv, 'ArrayValued', tru
 I_hi = integral(combined, k_l + epsilon_pv, Inf, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
 eta_8 = -F0/(2*pi) * (I_lo + I_mi + I_hi);
 
-% Steady η_s (eqn 4.5b) via Lamb G(x) — ArrayValued
+% Steady η_s (eqn 3.6b) via Lamb G(x) — ArrayValued
 G_int = @(k) (cos(k*x_grid)./(k + k_s) - cos(k*x_grid)./(k + k_l)) / (k_l - k_s);
 G_x   = integral(G_int, 0, Inf, 'ArrayValued', true, 'AbsTol', AbsTol, 'RelTol', RelTol);
 eta_s_8  = F0/(alpha*(k_l - k_s)) .* (-sin(k_s*abs(x_grid)) + sin(k_l*abs(x_grid))) + F0*G_x/(pi*alpha);
@@ -507,7 +507,7 @@ l_c = U^2 / g        # characteristic length [cm]
 t_dim = 0.25
 t_sim = t_dim / (t_c)   # nondimensional (data in CGS: 1 cm = l_c)
 
-# IVP η using the shared cgIVPProfile driver from Fig. 8.
+# IVP η using the shared cgIVPProfile driver from Fig. 7.
 x_grid = collect(range(-15.0, 15.0; length=2001)); filter!(x -> abs(x) > 1e-12, x_grid)
 p = makeCGParams()
 η_sim, _, _ = cgIVPProfile(x_grid, t_sim, p)
@@ -530,7 +530,7 @@ plot!(x_bsk, y_bsk .* 1e3; label="Simulation", color="red", ls=:dot)
 %% Copy-pasting this code in MATLAB session, reproduces panels of Fig 9 of the manuscript, depending on the value of dimensional time `t_dim`
 
 
-%% IVP vs nonlinear simulation at t_dim = 0.25 s (Fig 10)
+%% IVP vs nonlinear simulation at t_dim = 0.25 s (Fig 9)
 U = 26.7046; g = 981.0; T = 72.0;
 rho_l = 1.0; rho_u = 0.001;
 l_c   = U^2 / g;
@@ -549,7 +549,7 @@ x_grid = linspace(-15, 15, 2001); x_grid(abs(x_grid) < 1e-12) = [];
 t_dim  = 0.25;
 t      = t_dim / ( t_c);
 
-% IVP η — ArrayValued combined-integrand inversion (same as Fig 8)
+% IVP η — ArrayValued combined-integrand inversion (same as Fig 7)
 combined = @(k) ...
     2*cos(k*x_grid) ./ (alpha*(k - k_l).*(k - k_s)) ...
     - (1+rho_r)*(k + chi(k)).*cos(k*(t - x_grid) - t*chi(k)) ./ ...
