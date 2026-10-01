@@ -1,11 +1,11 @@
-# Pure Gravity — Zero Capillarity Limit (Manuscript §4.1)
+# Pure Gravity — Zero Capillarity Limit (Manuscript §3.1)
 
 Setting $\alpha = 0$ removes capillary forces entirely. The dispersion simplifies to $\chi(k) = \sqrt{\beta k}$ and the steady-state integral acquires a single Cauchy principal-value pole at $k = \beta$. This page presents the full analytical decomposition into $\eta_s, T_1–T_4^\pm$ terms and an independent numerical CPV verification.
 
-Below eqns. (4.1) and (4.2a,b,c) are obtained by substituting $\alpha=0$ in eqn. (3.8) in the manuscript,
+Below eqns. (3.1) and (3.2a,b,c) are obtained by substituting $\alpha=0$ in eqn. (2.8) in the manuscript,
 
 ```math
-\eta(x,t) = \eta_{s}(x) + \eta_{tr}^{(1)}(x,t) + \eta_{tr}^{(2)}(x,t) \tag{4.1}
+\eta(x,t) = \eta_{s}(x) + \eta_{tr}^{(1)}(x,t) + \eta_{tr}^{(2)}(x,t) \tag{3.1}
 ```
 where,
 ```math
@@ -13,52 +13,52 @@ where,
         \dfrac{\eta_{s}(x)}{F_0} &\equiv \dfrac{1}{2\pi\left(1+\rho_r\right)}\int_{-\infty}^{\infty}dk\; \dfrac{\exp\left(ikx\right)}{|k| - \beta},\quad 0 < \beta \leq 1  \nonumber\\
         \dfrac{\eta_{tr}^{(1)}(x,t)}{F_0} &\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) + t\sqrt{\beta|k|}\right)\right]}{k+ \sqrt{\beta|k|}},  \nonumber\\
         \dfrac{\eta_{tr}^{(2)}(x,t)}{F_0} &\equiv - \dfrac{1}{4\pi(1-\rho_r)}\int_{-\infty}^{\infty}dk\;\dfrac{k\;\exp\left[-i\left(k(t-x) - t\sqrt{\beta|k|}\right)\right]}{k- \sqrt{\beta|k|}}.
-      \end{align} \tag{4.2a,b,c}
+      \end{align} \tag{3.2a,b,c}
 ```
 It may be further shown using principal value techniques that (see proof [here](../pure_gravity_steady_proof.md))
 
 ```math
-\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right) + \int_0^\infty \frac{y\,e^{-|x|y}}{\beta^2+y^2}\,dy\right], \quad 0<\beta\leq1,\; -\infty<x<\infty \tag{4.3}
+\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right) + \int_0^\infty dy\, \frac{y\,e^{-|x|y}}{\beta^2+y^2}\right], \quad 0<\beta\leq1,\; -\infty<x<\infty \tag{3.3}
 ```
 
-In expression (4.3), $\eta_{s}(x)$ is a symmetric function of $x$, implying a symmetric response upstream and downstream of the forcing at $x=0$. However, a contribution to the steady-state *also comes* from the time-dependent term in eqns. (4.2b),(4.2c). As shown in the  proof([here](../pure_gravity_transient_proof.md)) these transient terms may be further simplified to obtain the following analytical representation valid for all $x,t$ i.e.
+In expression (3.3), $\eta_{s}(x)$ is a symmetric function of $x$, implying a symmetric response upstream and downstream of the forcing at $x=0$. However, a contribution to the steady-state *also comes* from the time-dependent term in eqns. (3.2b),(3.2c). As shown in the  proof([here](../pure_gravity_transient_proof.md)) these transient terms may be further simplified to obtain the following analytical representation valid for all $x,t$ i.e.
 
 ```math
-\eta_{\mathrm{tr}}(x,t) \equiv \eta_{\mathrm{tr}}^{(1)}(x,t) + \eta_{\mathrm{tr}}^{(2)}(x,t) = \left\{\mathbb{T}_1(x) +\mathbb{T}_2(x,t) +\mathbb{T}_3(x,t) +\mathbb{T}_4(x,t)\right\}F_0, \tag{4.4a}
+\eta_{\mathrm{tr}}(x,t) \equiv \eta_{\mathrm{tr}}^{(1)}(x,t) + \eta_{\mathrm{tr}}^{(2)}(x,t) = \left\{\mathbb{T}_1(x) +\mathbb{T}_2(x,t) +\mathbb{T}_3(x,t) +\mathbb{T}_4(x,t)\right\}F_0, \tag{3.4a}
 ```
 
 where,
 
 ```math
-\mathbb{T}_1(x) \equiv \mp\frac{1}{1+\rho_r}\sin(\beta x) \tag{4.4b}
+\mathbb{T}_1(x) \equiv \mp\frac{1}{1+\rho_r}\sin(\beta x) \tag{3.4b}
 ```
 
 ```math
-\mathbb{T}_2(x,t) \equiv -\frac{4\beta^{-1}}{\pi(1+\rho_r)} \int_0^\infty dv\; v^2 \frac{\exp\!\left(\mp2av^2\pm2bv\right)}{\beta+\left(2v-\beta^{1/2}\right)^2} \left[\beta^{1/2}\cos\!\left(\beta^{1/2}tv\right) \pm \left(2v-\beta^{1/2}\right)\sin\!\left(\beta^{1/2}tv\right)\right] \tag{4.4c}
+\mathbb{T}_2(x,t) \equiv -\frac{4\beta^{-1}}{\pi(1+\rho_r)} \int_0^\infty dv\; v^2 \frac{\exp\!\left(\mp2av^2\pm2bv\right)}{\beta+\left(2v-\beta^{1/2}\right)^2} \left[\beta^{1/2}\cos\!\left(\beta^{1/2}tv\right) \pm \left(2v-\beta^{1/2}\right)\sin\!\left(\beta^{1/2}tv\right)\right] \tag{3.4c}
 ```
 
 ```math
-\mathbb{T}_3(x,t) \equiv \frac{\beta^{-1/2}}{\pi(1+\rho_r)}\left(1+\frac{t}{2(t-x)}\right)\sqrt{\frac{\pi}{2|a|}} \left[\cos\!\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp\mathrm{C}\!\left(b\sqrt{\frac{2}{\pi|a|}}\right)\right\} + \sin\!\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp\mathrm{S}\!\left(b\sqrt{\frac{2}{\pi|a|}}\right)\right\}\right] \tag{4.4d}
+\mathbb{T}_3(x,t) \equiv \frac{\beta^{-1/2}}{\pi(1+\rho_r)}\left(1+\frac{t}{2(t-x)}\right)\sqrt{\frac{\pi}{2|a|}} \left[\cos\!\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp\mathrm{C}\!\left(b\sqrt{\frac{2}{\pi|a|}}\right)\right\} + \sin\!\left(\frac{b^2}{|a|}\right)\left\{\frac{1}{2}\mp\mathrm{S}\!\left(b\sqrt{\frac{2}{\pi|a|}}\right)\right\}\right] \tag{3.4d}
 ```
 
 ```math
-\mathbb{T}_4(x,t) \equiv -\frac{1}{\pi(1+\rho_r)}\int_0^\infty dv\;\frac{\cos\!\left(av^2+2bv\right)}{v+\beta^{1/2}} \tag{4.4e}
+\mathbb{T}_4(x,t) \equiv -\frac{1}{\pi(1+\rho_r)}\int_0^\infty dv\;\frac{\cos\!\left(av^2+2bv\right)}{v+\beta^{1/2}} \tag{3.4e}
 ```
 
-where, $a \equiv t-x, \; b \equiv \dfrac{t\sqrt{\beta}}{2}$, the upper signs in $\mathbb{T}_1(x),\mathbb{T}_2(x,t), \mathbb{T}_3(x,t)$ are used for $x<t$, while lower signs are for $x > t$. The Fresnel integrals $\mathrm{C}(\cdot)$ and $\mathrm{S}(\cdot)$ in eqn. (4.4d) are defined as
+where, $a \equiv t-x, \; b \equiv \dfrac{t\sqrt{\beta}}{2}$, the upper signs in $\mathbb{T}_1(x),\mathbb{T}_2(x,t), \mathbb{T}_3(x,t)$ are used for $x<t$, while lower signs are for $x > t$. The Fresnel integrals $\mathrm{C}(\cdot)$ and $\mathrm{S}(\cdot)$ in eqn. (3.4d) are defined as
 
 ```math
 \mathrm{C}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \cos\left(\frac{\pi t^2}{2}\right),\quad
-	\mathrm{S}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \sin\left(\frac{\pi t^2}{2}\right).\tag{4.4f}
+	\mathrm{S}\left(b\sqrt{\frac{2}{\pi |a|}}\right) \equiv  \int_{0}^{b\sqrt{\frac{2}{\pi |a|}}}dt\;  \sin\left(\frac{\pi t^2}{2}\right).\tag{3.4f}
 ```
 
-In expressions (4.4), the *time-independent term*, $\mathbb{T}_1(x)$ (eqn. 4.4b), is asymmetric with the same amplitude as the first term on the right hand side of eqn. (4.3). As a result, these two terms reinforce each other for $x>0$ but cancel for $x<0$. Further, we note that as $\rho_r\rightarrow 1$ $\left(\beta = \dfrac{1-\rho_r}{1 + \rho_r}\rightarrow 0\right)$, the terms diverge. This is physically reasonable because in this limit ($\rho_r\rightarrow 1$), gravity vanishes and in the absence of capillary forces as well (i.e. $\alpha=0$ that we are currently assuming), there remains no restoring force to resist deformation due to the external pressure. The analytical strategy is clear now: provided one can show that $\mathbb{T}_2(x,t\rightarrow\infty)\rightarrow0$, $\mathbb{T}_3(x,t\rightarrow\infty)\rightarrow0$ and $\mathbb{T}_4(x,t\rightarrow\infty)\rightarrow0$, one obtains the expected steady-state lacking waves upstream (except for small localised deformation of the interface due to the localised integral in eqn. (4.3)) and sinusoidal waves downstream ($x>0$) with wavenumber $\beta$.
+In expressions (3.4), the *time-independent term*, $\mathbb{T}_1(x)$ (eqn. 3.4b), is asymmetric with the same amplitude as the first term on the right hand side of eqn. (3.3). As a result, these two terms reinforce each other for $x>0$ but cancel for $x<0$. Further, we note that as $\rho_r\rightarrow 1$ $\left(\beta = \dfrac{1-\rho_r}{1 + \rho_r}\rightarrow 0\right)$, the terms diverge. This is physically reasonable because in this limit ($\rho_r\rightarrow 1$), gravity vanishes and in the absence of capillary forces as well (i.e. $\alpha=0$ that we are currently assuming), there remains no restoring force to resist deformation due to the external pressure. The analytical strategy is clear now: provided one can show that $\mathbb{T}_2(x,t\rightarrow\infty)\rightarrow0$, $\mathbb{T}_3(x,t\rightarrow\infty)\rightarrow0$ and $\mathbb{T}_4(x,t\rightarrow\infty)\rightarrow0$, one obtains the expected steady-state lacking waves upstream (except for small localised deformation of the interface due to the localised integral in eqn. (3.3)) and sinusoidal waves downstream ($x>0$) with wavenumber $\beta$.
 
-Substituting the $\eta_s, T_1$–$T_4$ terms together gives the full transient-plus-steady solution $\eta(x,t)$ [eqn. (4.1)], and, as an independent cross-check, the original CPV integral can be evaluated directly, bypassing the $\eta_s,T_1–T_4$ decomposition entirely. The small difference between $\eta$ and $\eta_{\mathrm{cpv}}$ at $x=-2$ reflects that this point lies just inside the front-exclusion band, where the analytical branch and the direct CPV evaluation are not expected to agree to full precision (see the comparison table below).
+Substituting the $\eta_s, T_1$–$T_4$ terms together gives the full transient-plus-steady solution $\eta(x,t)$ [eqn. (3.1)], and, as an independent cross-check, the original CPV integral can be evaluated directly, bypassing the $\eta_s,T_1–T_4$ decomposition entirely. 
 
 ## Numerical evaluation
 
-The integral expressions $\eta(x,t)$ (eqn. (4.1) of the manuscript), $\eta_s(x)$ (eqn. (4.3) of the manuscript) and $\eta_{tr}(x,t)$ (eqn. (4.4) of the manuscript) are evaluated numerically, at $x=-2$ and $t_{\dim}=1\,\mathrm{s}$, using both Julia and MATLAB with the codes below. Each analytical term $\eta_s, T_1$–$T_4$ (eqns. 4.3, 4.4b–e) is written out directly; $\eta_s = F_0\,T_0$, $\eta_{tr} = F_0\,(T_1+T_2+T_3+T_4)$, and $\eta = \eta_s + \eta_{tr}$. As an independent check, $\eta$ is also compared against a direct Cauchy-principal-value evaluation $\eta_{\mathrm{CPV}}$ of the combined integrand.
+The integral expressions $\eta(x,t)$ (eqn. (3.1) of the manuscript), $\eta_s(x)$ (eqn. (3.3) of the manuscript) and $\eta_{tr}(x,t)$ (eqn. (3.4) of the manuscript) are evaluated numerically, at $x=-2$ and $t_{\dim}=1\,\mathrm{s}$, using both Julia and MATLAB with the codes below. Each analytical term $\eta_s, T_1$–$T_4$ (eqns. 3.3, 3.4b–e) is written out directly; $\eta_s = F_0\,T_0$, $\eta_{tr} = F_0\,(T_1+T_2+T_3+T_4)$, and $\eta = \eta_s + \eta_{tr}$. As an independent check, $\eta$ is also compared against a direct Cauchy-principal-value evaluation $\eta_{\mathrm{CPV}}$ of the combined integrand.
 
 ```julia
 using QuadGK, FresnelIntegrals
@@ -91,7 +91,7 @@ function makeParams()
                              100.0, 100.0, 1.0)
 end
 
-# Eqn. (4.3): steady principal-value contribution T₀.
+# Eqn. (3.3): steady principal-value contribution T₀.
 function T₀(x::Float64, p::PureGravityParams)
     xₐ = abs(x)
     β² = p.β^2
@@ -100,13 +100,13 @@ function T₀(x::Float64, p::PureGravityParams)
     return (-π * sin(p.β * xₐ) + Ilocal) / (π * (1.0 + p.ρᵣ))
 end
 
-# Eqn. (4.4b): closed-form sign-dependent term T₁.
+# Eqn. (3.4b): closed-form sign-dependent term T₁.
 @inline function T₁(x::Float64, t::Float64, p::PureGravityParams)
     s = x < t ? -1.0 : 1.0
     return s * sin(p.β * x) / (1.0 + p.ρᵣ)
 end
 
-# Eqn. (4.4c): quadratic-exponential integral T₂.
+# Eqn. (3.4c): quadratic-exponential integral T₂.
 function T₂(x::Float64, t::Float64, p::PureGravityParams)
     a = t - x
     s = a > 0.0 ? 1.0 : -1.0
@@ -122,7 +122,7 @@ function T₂(x::Float64, t::Float64, p::PureGravityParams)
     return -4.0 * I / (π * (1.0 + p.ρᵣ) * p.β)
 end
 
-# Eqn. (4.4d): Fresnel-integral contribution T₃.
+# Eqn. (3.4d): Fresnel-integral contribution T₃.
 function T₃(x::Float64, t::Float64, p::PureGravityParams)
     a = t - x
     absA = abs(a)
@@ -136,7 +136,7 @@ function T₃(x::Float64, t::Float64, p::PureGravityParams)
                         sin(phase) * (0.5 - s * fresnels(X)))
 end
 
-# Eqn. (4.4e): quadratic-phase cosine integral T₄.
+# Eqn. (3.4e): quadratic-phase cosine integral T₄.
 function T₄(x::Float64, t::Float64, p::PureGravityParams)
     a = t - x
     tSqrtβ = t * p.sqrtβ
@@ -165,7 +165,7 @@ function ηCPV(x::Float64, t::Float64, p::PureGravityParams)
     return p.F₀ * (I₋ + I₊)
 end
 
-# Eqns. (4.3) and (4.4) evaluated at x = −2 and tdim = 1 s.
+# Eqns. (3.3) and (3.4) evaluated at x = −2 and tdim = 1 s.
 p = makeParams()
 x = -2.0
 t = 1.0 / (26.7046 / 981.0)
@@ -294,9 +294,9 @@ eta_CPV     = 6.979529999850479e-05
 |diff|      = 2.324991035827648e-06
 ```
 
-The full spatial profile at $t = 183.68$ (last panel of manuscript Fig. 5) is computed below by
-integrating equations (4.1)–(4.2) directly: the combined-integrand Fourier/CPV inversion gives
-the total $\eta(x)$, equation (4.3) gives the steady part $\eta_s(x)$, and $\eta_{tr} = \eta - \eta_s$.
+The full spatial profile at $t = 183.68$ (Fig. (5h) manuscript) is computed below by
+integrating equations (3.1)–(3.2) directly: the combined-integrand Fourier/CPV inversion gives
+the total $\eta(x)$, equation (3.3) gives the steady part $\eta_s(x)$, and $\eta_{tr} = \eta - \eta_s$.
 The scripts below plot all four ($\eta$, $\eta_{\mathrm{CPV}}$, $\eta_s$, $\eta_{tr}$).
 
 *The following Julia profile calculation reuses `PureGravityParams`, `makeParams`, `T₀`–`T₄`, and `ηCPV` from the preceding pointwise-validation block. When running this profile calculation independently, include that preceding Julia block first. Below MATLAB code runs independent of previous code-block*
@@ -350,7 +350,7 @@ function makeFigure(xgrid::Vector{Float64}, η::Vector{Float64},
     return plt
 end
 
-# Figure 6 uses t = 183.68 on x ∈ [−12,12], excluding x = 0.
+# Figure 5 uses t = 183.68 on x ∈ [−12,12], excluding x = 0.
 default(fontfamily="Computer Modern", linewidth=3, framestyle=:box,
         label=nothing, color="blue", grid=false, fg_legend=false,
         background_color_legend=false, guidefontsize=16,
