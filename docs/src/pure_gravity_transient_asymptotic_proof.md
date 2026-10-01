@@ -4,7 +4,7 @@
 
 ## Transient contribution
 
-For the two-fluid problem in the pure-gravity limit $\alpha=0$, the time-dependent contribution to the interface deformation (eqns. 4.2b and 4.2c of the manuscript) can be combined and rewritten as,
+For the two-fluid problem in the pure-gravity limit $\alpha=0$, the time-dependent contribution to the interface deformation (eqns. 3.2b and 3.2c of the manuscript) can be combined and rewritten as,
 
 ```math
 \frac{\eta_{\mathrm{tr}}(x,t)}{F_0} = -\frac{1}{2\pi(1-\rho_r)}\left[I_7(x,t)+I_8(x,t)\right],
