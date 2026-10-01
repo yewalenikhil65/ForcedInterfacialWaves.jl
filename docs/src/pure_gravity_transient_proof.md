@@ -1,6 +1,6 @@
 # Proof: Evaluation of the time-dependent term $\eta_{tr}(x,t)$ for pure gravity ($\alpha = 0$)
 
-We now focus on the time-dependent contribution, $\eta_{\mathrm{tr}}(x,t)=\eta_{\mathrm{tr}}^{(1)}(x,t)+\eta_{\mathrm{tr}}^{(2)}(x,t)$. Equations (4.2b) and (4.2c) of the manuscript can be combined and rewritten as
+We now focus on the time-dependent contribution, $\eta_{\mathrm{tr}}(x,t)=\eta_{\mathrm{tr}}^{(1)}(x,t)+\eta_{\mathrm{tr}}^{(2)}(x,t)$. Equations (3.2b) and (3.2c) of the manuscript can be combined and rewritten as
 
 ```math
 \frac{\eta_{tr}(x,t)}{F_0}	= -\dfrac{1}{2\pi(1-\rho_r)}\left\{\mathbb{I}_7(x,t)+\mathbb{I}_8(x,t)\right\},\tag{T.1}
@@ -123,7 +123,7 @@ and
 \operatorname{S}\left(b\sqrt{\frac{2}{\pi a}}\right) = \int_{0}^{b\sqrt{\frac{2}{\pi a}}}dt\;  \sin\left\{\frac{\pi t^2}{2}\right\}.\tag{T.16}
 ```
 
-The Fresnel function definitions in eqns. (T.15)–(T.16) are taken from Abramowitz & Stegun: *Handbook of Mathematical Functions*. The derivation above is valid for $a>0$. Detailed calculation shows that it continues to remain valid for $a<0$, provided we replace $\int_{0}^{\infty}dv\;  \cos\left\{a v^2  + 2bv\right\}$ with $\int_{0}^{\infty}dv\;  \cos\left\{|a| v^2  - 2bv\right\}$. Note that the right-hand side of eqn. (T.13) gives the transient terms $\mathbb{T}_3$ (eqn. (4.4d)) and $\mathbb{T}_4$ (eqn. (4.4e)) of the manuscript.
+The Fresnel function definitions in eqns. (T.15)–(T.16) are taken from Abramowitz & Stegun: *Handbook of Mathematical Functions*. The derivation above is valid for $a>0$. Detailed calculation shows that it continues to remain valid for $a<0$, provided we replace $\int_{0}^{\infty}dv\;  \cos\left\{a v^2  + 2bv\right\}$ with $\int_{0}^{\infty}dv\;  \cos\left\{|a| v^2  - 2bv\right\}$. Note that the right-hand side of eqn. (T.13) gives the transient terms $\mathbb{T}_3$ (eqn. (3.4d)) and $\mathbb{T}_4$ (eqn. (3.4e)) of the manuscript.
 
 
 ## Evaluation of the singular integral $\mathbb{I}_7(x,t)$
@@ -146,10 +146,10 @@ and
 \mathbb{I}_7''(x,t)	= \frac{1}{2} \int_{0}^{\infty}dk\;\dfrac{k\;\exp\left\{-i\left(k(t-x) - t\sqrt{k \beta}\right)\right\}}{k- \sqrt{k \beta}}.\tag{T.19}
 ```
 
-The integrals $\mathbb{I}_7'(x,t)$ and $\mathbb{I}_7''(x,t)$ are singular at $k=\beta$, lying along the line of integration, as shown in the contour of Figure 2 (see [Pure-gravity steady-state proof](pure_gravity_steady_proof.md)).
+The integrals $\mathbb{I}_7'(x,t)$ and $\mathbb{I}_7''(x,t)$ are singular at $k=\beta$, lying along the line of integration, as shown in the contour of Figure 3 (see [Pure-gravity steady-state proof](pure_gravity_steady_proof.md)).
 Hence we interpret them to exist in a Principal Value (PV) sense. They may be evaluated by contour integration using the PV method, with the same contours.
 
-Consider the integral $\left[\mathbb{I}_7'(x,t)\right]^c$ along the closed contour (Figure 2(a)) for $x<t$,
+Consider the integral $\left[\mathbb{I}_7'(x,t)\right]^c$ along the closed contour (Figure 3(a)) for $x<t$,
 
 ```math
 \left[\mathbb{I}_7'(x,t)\right]^c = \frac{1}{2} \oint dz \;  \dfrac{z\;\exp\left\{i\left(z(t-x) - t\sqrt{\beta z}\right)\right\}}{z- \sqrt{\beta z}}.\tag{T.20}
@@ -348,7 +348,7 @@ y
 \tag{T.24}
 ```
 
-Similarly, for $x>t$, one performs similar steps of contour integration using the contour of Figure 2(b) and obtains,
+Similarly, for $x>t$, one performs similar steps of contour integration using the contour of Figure 3(b) and obtains,
 
 ```math
 \begin{aligned}
@@ -498,7 +498,7 @@ Changing the variable of integration to $v=\sqrt{\frac{y}{2}}$ in $\mathbb{I}_7'
 \tag{T.29}
 ```
 
-Substituting $\mathbb{I}_7(x,t)$ from eqn. (T.28) and $\mathbb{I}_8(x,t)$ from eqn. (T.13) into eqn. (T.1) yields $\eta_{tr}(x,t)$ (eqns. 4.4a,b,c,d,e of the manuscript) for $x<t$ . Similarly, substituting $\mathbb{I}_7(x,t)$ from eqn. (T.29) and $\mathbb{I}_8(x,t)$ from eqn. (T.13) into eqn. (T.1) gives $\eta_{tr}(x,t)$ (eqns. 4.4a,b,c,d,e of the manuscript) for $x>t$.
+Substituting $\mathbb{I}_7(x,t)$ from eqn. (T.28) and $\mathbb{I}_8(x,t)$ from eqn. (T.13) into eqn. (T.1) yields $\eta_{tr}(x,t)$ (eqns. 3.4a,b,c,d,e of the manuscript) for $x<t$ . Similarly, substituting $\mathbb{I}_7(x,t)$ from eqn. (T.29) and $\mathbb{I}_8(x,t)$ from eqn. (T.13) into eqn. (T.1) gives $\eta_{tr}(x,t)$ (eqns. 3.4a,b,c,d,e of the manuscript) for $x>t$.
 
 It is noteworthy that the time-dependent integral $\mathbb{I}_7(x,t)$ (the first term on the right-hand side of eqns. T.28 and T.29) contains a time-independent contribution. This time-independent term, which emerges from the evaluation of the time-dependent integral, combines with the steady component $\eta_s(x)$ in such a way that, in the long-time limit, the interface becomes flat at $z=0$ for $x<0$, while gravity waves persist for $x>0$.
 
