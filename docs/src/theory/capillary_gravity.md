@@ -483,7 +483,7 @@ legend('\eta', '\eta_{tr}'); xlim([-10 10]);
 </figure>
 ```
 
-## Comparison with nonlinear simulations (Fig. 9)
+## Comparison with nonlinear simulations (Fig. 10)
 
 The IVP solution is compared against a nonlinear simulation using Basilisk[^1] (Navier–Stokes/VOF) at different time-instances. Details of the CFD setup — domain, pressure forcing, boundary conditions, and mesh refinement — are described in the [Basilisk CFD Setup](basilisk_capillary_gravity.md) page.
 
@@ -578,14 +578,14 @@ legend('\eta (IVP)', 'Simulation'); xlim([-6 10]);
 ```@raw html
 <figure style="text-align:center;">
   <img src="../../assets/cg_sim_fig10.png" alt="Fig 9(e)" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 9(e)</strong> of the manuscript.</figcaption>
+  <figcaption style="text-align:center;"><strong>Fig. 10(e)</strong> of the manuscript.</figcaption>
 </figure>
 ```
 
 ```@raw html
 <figure style="text-align:center;">
   <img src="../../assets/fig10_overlay.png" alt="Fig 9(e) overlay" style="max-width:80%; height:auto;">
-  <figcaption style="text-align:center;"><strong>Fig. 9(e)</strong> of the manuscript. Comparison of Julia(solid blue lines) and MATLAB code(markers) with Basilisk simulation(red dotted line).</figcaption>
+  <figcaption style="text-align:center;"><strong>Fig. 10(e)</strong> of the manuscript. Comparison of Julia(solid blue lines) and MATLAB code(markers) with Basilisk simulation(red dotted line).</figcaption>
 </figure>
 ```
 
