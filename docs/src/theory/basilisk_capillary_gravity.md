@@ -1,6 +1,6 @@
 # Basilisk CFD: Capillary-Gravity Waves from Pressure Forcing
 
-This page describes the Basilisk[^1] (the specific build used for all simulations in this work is available as a [downloadable archive](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/releases)) simulation used to generate the nonlinear CFD reference data compared against the IVP theory in the [Capillary–Gravity](capillary_gravity.md) section (Fig. 9 of the manuscript). The simulation solves the two-phase incompressible Navier–Stokes equations with surface tension for a localized Lorentzian pressure forcing applied at the interface between two fluids in uniform horizontal motion. The simulation is dimensional in CGS units. The full source file is [`notebooks/capillary_gravity_forced.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/capillary_gravity_forced.c).
+This page describes the Basilisk[^1] (the specific build used for all simulations in this work is available as a [downloadable archive](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/releases)) simulation used to generate the nonlinear CFD reference data compared against the IVP theory in the [Capillary–Gravity](capillary_gravity.md) section (Fig. 10 of the manuscript). The simulation solves the two-phase incompressible Navier–Stokes equations with surface tension for a localized Lorentzian pressure forcing applied at the interface between two fluids in uniform horizontal motion. The simulation is dimensional in CGS units. The full source file is [`notebooks/capillary_gravity_forced.c`](https://github.com/yewalenikhil65/ForcedInterfacialWaves.jl/blob/main/notebooks/capillary_gravity_forced.c).
 
 Note that Basilisk uses `y` as vertical coordinate in its programmatic notation, whereas  the manuscript (see [Kadari et al. (2026)](https://arxiv.org/abs/2605.12254)) adopts `z` as the notation for vertical coordinate.
 
@@ -236,7 +236,7 @@ Postprocessing the interface from this Basilisk simulation(dotted red) at each t
 <figure style="text-align:center;">
   <img src="../../assets/basilisk.gif" alt="" style="max-width:80%; height:auto;">
   <figcaption style="text-align:center;">
-    Figure 9 in the manuscript.
+    Figure 10 in the manuscript.
   </figcaption>
 </figure>
 ```
