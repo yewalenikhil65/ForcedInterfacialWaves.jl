@@ -18,7 +18,7 @@ where,
 It may be further shown using principal value techniques that (see proof [here](../pure_gravity_steady_proof.md))
 
 ```math
-\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right) + \int_0^\infty dy\, \frac{y\,\exp(-|x|y)}{\beta^2+y^2}, \quad 0<\beta\leq1,\; -\infty<x<\infty \tag{3.3}
+\frac{\eta_s(x)}{F_0} = \frac{1}{\pi(1+\rho_r)}\left[-\pi\sin\!\left(\beta|x|\right) + \int_0^\infty dy\, \frac{y\,\exp(-|x|y)}{\beta^2+y^2}\right], \quad 0<\beta\leq1,\; -\infty<x<\infty \tag{3.3}
 ```
 
 In expression (3.3), $\eta_{s}(x)$ is a symmetric function of $x$, implying a symmetric response upstream and downstream of the forcing at $x=0$. However, a contribution to the steady-state *also comes* from the time-dependent term in eqns. (3.2b),(3.2c). As shown in the  proof([here](../pure_gravity_transient_proof.md)) these transient terms may be further simplified to obtain the following analytical representation valid for all $x,t$ i.e.
