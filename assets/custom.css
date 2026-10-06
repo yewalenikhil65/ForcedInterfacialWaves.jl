@@ -1,0 +1,157 @@
+/* Use the space remaining beside the sidebar on desktop. Documenter caps
+   .docs-main at 50rem by default, which causes premature wrapping and a
+   large unused area on the right at normal zoom. */
+@media screen and (min-width: 1056px) {
+    #documenter > .docs-main {
+        max-width: none;
+    }
+
+    #documenter > .docs-main > article {
+        max-width: none;
+    }
+}
+
+/* Keep generated content and wide code/table blocks from adding another cap. */
+#documenter .content {
+    max-width: none;
+}
+
+/* Keep paired Julia/MATLAB examples together on wide screens. The wrapper is
+   added by custom.js because executable Julia examples can have generated
+   output between the Julia and MATLAB <pre> elements. */
+.code-comparison {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    margin: 1rem 0 1.5rem;
+}
+
+.code-comparison .code-column {
+    min-width: 0;
+}
+
+.code-comparison pre {
+    max-width: none;
+    margin: 0 0 0.75rem;
+    overflow-x: auto;
+}
+
+.code-comparison img,
+.code-comparison svg {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.75rem;
+}
+
+@media screen and (max-width: 800px) {
+    .code-comparison {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ── Language labels above code blocks ─────────────────────────────────────── */
+/* Documenter wraps code fences in <pre><code class="language-julia hljs">
+   or <pre><code class="language-matlab hljs">. These rules add a visible
+   label so readers can immediately distinguish Julia from MATLAB blocks. */
+
+pre:has(> code.language-julia)::before,
+pre:has(> code.language-matlab)::before {
+    display: block;
+    font-family: var(--docs-font-family, sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 2;
+    padding: 0 0.5rem;
+    margin: -0.5rem -0.5rem 0.6rem;
+    border-radius: 4px 4px 0 0;
+}
+
+pre:has(> code.language-julia)::before {
+    content: "Julia";
+    background: #9558b2;
+    color: #fff;
+}
+
+pre:has(> code.language-matlab)::before {
+    content: "MATLAB";
+    background: #0076a8;
+    color: #fff;
+}
+
+/* ── Clickable Julia/MATLAB tabs ───────────────────────────────────────────── */
+/* custom.js wraps a paired Julia + MATLAB example in .code-tabs and exposes a
+   .code-tab-bar with two buttons. Only the active panel is shown, so override
+   the two-column grid layout inherited from .code-comparison. */
+
+.code-comparison.code-tabs {
+    display: block;
+    margin: 1rem 0 1.5rem;
+}
+
+.code-tab-bar {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.code-tab-button {
+    font-family: var(--docs-font-family, sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    color: #fff;
+    opacity: 0.5;
+    transition: opacity 0.15s ease-in-out;
+}
+
+.code-tab-button:hover {
+    opacity: 0.8;
+}
+
+.code-tab-button.active {
+    opacity: 1;
+}
+
+.code-tab-button.code-tab-julia {
+    background: #9558b2;
+}
+
+.code-tab-button.code-tab-matlab {
+    background: #0076a8;
+}
+
+/* Panels: only the active one is visible. The per-language label added by the
+   pre::before rules above is redundant inside a tab, so hide it here. */
+.code-tab-panel {
+    display: none;
+}
+
+.code-tab-panel.active {
+    display: block;
+}
+
+.code-tabs pre:has(> code.language-julia)::before,
+.code-tabs pre:has(> code.language-matlab)::before {
+    display: none;
+}
+
+.code-tabs pre {
+    max-width: none;
+    margin: 0 0 0.75rem;
+    overflow-x: auto;
+}
+
+.code-tabs img,
+.code-tabs svg {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.75rem;
+}
