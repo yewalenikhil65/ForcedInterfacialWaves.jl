@@ -1302,3 +1302,11 @@ and
 ```
 
 The singular integral $I_7$ contains both a non-decaying pole contribution and an oscillatory stationary-phase contribution that decays as $t^{-1/2}$. In contrast, $I_8$ has neither a pole nor a stationary point on the integration interval, and its asymptotic behaviour is controlled by the endpoint $z=0$, resulting in the much faster $t^{-4}$ decay.
+
+---
+
+**AI assistance:** ChatGPT (GPT-5.6 Sol, OpenAI; accessed 6 October 2026) was
+used to assist with the derivation and verification of the large-time
+asymptotic analysis presented in this section. All derivations and results
+were independently checked by the authors, who take full responsibility for
+the final analysis.
