@@ -27,13 +27,14 @@ If you use this material, please cite:
 > *arXiv preprint* [arXiv:2605.12254](https://arxiv.org/abs/2605.12254).
 
 ```bibtex
-@article{kadari2026interfacial,
-  title={Interfacial waves from pressure forcing: revisiting classical
-         theories from an {IVP} perspective},
-  author={Kadari, Vinod Kumar and Yewale, Nikhil and Farsoiya, Palas Kumar
-          and Mayya, Y. S. and Dasgupta, Ratul},
-  journal={arXiv preprint arXiv:2605.12254},
-  year={2026}
+@article{kadari2026interfacialwavespressureforcing,
+      title={Interfacial waves from pressure forcing: role of the transients}, 
+      author={Vinod Kumar Kadari and Nikhil Yewale and Palas Kumar Farsoiya and Y. S. Mayya and Ratul Dasgupta},
+      year={2026},
+      eprint={2605.12254},
+      archivePrefix={arXiv},
+      primaryClass={physics.flu-dyn},
+      url={https://arxiv.org/abs/2605.12254}, 
 }
 ```
 
