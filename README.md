@@ -23,7 +23,7 @@ computations, see the notebooks described below.
 If you use this material, please cite:
 
 > Kadari, V.K., Yewale, N., Farsoiya, P.K., Mayya, Y.S. & Dasgupta, R. (2026).
-> Interfacial waves from pressure forcing: revisiting classical theories from an IVP perspective.
+> Interfacial waves from pressure forcing: role of the transients
 > *arXiv preprint* [arXiv:2605.12254](https://arxiv.org/abs/2605.12254).
 
 ```bibtex
